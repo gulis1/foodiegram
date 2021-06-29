@@ -1,8 +1,8 @@
 package main.rest.controller;
 
+import main.application.service.UserService;
 import main.application.service.manageAccountService.ManageFriends;
 import main.application.service.manageAccountService.ManageInfo;
-import main.application.service.manageAccountService.Unsubscribe;
 import main.application.service.manageAccountService.ViewImages;
 import main.domain.resource.AmigoResource;
 import main.domain.resource.PreviewPublicacion;
@@ -30,7 +30,7 @@ public class ControllerManageAccount {
     ManageInfo manageInfo;
 
     @Autowired
-    Unsubscribe unsubscribeService;
+    UserService userService;
 
     @Autowired
     ViewImages viewImagesService;
@@ -72,7 +72,7 @@ public class ControllerManageAccount {
     public ResponseEntity<List<PreviewPublicacion>> viewImagesofFriend(@RequestPart(value = "name", required = true) String name){
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<PreviewPublicacion> publicacionesAmigo = manageFriends.viewPostOfFriend(userID, name);
+        List<PreviewPublicacion> publicacionesAmigo = userService.getPosts(name);
         return publicacionesAmigo != null ? ResponseEntity.ok(publicacionesAmigo) : ResponseEntity.notFound().build();
     }
     //-------------------------------------------------------------------------------------------------------------------------
@@ -133,8 +133,8 @@ public class ControllerManageAccount {
     @RequestMapping(value  = "/unsubscribe",method = RequestMethod.DELETE)
     public ResponseEntity<?> unsubscribe() {
 
-        Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        UsuarioResource user = unsubscribeService.unsubscribe(userID);
+        String userName = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
+        UsuarioResource user = userService.deleteUser(userName);
         return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 

@@ -5,20 +5,22 @@ import main.persistence.entity.Mensaje;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
-public class MensajeConverter implements Converter<Mensaje, MensajeResource> {
+public class MensajeConverter implements Converter<Optional<Mensaje>, MensajeResource> {
 
     @Override
-    public  MensajeResource convert(Mensaje source){
+    public  MensajeResource convert(Optional<Mensaje> source){
 
-        if (source == null)
+        if (!source.isPresent())
             return null;
 
         MensajeResource response = new MensajeResource();
-        response.setId(source.getId());
-        response.setIduser1(source.getIduser1());
-        response.setIduser2(source.getIduser2());
-        response.setText(source.getText());
+        response.setId(source.get().getId());
+        response.setIduser1(source.get().getIduser1());
+        response.setIduser2(source.get().getIduser2());
+        response.setText(source.get().getText());
         return response;
     }
 

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -97,9 +98,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         Claims claims =  Jwts.parser().setSigningKey(authSecret.getBytes()).parseClaimsJws(jwtToken).getBody();
 
-        Jwtoken lastToken = repoTokens.findByUserid(Integer.parseInt(claims.getSubject()));
+        Optional<Jwtoken> lastToken = repoTokens.findByUserid(Integer.parseInt(claims.getSubject()));
 
-        if (lastToken != null && claims.getExpiration().compareTo(lastToken.getExpiredate()) < 0)
+        if (lastToken.isPresent() && claims.getExpiration().compareTo(lastToken.get().getExpiredate()) < 0)
             throw new ExpiredJwtException(null, claims, "Someone logged in from another computer");
 
 

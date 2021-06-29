@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class RefreshTokenGenerator {
@@ -21,36 +22,35 @@ public class RefreshTokenGenerator {
     @Autowired
     RepoUsuario repoUser;
 
-
-
     @Value("${jwt.refresh.secret}")
     private String secretKey;
 
-
     public String buildToken(String username, int minutes) {
 
-        Usuario user = repoUser.findByName(username);
+        Optional<Usuario> user = repoUser.findByName(username);
 
+        if (!user.isPresent())
+            return null;
 
         minutes *= 60000;
 
         String token = Jwts.builder()
-                .setSubject(user.getId().toString())
+                .setSubject(user.get().getId().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + minutes))
                 .signWith(SignatureAlgorithm.HS512, secretKey.getBytes()).compact();
 
-        Refreshtoken dbToken = repoRefresh.findByUserid(user.getId());
+        Optional<Refreshtoken> dbToken = repoRefresh.findByUserid(user.get().getId());
 
-        if (dbToken != null)
-            dbToken.setExpiredate(new Date(System.currentTimeMillis() + minutes));
+        if (dbToken.isPresent())
+            dbToken.get().setExpiredate(new Date(System.currentTimeMillis() + minutes));
 
 
         else
-            dbToken = new Refreshtoken(user.getId(), new Date(System.currentTimeMillis() + minutes));
+            dbToken = Optional.of(new Refreshtoken(user.get().getId(), new Date(System.currentTimeMillis() + minutes)));
 
 
-        repoRefresh.save(dbToken);
+        repoRefresh.save(dbToken.get());
 
         return token;
     }

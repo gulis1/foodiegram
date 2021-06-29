@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ PublicationServiceImpl implements PublicationService {
 
     @Override
     public PublicacionResource getPost(Integer pubID) {
-        return converterPubli.convert(repoPubli.findOne(pubID));
+        return converterPubli.convert(repoPubli.findById(pubID));
     }
 
     @Override
@@ -77,14 +78,14 @@ PublicationServiceImpl implements PublicationService {
             throw new IllegalArgumentException("Text or loc should be not null");
 
 
-        Publicacion publi = repoPubli.findOne(pubID);
+        Optional<Publicacion> publi = repoPubli.findById(pubID);
 
-        if (publi != null) {
+        if (publi.isPresent()) {
 
-            publi.setText(text);
+            publi.get().setText(text);
 
 
-            repoPubli.save(publi);
+            repoPubli.save(publi.get());
 
         }
 
@@ -95,10 +96,9 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public PublicacionResource deletePost(Integer pubID) throws NoPermissionException {
 
-        Publicacion publi = repoPubli.findOne(pubID);
+        Optional<Publicacion> publi = repoPubli.findById(pubID);
 
-        if (publi != null)
-            repoPubli.delete(publi);
+        publi.ifPresent(publicacion -> repoPubli.delete(publicacion));
 
 
         return converterPubli.convert(publi);
@@ -156,20 +156,20 @@ PublicationServiceImpl implements PublicationService {
         }
 
 
-        return converterPubli.convert(publi);
+        return converterPubli.convert(Optional.of(publi));
     }
 
     @Override
     public List<ValoracionResource> getRatings(Integer pubID) {
 
-        Publicacion publi = repoPubli.findOne(pubID);
+        Optional<Publicacion> publi = repoPubli.findById(pubID);
 
-        if (publi == null)
+        if (!publi.isPresent())
             return null;
 
         else {
             List<Valoracion> valoraciones = repoVal.findByIdpubli(pubID);
-            return valoraciones.stream().map(converterVal::convert).collect(Collectors.toList());
+            return valoraciones.stream().map(x -> converterVal.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
 
@@ -183,7 +183,7 @@ PublicationServiceImpl implements PublicationService {
             Valoracion valora = new Valoracion(form.getPubID(), form.getUserID(), form.getScore());
             repoVal.save(valora);
 
-            return converterVal.convert(valora);
+            return converterVal.convert(Optional.of(valora));
         }
 
     }
@@ -191,22 +191,18 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public ValoracionResource getRating(Integer pubID, String user) {
 
-        Usuario usuario = repoUsuario.findByName(user);
+        Optional<Usuario> usuario = repoUsuario.findByName(user);
 
-        if (usuario == null)
-            return null;
-
-        return converterVal.convert(repoVal.findOne(new IDvaloracion(pubID, usuario.getId())));
+        return usuario.map(value -> converterVal.convert(repoVal.findById(new IDvaloracion(pubID, value.getId())))).orElse(null);
 
     }
 
     @Override
     public ValoracionResource deleteRating(RatingForm form) {
 
-        Valoracion valor = repoVal.findOne(new IDvaloracion(form.getPubID(), form.getUserID()));
+        Optional<Valoracion> valor = repoVal.findById(new IDvaloracion(form.getPubID(), form.getUserID()));
 
-        if (valor != null)
-            repoVal.delete(valor);
+        valor.ifPresent(valoracion -> repoVal.delete(valoracion));
 
         return converterVal.convert(valor);
     }
@@ -214,15 +210,15 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public List<ComentarioResource> getComments(Integer pubID) {
 
-        Publicacion pub = repoPubli.findOne(pubID);
+        Optional<Publicacion> pub = repoPubli.findById(pubID);
 
-        if (pub == null)
+        if (!pub.isPresent())
             return null;
 
         else {
 
             List<Comentario> comentarios = repoComen.findByIdpubliOrderByIdAsc(pubID);
-            return comentarios.stream().map(converterCom::convert).collect(Collectors.toList());
+            return comentarios.stream().map(x -> converterCom.convert(Optional.of(x))).collect(Collectors.toList());
         }
 
     }
@@ -236,7 +232,7 @@ PublicationServiceImpl implements PublicationService {
 
         Comentario comment = new Comentario(form.getPubID(), new Usuario(form.getUserID()), form.getText());
         repoComen.save(comment);
-        return converterCom.convert(comment);
+        return converterCom.convert(Optional.of(comment));
 
     }
 

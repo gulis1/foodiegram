@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface RepoMensaje extends JpaRepository<Mensaje,Integer>  {
-    public List<Mensaje> findByIduser1OrIduser2(Integer iduser1, Integer iduser2);
+    List<Mensaje> findByIduser1OrIduser2(Integer iduser1, Integer iduser2);
 
 }

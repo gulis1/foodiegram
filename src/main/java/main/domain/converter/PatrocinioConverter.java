@@ -5,10 +5,12 @@ import main.domain.resource.PatrocinioResource;
 import main.persistence.entity.Patrocinio;
 import org.springframework.core.convert.converter.Converter;
 
-public class PatrocinioConverter implements Converter<Patrocinio, PatrocinioResource> {
+import java.util.Optional;
+
+public class PatrocinioConverter implements Converter<Optional<Patrocinio>, PatrocinioResource> {
 
     @Override
-    public PatrocinioResource convert(Patrocinio source) {
-        return source != null ? new PatrocinioResource(source.getId(), source.getEndtime()) : null;
+    public PatrocinioResource convert(Optional<Patrocinio> source) {
+        return source.map(patrocinio -> new PatrocinioResource(patrocinio.getId(), patrocinio.getEndtime())).orElse(null);
     }
 }

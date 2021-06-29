@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.naming.NoPermissionException;
+import java.util.Optional;
 
 @Service
 public class ComentarioServiceImpl implements ComentarioService {
@@ -22,21 +23,21 @@ public class ComentarioServiceImpl implements ComentarioService {
     public ComentarioResource editComentario(Integer comID, String text) throws IllegalArgumentException, NoPermissionException {
 
 
-        Comentario comment = repoComen.findOne(comID);
+        Optional<Comentario> comment = repoComen.findById(comID);
 
-        if (comment == null)
+        if (!comment.isPresent())
             return null;
 
         else {
 
             if (text != null)
-                comment.setText(text);
+                comment.get().setText(text);
             else
                 throw new IllegalArgumentException();
 
         }
 
-            repoComen.save(comment);
+            repoComen.save(comment.get());
 
         return  comentarioConverter.convert(comment);
     }
@@ -44,10 +45,9 @@ public class ComentarioServiceImpl implements ComentarioService {
     @Override
     public ComentarioResource deleteComentario(Integer comID) throws NoPermissionException {
 
-        Comentario comment = repoComen.findOne(comID);
+        Optional<Comentario> comment = repoComen.findById(comID);
 
-        if (comment != null)
-            repoComen.delete(comID);
+        comment.ifPresent(comentario -> repoComen.delete(comentario));
 
         return comentarioConverter.convert(comment);
 

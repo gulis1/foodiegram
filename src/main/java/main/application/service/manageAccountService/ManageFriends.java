@@ -17,7 +17,4 @@ public interface ManageFriends {
     //Devuelve la lista de amigos
     List<String> getFriends(Integer id);
 
-    //Devuelve una lista con publicaciones del amigo de id con nombre name, devuelve null si no existe usuario con nombre name y excepción si existe pero no es su am
-    List<PreviewPublicacion> viewPostOfFriend(Integer id, String name);
-
 }

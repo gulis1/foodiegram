@@ -5,21 +5,23 @@ import main.persistence.entity.MeetUp;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
-public class MeetUpConverter implements Converter<MeetUp, MeetupResource> {
+public class MeetUpConverter implements Converter<Optional<MeetUp>, MeetupResource> {
 
 
     @Override
-    public MeetupResource convert(MeetUp source) {
+    public MeetupResource convert(Optional<MeetUp> source) {
 
 
-        if(source==null)
-            return  null;
+        if(!source.isPresent())
+            return null;
 
         MeetupResource response= new MeetupResource();
 
-        response.setEventId(source.getId());
-        response.setEventId(source.getIduser());
+        response.setEventId(source.get().getId());
+        response.setEventId(source.get().getIduser());
         return response;
     }
 }

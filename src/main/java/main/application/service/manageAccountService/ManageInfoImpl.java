@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,47 +37,49 @@ public class ManageInfoImpl implements ManageInfo{
     @Override
     public UsuarioResource changeName(Integer idUser, String newName) throws IllegalArgumentException{
 
-        Usuario user = repoUser.findOne(idUser);
+        Optional<Usuario> user = repoUser.findById(idUser);
 
-        if(user == null)
+        if(!user.isPresent())
             return null;
-        else{
-            Usuario nameUnique = repoUser.findByName(newName);
 
-            if(nameUnique == null)//si no hay usuarios con newName, podrá cambiar el nombre
-                user.setName(newName);
+        else{
+            Optional<Usuario> nameUnique = repoUser.findByName(newName);
+
+            if(!nameUnique.isPresent())//si no hay usuarios con newName, podrá cambiar el nombre
+                user.get().setName(newName);
             else{
                 throw new IllegalArgumentException("There is already a user with name : " + newName);
             }
 
-            repoUser.save(user);
+            repoUser.save(user.get());
             return userConverter.convert(user);
         }
     }
 
     @Override
     public UsuarioResource changePasswd(Integer idUser, String newPasswd) {
-        Usuario user = repoUser.findOne(idUser);
+        Optional<Usuario> user = repoUser.findById(idUser);
 
-        if(user == null)
+        if(!user.isPresent())
             return null;
+
         else{
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPasswd(encoder.encode(newPasswd));
-            repoUser.save(user);
+            user.get().setPasswd(encoder.encode(newPasswd));
+            repoUser.save(user.get());
             return userConverter.convert(user);
         }
     }
 
     @Override
     public UsuarioResource changeEmail(Integer idUser, String newMail) {
-        Usuario user = repoUser.findOne(idUser);
+        Optional<Usuario> user = repoUser.findById(idUser);
 
-        if(user == null)
+        if(!user.isPresent())
             return null;
         else{
-            user.setEmail(newMail);
-            repoUser.save(user);
+            user.get().setEmail(newMail);
+            repoUser.save(user.get());
             return userConverter.convert(user);
         }
     }
@@ -84,9 +87,9 @@ public class ManageInfoImpl implements ManageInfo{
     @Override
     public UsuarioResource changeProfilePicture(Integer idUser, MultipartFile newProfilePic) throws IOException {
 
-        Usuario user = repoUser.findOne(idUser);
+        Optional<Usuario> user = repoUser.findById(idUser);
 
-        if(user == null)
+        if(!user.isPresent())
             return null;
 
         Matcher matcher = imagePattern.matcher(newProfilePic.getOriginalFilename());
@@ -95,7 +98,7 @@ public class ManageInfoImpl implements ManageInfo{
             throw new IllegalArgumentException("Only jpeg and png images are supported.");
 
 
-        File folder = new File(apacheRootFolder + "/" + user.getId());
+        File folder = new File(apacheRootFolder + "/" + user.get().getId());
         folder.mkdirs();
 
         String name = folder.getAbsolutePath() + "/pfp." + matcher.group(1);
@@ -103,9 +106,9 @@ public class ManageInfoImpl implements ManageInfo{
         stream.write(newProfilePic.getBytes());
         stream.close();
 
-        String address = String.format("%s/%s/pfp.%s", apacheAddress, user.getId(), matcher.group(1));
-        user.setImage(address);
-        repoUser.save(user);
+        String address = String.format("%s/%s/pfp.%s", apacheAddress, user.get().getId(), matcher.group(1));
+        user.get().setImage(address);
+        repoUser.save(user.get());
 
         return userConverter.convert(user);
 

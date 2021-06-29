@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class LogoutTokenGenerator {
@@ -22,7 +23,7 @@ public class LogoutTokenGenerator {
     public String getToken(String username, Integer minutes) {
 
         minutes *= 60000;
-        Usuario user = repo.findByName(username);
+        Usuario user = repo.getByName(username);
         
         return  Jwts.builder()
                 .setSubject(user.getId().toString())

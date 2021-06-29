@@ -7,6 +7,7 @@ import java.sql.Date;
 
 @Resource
 @Data
+
 public class PublicacionResource {
 
     private Integer id;

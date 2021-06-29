@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class SponsorServiceImpl implements SponsorService {
@@ -44,10 +45,14 @@ public class SponsorServiceImpl implements SponsorService {
     // pone a true el valor de VIP y mete el dinero aportado
     public void setVIP(Integer id, Float money) {
 
-        Colaborador colab = repoColab.findOne(id);
-        colab.setVip(true);
-        colab.setMoney(colab.getMoney() + money);
-        repoColab.save(colab);
+        Optional<Colaborador> colab = repoColab.findById(id);
+
+        if (colab.isPresent()) {
+            colab.get().setVip(true);
+            colab.get().setMoney(colab.get().getMoney() + money);
+            repoColab.save(colab.get());
+        }
+
     }
 
 
@@ -58,6 +63,7 @@ public class SponsorServiceImpl implements SponsorService {
     public PatrocinioResource obtain(Integer id, Integer type, Float money) {
 
         Patrocinio sponsorship = null;
+
         switch(type) {
             case 1: // 1 mes
                 sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30)));
@@ -72,11 +78,12 @@ public class SponsorServiceImpl implements SponsorService {
                 sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30*12)));
                 break;
         }
+
         repoSponsor.save(sponsorship);
 
         setVIP(id, money);
 
-        return converterSponsor.convert(sponsorship);
+        return converterSponsor.convert(Optional.of(sponsorship));
     }
 
 
@@ -86,25 +93,29 @@ public class SponsorServiceImpl implements SponsorService {
     // devuelve un patrocinio modificado
     public PatrocinioResource modify(Integer id, Integer type, Float money) {
 
-        Patrocinio sponsorship = repoSponsor.findById(id);
-        LocalDate date = sponsorship.getEndtime().toLocalDate();
-        switch(type) {
-            case 1: // 1 mes
-                sponsorship.setEndtime(Date.valueOf(date.plusDays(30)));
-                break;
-            case 2: // 3 meses
-                sponsorship.setEndtime(Date.valueOf(date.plusDays(30*3)));
-                break;
-            case 3: // 6 meses
-                sponsorship.setEndtime(Date.valueOf(date.plusDays(30*6)));
-                break;
-            case 4: // 12 meses
-                sponsorship.setEndtime(Date.valueOf(date.plusDays(30*12)));
-                break;
-        }
-        repoSponsor.save(sponsorship);
+        Optional<Patrocinio> sponsorship = repoSponsor.findById(id);
 
-        setVIP(id, money);
+        if (sponsorship.isPresent()) {
+
+            LocalDate date = sponsorship.get().getEndtime().toLocalDate();
+            switch(type) {
+                case 1: // 1 mes
+                    sponsorship.get().setEndtime(Date.valueOf(date.plusDays(30)));
+                    break;
+                case 2: // 3 meses
+                    sponsorship.get().setEndtime(Date.valueOf(date.plusDays(30*3)));
+                    break;
+                case 3: // 6 meses
+                    sponsorship.get().setEndtime(Date.valueOf(date.plusDays(30*6)));
+                    break;
+                case 4: // 12 meses
+                    sponsorship.get().setEndtime(Date.valueOf(date.plusDays(30*12)));
+                    break;
+            }
+
+            repoSponsor.save(sponsorship.get());
+            setVIP(id, money);
+        }
 
         return converterSponsor.convert(sponsorship);
     }

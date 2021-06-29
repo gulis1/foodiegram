@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface RepoComentario extends JpaRepository<Comentario, Integer> {
 
-    public List<Comentario> findByIdpubliOrderByIdAsc(Integer idpubli);
+    List<Comentario> findByIdpubliOrderByIdAsc(Integer idpubli);
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ColaboradorServiceImpl implements ColaboradorService {
@@ -35,8 +36,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         String city=null;
         String street= null;
 
-
-        Usuario user = repoUsuario.findOne(userid);
+        Usuario user = repoUsuario.getById(userid);
 
         if (form.getLatitud() != null && form.getLongitud() != null) {
             Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
@@ -51,17 +51,17 @@ public class ColaboradorServiceImpl implements ColaboradorService {
             }
         }
 
-        Colaborador colaborador=new Colaborador(user.getId(), form.getOrigin(), form.getType(), country,city,street);
+        Colaborador colaborador = new Colaborador(user.getId(), form.getOrigin(), form.getType(), country,city,street);
         user.setRole(RoleEnum.ROLE_COL);
         repoUsuario.save(user);
         repoColaborador.save(colaborador);
 
-        return converterCol.convert(colaborador);
+        return converterCol.convert(Optional.of(colaborador));
     }
 
     @Override
     public ColaboradorResource getCollab(Integer User) {
-        return converterCol.convert(repoColaborador.findOne(User));
+        return converterCol.convert(repoColaborador.findById(User));
     }
 
 

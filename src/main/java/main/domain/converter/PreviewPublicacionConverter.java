@@ -5,14 +5,15 @@ import main.persistence.entity.Publicacion;
 import org.springframework.core.convert.converter.Converter;
 
 import java.text.DecimalFormat;
+import java.util.Optional;
 
 
-public class PreviewPublicacionConverter implements Converter<Publicacion, PreviewPublicacion> {
+public class PreviewPublicacionConverter implements Converter<Optional<Publicacion>, PreviewPublicacion> {
 
     @Override
-    public PreviewPublicacion convert(Publicacion source) {
+    public PreviewPublicacion convert(Optional<Publicacion> source) {
 
         DecimalFormat df = new DecimalFormat("#.##");
-        return source != null ? new PreviewPublicacion(source.getId(), source.getImage(), df.format(source.getMedia()), source.getText()) : null;
+        return source.map(publicacion -> new PreviewPublicacion(publicacion.getId(), publicacion.getImage(), df.format(publicacion.getMedia()), publicacion.getText())).orElse(null);
     }
 }

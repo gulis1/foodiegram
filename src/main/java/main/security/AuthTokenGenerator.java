@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AuthTokenGenerator {
@@ -29,13 +30,13 @@ public class AuthTokenGenerator {
 
     public String buildToken(String username, int minutes) {
 
-        Usuario user = repoUser.findByName(username);
+        Usuario user = repoUser.getByName(username);
         return getToken(user.getId(), username, minutes, user.getRole().toString());
     }
 
     public String buildToken(Integer userID, int minutes) {
 
-        Usuario user = repoUser.findOne(userID);
+        Usuario user = repoUser.getById(userID);
         return getToken(user.getId(), user.getName(), minutes, user.getRole().toString());
     }
 
@@ -43,16 +44,16 @@ public class AuthTokenGenerator {
 
         minutes *= 60000;
 
-        Jwtoken dbToken = repoJwtoke.findByUserid(userID);
+        Optional<Jwtoken> dbToken = repoJwtoke.findByUserid(userID);
 
-        if(dbToken!= null)
-            dbToken.setExpiredate(new Date(System.currentTimeMillis() + minutes));
+        if(dbToken.isPresent())
+            dbToken.get().setExpiredate(new Date(System.currentTimeMillis() + minutes));
 
         else
-            dbToken = new Jwtoken(userID, new Date(System.currentTimeMillis() + minutes));
+            dbToken = Optional.of(new Jwtoken(userID, new Date(System.currentTimeMillis() + minutes)));
 
 
-        repoJwtoke.save(dbToken);
+        repoJwtoke.save(dbToken.get());
 
         return  Jwts.builder()
                 .setSubject(userID.toString())

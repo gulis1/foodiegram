@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,13 +29,13 @@ public class ViewImagesImpl implements  ViewImages{
     @Override
     public List<PreviewPublicacion> viewPost(Integer idUser) {
 
-        Usuario user = repoUser.findOne(idUser);
+        Optional<Usuario> user = repoUser.findById(idUser);
 
-        if(user == null) //comprobamos que existe el usuario con idUser
+        if(!user.isPresent()) //comprobamos que existe el usuario con idUser
             return null;
         else{
             List<Publicacion> post = repoPost.findByIduserOrderByIdDesc(idUser);
-            return post.stream().map(converterPreview::convert).collect(Collectors.toList());
+            return post.stream().map(x -> converterPreview.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
 }

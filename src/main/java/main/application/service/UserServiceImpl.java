@@ -14,10 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,30 +60,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<PreviewPublicacion> getPosts(String user) {
 
-        Usuario usuario = repoUsuario.findByName(user);
+        Optional<Usuario> usuario = repoUsuario.findByName(user);
 
-        if (usuario == null)
+        if (!usuario.isPresent())
             return null;
 
         else {
 
-            List<Publicacion> publicaciones = repoPubli.findByIduserOrderByIdDesc(usuario.getId());
-            return publicaciones.stream().map(converterPreview::convert).collect(Collectors.toList());
+            List<Publicacion> publicaciones = repoPubli.findByIduserOrderByIdDesc(usuario.get().getId());
+            return publicaciones.stream().map(x -> converterPreview.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
 
     @Override
     public List<ValoracionResource> getRatings(String user) {
 
-        Usuario usuario = repoUsuario.findByName(user);
+        Optional<Usuario> usuario = repoUsuario.findByName(user);
 
-        if (usuario == null)
+        if (!usuario.isPresent())
             return null;
 
         else {
 
-            List<Valoracion> valoracionU = repoVal.findByIduser(usuario.getId());
-            return valoracionU.stream().map(converterVal::convert).collect(Collectors.toList());
+            List<Valoracion> valoracionU = repoVal.findByIduser(usuario.get().getId());
+            return valoracionU.stream().map(x -> converterVal.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
 
@@ -103,10 +100,10 @@ public class UserServiceImpl implements UserService {
         else if(!user.getEmail().contains("@"))
             throw new IllegalArgumentException("The email introduces is NOT valid, please insert a valid e-mail.");
 
-        else if (repoUsuario.findByEmail(user.getEmail()) != null)
+        else if (repoUsuario.findByEmail(user.getEmail()).isPresent())
             throw new IllegalArgumentException("That e-mail is already registered.");
 
-        else if (repoUsuario.findByName(user.getUsername()) != null)
+        else if (repoUsuario.findByName(user.getUsername()).isPresent())
             throw new IllegalArgumentException("That username is already taken.");
 
 
@@ -117,7 +114,7 @@ public class UserServiceImpl implements UserService {
             // Por si coincide que ese token ya exista (Dificil, pero bueno...)
             do {
                 token = random.nextInt(100000000);
-            }while(repoToken.findByToken(token) != null);
+            }while(repoToken.findByToken(token).isPresent());
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -134,9 +131,7 @@ public class UserServiceImpl implements UserService {
             sendEmailService.sendEmails(user.getEmail(), mensaje, topic);
 
 
-
-
-            return converterUser.convert(newUser);
+            return converterUser.convert(Optional.of(newUser));
 
         }
     }
@@ -145,30 +140,38 @@ public class UserServiceImpl implements UserService {
     public UsuarioResource verify(Integer token) {//token  de entrada
        //token de entrada comparar token con la id del user
         //
-        Verifytoken verToken = repoToken.findByToken(token);
+        Optional<Verifytoken> verToken = repoToken.findByToken(token);
 
-        if (verToken==null)
+        if (!verToken.isPresent())
             return null;
 
-        if(verToken.getExpiredate().before(new Date())) {
-            repoToken.delete(verToken);
+        if(verToken.get().getExpiredate().before(new Date())) {
+            repoToken.delete(verToken.get());
             return null;
         }
-        Usuario newUser = repoUsuario.findByEmail(verToken.getEmail());
-        newUser.setEnabled(true);
-        newUser.setRole(RoleEnum.ROLE_USER);
-        repoUsuario.save(newUser);
-        repoToken.delete(verToken);
 
+        Optional<Usuario> newUser = repoUsuario.findByEmail(verToken.get().getEmail());
+
+        if (!newUser.isPresent())
+            return null;
+
+        newUser.get().setEnabled(true);
+        newUser.get().setRole(RoleEnum.ROLE_USER);
+        repoUsuario.save(newUser.get());
+        repoToken.delete(verToken.get());
 
         return converterUser.convert(newUser);
     }
 
     @Override
-    public Usuario_baneadoResource banUser(String user,String severity) throws IllegalArgumentException{
+    public Usuario_baneadoResource banUser(String user, String severity) throws IllegalArgumentException{
         //nombre es unico
-        Usuario newUser=repoUsuario.findByName(user);
-        newUser.setEnabled(false);
+        Optional<Usuario> newUser = repoUsuario.findByName(user);
+
+        if (!newUser.isPresent())
+            return null;
+
+        newUser.get().setEnabled(false);
         int maxPenalty=5; //maximo
         int Severity; //local
 
@@ -185,34 +188,33 @@ public class UserServiceImpl implements UserService {
 
 
         date=this.calculateDate(Severity);
-        Usuario_baneado bannedUser=new Usuario_baneado(newUser.getId(),date);
+        Usuario_baneado bannedUser = new Usuario_baneado(newUser.get().getId(),date);
 
         repoUsuario_baneado.save(bannedUser);
-        repoUsuario.save(newUser);
+        repoUsuario.save(newUser.get());
 
 
-        return converterBannedUser.convert(bannedUser);
+        return converterBannedUser.convert(Optional.of(bannedUser));
     }
 
 
     @Override
     public Usuario_baneadoResource unbanUser(String user) throws IllegalArgumentException{
-        Usuario newUser;
-        Integer id;
 
-        try {
-            newUser = repoUsuario.findByName(user);
-            newUser.setEnabled(true);
-            id = newUser.getId();
-        }
+        Optional<Usuario> newUser = repoUsuario.findByName(user);
 
-        catch(Exception e){
+        if (!newUser.isPresent())
             throw new IllegalArgumentException("Usuario no existe");
-        }
 
-        Usuario_baneado bannedUser=repoUsuario_baneado.findOne(id);
-        repoUsuario_baneado.delete(bannedUser);
-        newUser.setEnabled(true);
+        newUser.get().setEnabled(true);
+
+        Optional<Usuario_baneado> bannedUser = repoUsuario_baneado.findById(newUser.get().getId());
+
+        if (bannedUser.isPresent()) {
+            repoUsuario_baneado.delete(bannedUser.get());
+            newUser.get().setEnabled(true);
+
+        }
 
         return null;
 
@@ -222,33 +224,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsuarioResource deleteUser(String user){
 
-        Usuario newUser=repoUsuario.findByName(user);
-        repoUsuario.delete(newUser);
-        return null;
+        Optional<Usuario> usuario = repoUsuario.findByName(user);
+
+        usuario.ifPresent(value -> repoUsuario.delete(value));
+
+        return converterUser.convert(usuario);
     }
 
     @Override
     public List<Usuario_baneadoResource> getBannedUserList(){
         List<Usuario_baneado> listabaneado = repoUsuario_baneado.findAll();
 
-        return listabaneado.stream().map(converterBannedUser::convert).collect(Collectors.toList());
+        return listabaneado.stream().map(x -> converterBannedUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
 
     @Override
     public UsuarioResource sendWarning(String user,Integer type){
 
-        Usuario newUser=repoUsuario.findByName(user);
-        String email= newUser.getEmail();
-        Date actualDate=new Date();
-        String mensaje=getWarningMessage(type)+", fecha de la operacion: "+actualDate;
-        String topic="AVISO: COMETISTES UNA INFRACCION EN FOODIEGRAM";
-        sendEmailService.sendEmails(email, mensaje, topic);
-        return null;
+        Optional<Usuario> usuario = repoUsuario.findByName(user);
+
+        if (usuario.isPresent()) {
+            String email= usuario.get().getEmail();
+            Date currentDate = new Date();
+            String mensaje = getWarningMessage(type)+", fecha de la operacion: " + currentDate;
+            String topic="AVISO: COMETISTES UNA INFRACCION EN FOODIEGRAM";
+            sendEmailService.sendEmails(email, mensaje, topic);
+        }
+
+        return converterUser.convert(usuario);
     }
-
-
-
 
     private String getWarningMessage(Integer num) {
         String message="";

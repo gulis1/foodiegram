@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -119,7 +118,7 @@ public class ControllerPrueba {
     }
 
     @PostMapping("/postLogin")
-    public void login(@Valid @ModelAttribute("userLog") UserForm user, HttpServletResponse response, Model model) throws IOException {
+    public void login(@ModelAttribute("user") UserForm user, HttpServletResponse response, Model model) throws IOException {
 
         try {
             UsernamePasswordAuthenticationToken userData = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
@@ -180,7 +179,7 @@ public class ControllerPrueba {
     }
 
     @PostMapping("/postRegister")
-    public void registerUser(@Valid @ModelAttribute("newUser") UserForm user, HttpServletResponse response, Model model) throws IOException {
+    public void registerUser(@ModelAttribute("newUser") UserForm user, HttpServletResponse response, Model model) throws IOException {
 
         try {
             UsuarioResource newUser = service.register(user);
@@ -225,7 +224,7 @@ public class ControllerPrueba {
     }
 
     @PostMapping("/postUpload")
-    void postUpload(@Valid @ModelAttribute("newPost") PostForm post, HttpServletResponse response,  Model model) throws IOException {
+    void postUpload(@ModelAttribute("newPost") PostForm post, HttpServletResponse response,  Model model) throws IOException {
 
         try {
             Integer userId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -274,7 +273,7 @@ public class ControllerPrueba {
     }
 
     @PostMapping("/postFriends")
-    void postFriends(@Valid @ModelAttribute("friendManagement") FriendForm friend, HttpServletResponse response, Model model) throws IOException {
+    void postFriends(@ModelAttribute("friendManagement") FriendForm friend, HttpServletResponse response, Model model) throws IOException {
         Integer userId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
 
         try{

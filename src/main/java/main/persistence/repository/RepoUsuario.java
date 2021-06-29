@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RepoUsuario extends JpaRepository<Usuario, Integer> {
 
-    public Usuario findByEmail(String email);
-    public Usuario findByName(String name);
-    List<Usuario> findByEnabled(boolean enabled);
+    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByName(String name);
+    Usuario getByName(String name);
     List<Usuario> findBynameContainingIgnoreCase(String name);
 
     @Query(value = "select * from usuario join numvalpubli on id = iduser order by numpubli desc limit 15", nativeQuery = true)

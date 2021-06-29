@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.NoPermissionException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,10 +30,9 @@ public class MensajeServiceImpl implements MensajeService{
 
     @Override
     public MensajeResource deleteMensaje(Integer mensID) throws NoPermissionException {
-        Mensaje mens = repoMens.findOne(mensID);
+        Optional<Mensaje> mens = repoMens.findById(mensID);
 
-        if (mens != null)
-            repoMens.delete(mens);
+        mens.ifPresent(mensaje -> repoMens.delete(mensaje));
 
         return converterMens.convert(mens);
 
@@ -41,15 +41,16 @@ public class MensajeServiceImpl implements MensajeService{
     @Override
     public MensajeResource setMensaje(Integer userID, MessageForm mensaje) throws IllegalArgumentException {
 
-        Usuario user2 = repoUser.findByName(mensaje.getReceiver());
+        Optional<Usuario> user2 = repoUser.findByName(mensaje.getReceiver());
 
-        if (user2 == null)
+        if (!user2.isPresent())
             throw new IllegalArgumentException("That user does not exist.");
 
 
-        Mensaje mens = new Mensaje(userID, user2.getId(), mensaje.getText());
+        Mensaje mens = new Mensaje(userID, user2.get().getId(), mensaje.getText());
         repoMens.save(mens);
-        return converterMens.convert(mens);
+
+        return converterMens.convert(Optional.of(mens));
 
     }
 
@@ -57,10 +58,15 @@ public class MensajeServiceImpl implements MensajeService{
     public List<MensajeResource> getMensajes(Integer userID) {
 
 
-        Usuario user = repoUser.findOne(userID);
+        Optional<Usuario> user = repoUser.findById(userID);
 
-        List<Mensaje> mensajes = repoMens.findByIduser1OrIduser2(user.getId(), user.getId());
-        return mensajes.stream().map(converterMens::convert).collect(Collectors.toList());
+        if (user.isPresent()) {
+            List<Mensaje> mensajes = repoMens.findByIduser1OrIduser2(user.get().getId(), user.get().getId());
+            return mensajes.stream().map(mensaje -> converterMens.convert(Optional.of(mensaje))).collect(Collectors.toList());
+        }
+
+        else return null;
+
 
     }
 

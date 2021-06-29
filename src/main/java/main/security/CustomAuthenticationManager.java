@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class CustomAuthenticationManager implements AuthenticationManager {
 
@@ -25,16 +27,16 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        Usuario usuario = userRepo.findByName(username);
+        Optional<Usuario> usuario = userRepo.findByName(username);
 
-        if (usuario == null || !encoder.matches(password, usuario.getPasswd()))
+        if (!usuario.isPresent() || !encoder.matches(password, usuario.get().getPasswd()))
             throw new BadCredentialsException("1000");
 
-        else if (!usuario.isEnabled())
+        else if (!usuario.get().isEnabled())
             throw new DisabledException("1001");
 
         else
-            return new UsernamePasswordAuthenticationToken(usuario.getId(), password, null);
+            return new UsernamePasswordAuthenticationToken(usuario.get().getId(), password, null);
 
 
     }

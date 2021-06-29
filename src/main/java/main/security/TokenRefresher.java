@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TokenRefresher {
 
@@ -25,9 +27,9 @@ public class TokenRefresher {
     public String refresh(String token) throws ExpiredJwtException, MalformedJwtException {
 
         Claims claims =  Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
-        Refreshtoken lastToken = repo.findByUserid(Integer.parseInt(claims.getSubject()));
+        Optional<Refreshtoken> lastToken = repo.findByUserid(Integer.parseInt(claims.getSubject()));
 
-        if (lastToken != null && claims.getExpiration().compareTo(lastToken.getExpiredate()) < 0)
+        if (lastToken.isPresent() && claims.getExpiration().compareTo(lastToken.get().getExpiredate()) < 0)
             throw new ExpiredJwtException(null, claims, "A new token for this user has been created");
 
         return generator.buildToken(Integer.parseInt(claims.getSubject()),  30);

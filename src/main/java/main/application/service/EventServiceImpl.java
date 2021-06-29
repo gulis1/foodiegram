@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class EventServiceImpl implements EventService {
     public List<EventoResource> getEventListByIdcolab(Integer idcolab) {
 
         List<Evento> userList = repoEvent.findByIdcolab(idcolab);
-        return userList.stream().map(converterEvent::convert).collect(Collectors.toList());
+        return userList.stream().map(x -> converterEvent.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // ORGANIZAR EVENTO
@@ -84,7 +85,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        return converterEvent.convert(evnt);
+        return converterEvent.convert(java.util.Optional.of(evnt));
     }
 
     // MODIFICAR EVENTO
@@ -93,11 +94,12 @@ public class EventServiceImpl implements EventService {
     public EventoResource modify(Integer id,EventForm form) throws IOException, IllegalArgumentException {
 
         // encuentra el evento de id
-        Evento evnt = repoEvent.findOne(id);
-        // se supone que siempre se encuentra porque en la seleccion del evento se muestran los existente
-        // por lo que no hace falta controlar una excepcion de si es null
+        Optional<Evento> evnt = repoEvent.findById(id);
 
-        if (form.getText() != null) evnt.setText(form.getText());
+        if (!evnt.isPresent())
+            return null;
+
+        if (form.getText() != null) evnt.get().setText(form.getText());
         if (form.getImage() != null) {
             Matcher matcher = imagePattern.matcher(form.getImage().getOriginalFilename());
 
@@ -105,7 +107,7 @@ public class EventServiceImpl implements EventService {
                 throw new IllegalArgumentException("Only jpeg and png images are supported.");
 
             try {
-                File folder = new File(apacheRootFolder + "/events/" + evnt.getIdcolab());
+                File folder = new File(apacheRootFolder + "/events/" + evnt.get().getIdcolab());
                 folder.mkdirs();
 
                 String name = folder.getAbsolutePath() + "/" + form.getDate() + "." + matcher.group(1);
@@ -113,14 +115,14 @@ public class EventServiceImpl implements EventService {
                 stream.write(form.getImage().getBytes());
                 stream.close();
 
-                String address = String.format("%s/events/%s/%s.%s", apacheAddress, evnt.getIdcolab(), form.getDate() , matcher.group(1));
-                evnt.setImage(address);
+                String address = String.format("%s/events/%s/%s.%s", apacheAddress, evnt.get().getIdcolab(), form.getDate() , matcher.group(1));
+                evnt.get().setImage(address);
             } catch (IOException e) {
                 throw e;
             }
         }
-        if (form.getDate() != null) evnt.setEndtime(form.getDate());
-        repoEvent.save(evnt);
+        if (form.getDate() != null) evnt.get().setEndtime(form.getDate());
+        repoEvent.save(evnt.get());
 
         return converterEvent.convert(evnt);
     }
@@ -129,10 +131,10 @@ public class EventServiceImpl implements EventService {
     //
     // devuelve true si consigue eliminar el evento sino false
     public boolean delete(Integer id) {
-        Evento evnt = repoEvent.findOne(id);
+        Optional<Evento> evnt = repoEvent.findById(id);
 
-        if (evnt != null) {
-            repoEvent.delete(evnt);
+        if (evnt.isPresent()) {
+            repoEvent.delete(evnt.get());
             return true;
         }
 
@@ -141,13 +143,13 @@ public class EventServiceImpl implements EventService {
 
     public MeetupResource joinEvent(Integer userid, Integer eventID){
 
-        Evento event= repoEvent.findOne(eventID);
+        Optional<Evento> event= repoEvent.findById(eventID);
 
-        if(event!= null) {
+        if(event.isPresent()) {
 
             MeetUp meet=new MeetUp(eventID,userid);
             repoMeetup.save(meet);
-            return converterMeet.convert(meet);
+            return converterMeet.convert(Optional.of(meet));
 
         }
 
@@ -156,11 +158,11 @@ public class EventServiceImpl implements EventService {
 
     public MeetupResource leaveEvent(Integer userid, Integer eventID){
 
-        MeetUp meet = repoMeetup.findOne(new IDmeetUp(eventID,userid));
+        Optional<MeetUp> meet = repoMeetup.findById(new IDmeetUp(eventID,userid));
 
-        if(meet!= null) {
+        if(meet.isPresent()) {
 
-            repoMeetup.delete(meet);
+            repoMeetup.delete(meet.get());
             return converterMeet.convert(meet);
 
         }

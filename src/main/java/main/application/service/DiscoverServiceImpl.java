@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,10 +44,7 @@ public class DiscoverServiceImpl implements DiscoverService {
 
         List<Publicacion> publi = repoPublicacion.fromFriends(userid);
 
-        if(publi==null)
-            return  null;
-
-        return publi.stream().map(publicacionConverter::convert).collect(Collectors.toList());
+        return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
 
     }
 
@@ -55,10 +53,7 @@ public class DiscoverServiceImpl implements DiscoverService {
 
         List<Publicacion> publi = repoPublicacion.bestRated(getDayAmount(period), country, city);
 
-        if(publi==null)
-            return  null;
-
-        return publi.stream().map(publicacionConverter::convert).collect(Collectors.toList());
+        return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     @Override
@@ -66,30 +61,27 @@ public class DiscoverServiceImpl implements DiscoverService {
 
         List<Publicacion> publi = repoPublicacion.mostRated(getDayAmount(period),  country, city);
 
-        if(publi==null)
-            return  null;
-
-        return publi.stream().map(publicacionConverter::convert).collect(Collectors.toList());
+        return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     @Override
     public List<PreviewUsuario> findFollowedByFriends(Integer userid) {
         List<Usuario> list = repoUsuario.findFollowedByFriends(userid);
 
-        return list.stream().map(usuarioConverter::convert).collect(Collectors.toList());
+        return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     @Override
     public List<PreviewUsuario> userWhoFollowXAlsoFollowY(String userName) {
 
-        Usuario user = repoUsuario.findByName(userName);
+        Optional<Usuario> user = repoUsuario.findByName(userName);
 
-        if (user == null)
+        if (!user.isPresent())
             return null;
 
-        List<Usuario> list = repoUsuario.usersFollowedByUsersWhoFollow(user.getId());
+        List<Usuario> list = repoUsuario.usersFollowedByUsersWhoFollow(user.get().getId());
 
-        return list.stream().map(usuarioConverter::convert).collect(Collectors.toList());
+        return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     @Override

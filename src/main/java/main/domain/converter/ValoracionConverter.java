@@ -5,19 +5,21 @@ import main.persistence.entity.Valoracion;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
-public class ValoracionConverter implements Converter<Valoracion, ValoracionResource> {
+public class ValoracionConverter implements Converter<Optional<Valoracion>, ValoracionResource> {
 
     @Override
-    public ValoracionResource convert(Valoracion source){
+    public ValoracionResource convert(Optional<Valoracion> source){
 
-        if (source == null)
+        if (!source.isPresent())
             return null;
 
-        ValoracionResource respose= new ValoracionResource();
-        respose.setPunt(source.getPunt());
-        respose.setIdpubli(source.getIdpubli());
-        respose.setIduser(source.getIduser());
+        ValoracionResource respose = new ValoracionResource();
+        respose.setPunt(source.get().getPunt());
+        respose.setIdpubli(source.get().getIdpubli());
+        respose.setIduser(source.get().getIduser());
         return respose;
     }
 }

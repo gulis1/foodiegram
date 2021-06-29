@@ -4,7 +4,14 @@
 *.iml
 *.ipr
 
+## VSCode
+.factorypath
+.project
+/.settings
+/.vscode
+
 target
 images
 src/main/resources/application.properties
 *.p12
+.classpath

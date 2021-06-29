@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface RepoValoracion extends JpaRepository<Valoracion, IDvaloracion>{
 
-   public List<Valoracion> findByIdpubli(Integer idpubli);
-   public List<Valoracion> findByIduser(Integer iduser);
+   List<Valoracion> findByIdpubli(Integer idpubli);
+   List<Valoracion> findByIduser(Integer iduser);
 }
