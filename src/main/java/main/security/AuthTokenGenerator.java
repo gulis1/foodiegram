@@ -36,7 +36,7 @@ public class AuthTokenGenerator {
 
     public String buildToken(Integer userID, int minutes) {
 
-        Usuario user = repoUser.getById(userID);
+        Usuario user = repoUser.getOne(userID);
         return getToken(user.getId(), user.getName(), minutes, user.getRole().toString());
     }
 

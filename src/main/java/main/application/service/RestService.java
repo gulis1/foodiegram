@@ -1,14 +1,18 @@
 package main.application.service;
 
 import com.google.gson.Gson;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+
+
 import java.util.Map;
+
+
 
 @Service
 public class RestService {
@@ -17,12 +21,13 @@ public class RestService {
     RestTemplate template;
     Gson gson;
 
+
     public RestService() {
 
         this.gson = new Gson();
     }
 
-    @HystrixCommand(fallbackMethod = "fallback")
+    @CircuitBreaker(name="geoData", fallbackMethod = "fallback")
     public Map<String, Object> getGeoData(Double lat, Double lon) {
         String latitude = lat.toString().replace(",", ".");
         String longitude = lon.toString().replace(",", ".");
@@ -53,9 +58,7 @@ public class RestService {
     }
 
     public Map<String, Object> fallback(Double lat, Double lon) {
-
-        System.out.println("Could not geoCode.");
-        return null;
+        return  null;
     }
 
     private Map<String, Object> getJSON(String url) {

@@ -36,7 +36,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         String city=null;
         String street= null;
 
-        Usuario user = repoUsuario.getById(userid);
+        Usuario user = repoUsuario.getOne(userid);
 
         if (form.getLatitud() != null && form.getLongitud() != null) {
             Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
