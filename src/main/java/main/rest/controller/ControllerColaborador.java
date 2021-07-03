@@ -30,7 +30,7 @@ public class ControllerColaborador {
 
         try{
             Integer userid=Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            ColaboradorResource colab= serviceC.getCollab(userid);
+            ColaboradorResource colab = serviceC.getCollab(userid);
             return colab != null ? ResponseEntity.ok(colab) : ResponseEntity.notFound().build();
         }
 

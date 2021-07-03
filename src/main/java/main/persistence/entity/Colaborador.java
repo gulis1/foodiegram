@@ -2,15 +2,16 @@ package main.persistence.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyToOne;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class Colaborador {
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String origin;
     private String type;
@@ -18,20 +19,18 @@ public class Colaborador {
     private String ciudad;
     private String calle;
     private Boolean vip;
-    private float money;
 
-    public Colaborador(Integer id,String origin, String type, String pais,String ciudad,String calle) {
-        this.id = id;
+    public Colaborador(String origin, String type, String pais, String ciudad, String calle, Usuario owner) {
+        this.owner = owner;
         this.origin = origin;
         this.type = type;
         this.calle=calle;
         this.ciudad=ciudad;
         this.pais=pais;
         vip=false;
-        money=0.0f;
-
     }
 
-
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id")
+    private Usuario owner;
 }

@@ -7,7 +7,6 @@ function getCollab() {
         document.getElementById("restaurant-pais").innerText = data.pais;
         document.getElementById("restaurant-ciudad").innerText = data.ciudad;
         document.getElementById("restaurant-calle").innerText = data.calle;
-        document.getElementById("restaurant-money").innerText = data.money + "€";
         document.getElementById("restaurant-vip").innerText = data.vip;
 
         document.getElementById("tierSelectColumn").style.display = "table-cell";
@@ -19,6 +18,7 @@ function getCollab() {
     $.get("/sponsor", data => {
 
         document.getElementById("restaurant-date").innerText = data.endtime;
+        document.getElementById("restaurant-money").innerText = data.money + "€";
     });
 
 }

@@ -1,7 +1,7 @@
 package main.application.service;
 
 
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
 
@@ -30,6 +30,6 @@ public interface DiscoverService {
 
 
     //devuelve una lista con los PreviewColabJOINUser que esten en el mismo pais y/o ciudad ordenados por VIP.
-    List<PreviewColabJOINUser> findCollabs(String country, String city);
+    List<ColaboradorResource> findCollabs(String country, String city);
 
 }

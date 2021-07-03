@@ -9,13 +9,11 @@ import javax.annotation.Resource;
 @Data
 public class ColaboradorResource {
 
-    private  Integer idUser;
-    private  String origin;
-    private  String type;
+    private Integer idUser;
+    private String origin;
+    private String type;
     private String pais;
     private String ciudad;
     private String calle;
-    private boolean vip;
-    private float money;
-
+    private Boolean vip;
 }

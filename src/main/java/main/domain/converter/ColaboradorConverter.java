@@ -25,7 +25,6 @@ public class ColaboradorConverter implements Converter<Optional<Colaborador>,Col
         response.setCiudad(source.get().getCiudad());
         response.setCalle(source.get().getCalle());
         response.setVip(source.get().getVip());
-        response.setMoney(source.get().getMoney());
 
         return response;
     }

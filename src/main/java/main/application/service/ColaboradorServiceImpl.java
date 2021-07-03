@@ -36,7 +36,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         String city=null;
         String street= null;
 
-        Usuario user = repoUsuario.getOne(userid);
+        Usuario user = repoUsuario.getById(userid);
 
         if (form.getLatitud() != null && form.getLongitud() != null) {
             Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
@@ -51,7 +51,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
             }
         }
 
-        Colaborador colaborador = new Colaborador(user.getId(), form.getOrigin(), form.getType(), country,city,street);
+        Colaborador colaborador = new Colaborador(form.getOrigin(), form.getType(), country, city, street, user);
         user.setRole(RoleEnum.ROLE_COL);
         repoUsuario.save(user);
         repoColaborador.save(colaborador);
@@ -60,8 +60,8 @@ public class ColaboradorServiceImpl implements ColaboradorService {
     }
 
     @Override
-    public ColaboradorResource getCollab(Integer User) {
-        return converterCol.convert(repoColaborador.findById(User));
+    public ColaboradorResource getCollab(Integer userID) {
+        return converterCol.convert(repoColaborador.findByOwner_Id(userID));
     }
 
 

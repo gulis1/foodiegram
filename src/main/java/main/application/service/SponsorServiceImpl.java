@@ -4,6 +4,7 @@ import main.domain.converter.PatrocinioConverter;
 import main.domain.resource.PatrocinioResource;
 import main.persistence.entity.Colaborador;
 import main.persistence.entity.Patrocinio;
+import main.persistence.entity.Usuario;
 import main.persistence.repository.RepoColaborador;
 import main.persistence.repository.RepoPatrocinio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,28 +31,22 @@ public class SponsorServiceImpl implements SponsorService {
         return date.plusDays(days).toString();
     }
 
-
-    // devuelve la fecha de vencimiento del patrocinio de un sponsor antiguo
-    // necesita que le pasen la fecha
-    public String getNewDateOldSponsor(Integer days, LocalDate date) {
-        return date.plusDays(days).toString();
+    // devuelve un patrocinio existente o null en caso contrario
+    public PatrocinioResource getSponsorship(Integer id) {
+        return converterSponsor.convert(repoSponsor.findByCollab_Id(id));
     }
 
 
-    // devuelve un patrocinio existente o null en caso contrario
-    public PatrocinioResource getSponsorship(Integer id) { return converterSponsor.convert(repoSponsor.findById(id)); }
-
-
     // pone a true el valor de VIP y mete el dinero aportado
-    public void setVIP(Integer id, Float money) {
+    public void setVIP(Integer id) {
 
         Optional<Colaborador> colab = repoColab.findById(id);
-
+        
+        
         if (colab.isPresent()) {
             colab.get().setVip(true);
-            colab.get().setMoney(colab.get().getMoney() + money);
             repoColab.save(colab.get());
-        }
+         }
 
     }
 
@@ -60,28 +55,30 @@ public class SponsorServiceImpl implements SponsorService {
     //
     // crea un nuevo patrocinio
     // devuelve un patrocinio creado
-    public PatrocinioResource obtain(Integer id, Integer type, Float money) {
+    public PatrocinioResource obtain(Integer userID, Integer type, Float money) {
+
+        Colaborador col = repoColab.getByOwner_Id(userID);
 
         Patrocinio sponsorship = null;
-
+        
         switch(type) {
             case 1: // 1 mes
-                sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30)));
+                sponsorship = new Patrocinio(col, Date.valueOf(getNewDateNewSponsor(30)), money);
                 break;
             case 2: // 3 meses
-                sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30*3)));
+                sponsorship = new Patrocinio(col, Date.valueOf(getNewDateNewSponsor(30*3)), money);
                 break;
             case 3: // 6 meses
-                sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30*6)));
+                sponsorship = new Patrocinio(col, Date.valueOf(getNewDateNewSponsor(30*6)), money);
                 break;
             case 4: // 12 meses
-                sponsorship = new Patrocinio(id, Date.valueOf(getNewDateNewSponsor(30*12)));
+                sponsorship = new Patrocinio(col, Date.valueOf(getNewDateNewSponsor(30*12)), money);
                 break;
         }
 
         repoSponsor.save(sponsorship);
 
-        setVIP(id, money);
+        setVIP(col.getId());
 
         return converterSponsor.convert(Optional.of(sponsorship));
     }
@@ -114,7 +111,7 @@ public class SponsorServiceImpl implements SponsorService {
             }
 
             repoSponsor.save(sponsorship.get());
-            setVIP(id, money);
+            setVIP(id);
         }
 
         return converterSponsor.convert(sponsorship);

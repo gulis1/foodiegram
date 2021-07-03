@@ -2,7 +2,7 @@ package main.rest.controller;
 
 
 import main.application.service.DiscoverService;
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +96,7 @@ public class ControllerDescubrir {
                                              @RequestParam(required = false, defaultValue = "%") String country) {
 
         try {
-            List<PreviewColabJOINUser> collabs = service.findCollabs(country, city);
+            List<ColaboradorResource> collabs = service.findCollabs(country, city);
             return collabs != null ? ResponseEntity.ok(collabs) : ResponseEntity.notFound().build();
         } catch (Exception e) {
 

@@ -1,6 +1,6 @@
 package main.application.service;
 
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPubliJOINUser;
 import main.domain.resource.PreviewUsuario;
 
@@ -22,13 +22,13 @@ public interface SearchService {
     // BUSQUEDA DE LOCALES
     //
     // devuelve una lista de colaboradores cuyo nombre contenga colabname
-    List<PreviewColabJOINUser> getColabListByName(String colabname);
+    List<ColaboradorResource> getColabListByName(String colabname);
 
     // devuelve una lista de colaboradores cuyo origin contenga origin
-    List<PreviewColabJOINUser> getColabListByOrigin(String origin);
+    List<ColaboradorResource> getColabListByOrigin(String origin);
 
     // devuelve una lista de colaboradores cuyo type contenga type
-    List<PreviewColabJOINUser> getColabListByType(String type);
+    List<ColaboradorResource> getColabListByType(String type);
 
     // BUSQUEDA DE PUBLICACIONES
     //

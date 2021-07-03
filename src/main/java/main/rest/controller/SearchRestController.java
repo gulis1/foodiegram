@@ -1,7 +1,7 @@
 package main.rest.controller;
 
 import main.application.service.SearchService;
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPubliJOINUser;
 import main.domain.resource.PreviewUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +57,9 @@ public class SearchRestController {
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/colab/name/{colabname}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewColabJOINUser>> getColabListByName(@PathVariable String colabname) {
+    public ResponseEntity<List<ColaboradorResource>> getColabListByName(@PathVariable String colabname) {
 
-        List<PreviewColabJOINUser> colabList = service.getColabListByName(colabname);
+        List<ColaboradorResource> colabList = service.getColabListByName(colabname);
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 
@@ -67,9 +67,9 @@ public class SearchRestController {
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/colab/origin/{origin}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewColabJOINUser>> getColabListByOrigin(@PathVariable String origin) {
+    public ResponseEntity<List<ColaboradorResource>> getColabListByOrigin(@PathVariable String origin) {
 
-        List<PreviewColabJOINUser> colabList = service.getColabListByOrigin(origin);
+        List<ColaboradorResource> colabList = service.getColabListByOrigin(origin);
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 
@@ -77,9 +77,9 @@ public class SearchRestController {
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/colab/type/{type}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewColabJOINUser>> getColabListByType(@PathVariable String type) {
+    public ResponseEntity<List<ColaboradorResource>> getColabListByType(@PathVariable String type) {
 
-        List<PreviewColabJOINUser> colabList = service.getColabListByType(type);
+        List<ColaboradorResource> colabList = service.getColabListByType(type);
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 

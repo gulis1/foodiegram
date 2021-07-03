@@ -1,16 +1,16 @@
 package main.application.service;
 
 
-import main.domain.converter.PreviewColabJOINUserConverter;
+import main.domain.converter.ColaboradorConverter;
 import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.converter.PreviewUserConverter;
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
-import main.persistence.entity.ColabJOINUser;
+import main.persistence.entity.Colaborador;
 import main.persistence.entity.Publicacion;
 import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColabJOINUser;
+import main.persistence.repository.RepoColaborador;
 import main.persistence.repository.RepoPublicacion;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,11 @@ public class DiscoverServiceImpl implements DiscoverService {
     private RepoUsuario repoUsuario;
 
     @Autowired
-    private RepoColabJOINUser repoColabJOINUser;
+    private RepoColaborador repoColab;
 
-    private PreviewColabJOINUserConverter previewColabJOINUserConverter= new PreviewColabJOINUserConverter();
     private PreviewUserConverter usuarioConverter = new PreviewUserConverter();
     private PreviewPublicacionConverter publicacionConverter = new PreviewPublicacionConverter();
+    private ColaboradorConverter collabConverter = new ColaboradorConverter();
 
 
     public List<PreviewPublicacion> discoverByAmigo(){
@@ -85,11 +85,11 @@ public class DiscoverServiceImpl implements DiscoverService {
     }
 
     @Override
-    public List<PreviewColabJOINUser> findCollabs(String country, String city) {
+    public List<ColaboradorResource> findCollabs(String country, String city) {
 
-        List<ColabJOINUser> collab=repoColabJOINUser.descubrirCollab(country,city);
+        List<Colaborador> collabs = repoColab.descubrirCollab(country,city);
 
-        return collab.stream().map(previewColabJOINUserConverter::convert).collect(Collectors.toList());
+        return collabs.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
 

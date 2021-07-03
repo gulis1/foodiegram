@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RepoPatrocinio extends JpaRepository<Patrocinio, Integer> {
 
+    Optional<Patrocinio> findByCollab_Id(int collabID);
+
 }

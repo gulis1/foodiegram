@@ -1,15 +1,16 @@
 package main.application.service;
 
-import main.domain.converter.PreviewColabJOINUserConverter;
+import main.domain.converter.ColaboradorConverter;
 import main.domain.converter.PreviewPubliJOINUserConverter;
 import main.domain.converter.PreviewUserConverter;
-import main.domain.resource.PreviewColabJOINUser;
+import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPubliJOINUser;
 import main.domain.resource.PreviewUsuario;
-import main.persistence.entity.ColabJOINUser;
+import main.persistence.entity.Colaborador;
 import main.persistence.entity.PubliJOINUser;
 import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColabJOINUser;
+
+import main.persistence.repository.RepoColaborador;
 import main.persistence.repository.RepoPubliJOINUser;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,15 @@ import java.util.stream.Collectors;
 public class SearchServiceImpl implements SearchService {
 
     private final PreviewUserConverter converterPreviewUser = new PreviewUserConverter();
-    private final PreviewColabJOINUserConverter converterPreviewColabJUser = new PreviewColabJOINUserConverter();
     private final PreviewPubliJOINUserConverter converterPreviewPubliJUser = new PreviewPubliJOINUserConverter();
+    private final ColaboradorConverter collabConverter = new ColaboradorConverter();
 
     @Autowired
     private RepoUsuario repoUser;
+
     @Autowired
-    private RepoColabJOINUser repoColabJUser;
+    private RepoColaborador collabRepo;
+
     @Autowired
     private RepoPubliJOINUser repoPubliJUser;
 
@@ -61,26 +64,26 @@ public class SearchServiceImpl implements SearchService {
     //
     // devuelve una lista de colaboradores cuyo nombre contenga colabname
     @Override
-    public List<PreviewColabJOINUser> getColabListByName(String colabname) {
+    public List<ColaboradorResource> getColabListByName(String colabname) {
 
-        List<ColabJOINUser> colabJuser = repoColabJUser.findByUsername(colabname);
-        return colabJuser.stream().map(converterPreviewColabJUser::convert).collect(Collectors.toList());
+        List<Colaborador> collabs = collabRepo.findByUsername(colabname);
+        return collabs.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de colaboradores cuyo origin contenga origin
     @Override
-    public List<PreviewColabJOINUser> getColabListByOrigin(String origin) {
+    public List<ColaboradorResource> getColabListByOrigin(String origin) {
 
-        List<ColabJOINUser> colabJuser = repoColabJUser.findByOrigin(origin);
-        return colabJuser.stream().map(converterPreviewColabJUser::convert).collect(Collectors.toList());
+        List<Colaborador> colabJuser = collabRepo.findByOrigin(origin);
+        return colabJuser.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de colaboradores cuyo type contenga type
     @Override
-    public List<PreviewColabJOINUser> getColabListByType(String type) {
+    public List<ColaboradorResource> getColabListByType(String type) {
 
-        List<ColabJOINUser> colabJuser = repoColabJUser.findByType(type);
-        return colabJuser.stream().map(converterPreviewColabJUser::convert).collect(Collectors.toList());
+        List<Colaborador> colabJuser = collabRepo.findByType(type);
+        return colabJuser.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // BUSQUEDA DE PUBLICACIONES
