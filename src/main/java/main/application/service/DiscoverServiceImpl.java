@@ -12,7 +12,7 @@ import main.persistence.entity.Post;
 import main.persistence.entity.User;
 import main.persistence.repository.RestaurantRepo;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class DiscoverServiceImpl implements DiscoverService {
     private PostRepo repoPublicacion;
 
     @Autowired
-    private RepoUsuario repoUsuario;
+    private UserRepo userRepo;
 
     @Autowired
     private RestaurantRepo repoColab;
@@ -66,7 +66,7 @@ public class DiscoverServiceImpl implements DiscoverService {
 
     @Override
     public List<PreviewUsuario> findFollowedByFriends(Integer userid) {
-        List<User> list = repoUsuario.findFollowedByFriends(userid);
+        List<User> list = userRepo.findFollowedByFriends(userid);
 
         return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
@@ -74,12 +74,12 @@ public class DiscoverServiceImpl implements DiscoverService {
     @Override
     public List<PreviewUsuario> userWhoFollowXAlsoFollowY(String userName) {
 
-        Optional<User> user = repoUsuario.findByName(userName);
+        Optional<User> user = userRepo.findByName(userName);
 
         if (!user.isPresent())
             return null;
 
-        List<User> list = repoUsuario.usersFollowedByUsersWhoFollow(user.get().getUserid());
+        List<User> list = userRepo.usersFollowedByUsersWhoFollow(user.get().getUserid());
 
         return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }

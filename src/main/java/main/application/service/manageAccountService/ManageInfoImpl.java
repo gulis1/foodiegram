@@ -3,7 +3,7 @@ package main.application.service.manageAccountService;
 import main.domain.converter.UsuarioConverter;
 import main.domain.resource.UsuarioResource;
 import main.persistence.entity.User;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,7 +23,7 @@ public class ManageInfoImpl implements ManageInfo{
     private final UsuarioConverter userConverter = new UsuarioConverter();
 
     @Autowired
-    RepoUsuario repoUser;
+    UserRepo repoUser;
 
     @Value("${apache.rootFolder}")
     private String apacheRootFolder;

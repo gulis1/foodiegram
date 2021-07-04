@@ -2,7 +2,7 @@ package main.security;
 
 
 import main.persistence.entity.User;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class CustomAuthenticationManager implements AuthenticationManager {
 
     @Autowired
-    RepoUsuario userRepo;
+    UserRepo userRepo;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws BadCredentialsException, DisabledException {

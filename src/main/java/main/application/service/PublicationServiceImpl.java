@@ -13,7 +13,7 @@ import main.persistence.entity.Rating;
 import main.persistence.entity.User;
 import main.persistence.repository.CommentRepo;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import main.persistence.repository.RatingRepo;
 import main.rest.forms.CommentForm;
 import main.rest.forms.PostForm;
@@ -55,7 +55,7 @@ PublicationServiceImpl implements PublicationService {
     private CommentRepo repoComen;
 
     @Autowired
-    private RepoUsuario repoUsuario;
+    private UserRepo userRepo;
 
     @Autowired
     private RestService restService;
@@ -191,7 +191,7 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public ValoracionResource getRating(Integer pubID, String user) {
 
-        Optional<User> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = userRepo.findByName(user);
 
         return usuario.map(value -> converterVal.convert(repoVal.findById(new RatingID(pubID, value.getUserid())))).orElse(null);
 

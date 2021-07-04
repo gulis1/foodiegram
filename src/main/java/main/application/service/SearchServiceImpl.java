@@ -12,7 +12,7 @@ import main.persistence.entity.User;
 
 import main.persistence.repository.PostRepo;
 import main.persistence.repository.RestaurantRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class SearchServiceImpl implements SearchService {
     private final ColaboradorConverter collabConverter = new ColaboradorConverter();
 
     @Autowired
-    private RepoUsuario repoUser;
+    private UserRepo repoUser;
 
     @Autowired
     private RestaurantRepo collabRepo;

@@ -5,7 +5,7 @@ import main.domain.resource.MensajeResource;
 import main.persistence.entity.Message;
 import main.persistence.entity.User;
 import main.persistence.repository.MessageRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import main.rest.forms.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class MensajeServiceImpl implements MensajeService{
     MessageRepo repoMens;
 
     @Autowired
-    RepoUsuario repoUser;
+    UserRepo repoUser;
 
 
     @Override

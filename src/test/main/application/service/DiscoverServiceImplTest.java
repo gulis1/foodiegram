@@ -12,7 +12,7 @@ import main.persistence.entity.ColabJOINUser;
 import main.persistence.entity.Publicacion;
 import main.persistence.entity.Usuario;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

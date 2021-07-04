@@ -7,7 +7,7 @@ import main.persistence.entity.Restaurant;
 import main.persistence.entity.RoleEnum;
 import main.persistence.entity.User;
 import main.persistence.repository.RestaurantRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import main.rest.forms.CollaborateForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
     private ColaboradorConverter converterCol = new ColaboradorConverter();
 
     @Autowired
-    private RepoUsuario repoUsuario;
+    private UserRepo userRepo;
 
     @Autowired
     private RestaurantRepo repoColaborador;
@@ -36,7 +36,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         String city=null;
         String street= null;
 
-        User user = repoUsuario.getById(userid);
+        User user = userRepo.getById(userid);
 
         if (form.getLatitud() != null && form.getLongitud() != null) {
             Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
@@ -53,7 +53,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
 
         Restaurant colaborador = new Restaurant(form.getOrigin(), form.getType(), country, city, street, user);
         user.setRole(RoleEnum.ROLE_COL);
-        repoUsuario.save(user);
+        userRepo.save(user);
         repoColaborador.save(colaborador);
 
         return converterCol.convert(Optional.of(colaborador));

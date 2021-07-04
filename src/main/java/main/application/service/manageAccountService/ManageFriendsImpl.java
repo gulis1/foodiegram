@@ -8,7 +8,7 @@ import main.persistence.entity.Follow;
 import main.persistence.entity.User;
 import main.persistence.repository.FollowRepo;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class ManageFriendsImpl implements ManageFriends{
     PreviewPublicacionConverter converterPreview = new PreviewPublicacionConverter();
 
     @Autowired
-    RepoUsuario repoUser;
+    UserRepo repoUser;
 
     @Autowired
     FollowRepo followRepo;

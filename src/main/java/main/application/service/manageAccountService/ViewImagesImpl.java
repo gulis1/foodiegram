@@ -6,7 +6,7 @@ import main.domain.resource.PreviewPublicacion;
 import main.persistence.entity.Post;
 import main.persistence.entity.User;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class ViewImagesImpl implements  ViewImages{
     PostRepo repoPost;
 
     @Autowired
-    RepoUsuario repoUser;
+    UserRepo repoUser;
 
     @Override
     public List<PreviewPublicacion> viewPost(Integer idUser) {

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    private RepoUsuario repoUsuario;
+    private UserRepo userRepo;
 
     @Autowired
     private VerifytokenRepo repoToken;
@@ -54,13 +54,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UsuarioResource getUserByName(String user) {
-        return converterUser.convert(repoUsuario.findByName(user));
+        return converterUser.convert(userRepo.findByName(user));
     }
 
     @Override
     public List<PreviewPublicacion> getPosts(String user) {
 
-        Optional<User> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = userRepo.findByName(user);
 
         if (!usuario.isPresent())
             return null;
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<ValoracionResource> getRatings(String user) {
 
-        Optional<User> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = userRepo.findByName(user);
 
         if (!usuario.isPresent())
             return null;
@@ -100,10 +100,10 @@ public class UserServiceImpl implements UserService {
         else if(!user.getEmail().contains("@"))
             throw new IllegalArgumentException("The email introduces is NOT valid, please insert a valid e-mail.");
 
-        else if (repoUsuario.findByEmail(user.getEmail()).isPresent())
+        else if (userRepo.findByEmail(user.getEmail()).isPresent())
             throw new IllegalArgumentException("That e-mail is already registered.");
 
-        else if (repoUsuario.findByName(user.getUsername()).isPresent())
+        else if (userRepo.findByName(user.getUsername()).isPresent())
             throw new IllegalArgumentException("That username is already taken.");
 
 
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
             User newUser = new User(user.getUsername(), encoder.encode(user.getPassword()),null, user.getEmail());
-            repoUsuario.save(newUser);
+            userRepo.save(newUser);
 
             Verifytoken verifyToken=new Verifytoken(user.getEmail(), token);
             repoToken.save(verifyToken);
@@ -150,14 +150,14 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        Optional<User> newUser = repoUsuario.findByEmail(verToken.get().getEmail());
+        Optional<User> newUser = userRepo.findByEmail(verToken.get().getEmail());
 
         if (!newUser.isPresent())
             return null;
 
         newUser.get().setEnabled(true);
         newUser.get().setRole(RoleEnum.ROLE_USER);
-        repoUsuario.save(newUser.get());
+        userRepo.save(newUser.get());
         repoToken.delete(verToken.get());
 
         return converterUser.convert(newUser);
@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario_baneadoResource banUser(String user, String severity) throws IllegalArgumentException{
         //nombre es unico
-        Optional<User> newUser = repoUsuario.findByName(user);
+        Optional<User> newUser = userRepo.findByName(user);
 
         if (!newUser.isPresent())
             return null;
@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService {
         Usuario_baneado bannedUser = new Usuario_baneado(newUser.get().getUserid(),date);
 
         repoUsuario_baneado.save(bannedUser);
-        repoUsuario.save(newUser.get());
+        userRepo.save(newUser.get());
 
 
         return converterBannedUser.convert(Optional.of(bannedUser));
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario_baneadoResource unbanUser(String user) throws IllegalArgumentException{
 
-        Optional<User> newUser = repoUsuario.findByName(user);
+        Optional<User> newUser = userRepo.findByName(user);
 
         if (!newUser.isPresent())
             throw new IllegalArgumentException("Usuario no existe");
@@ -224,9 +224,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsuarioResource deleteUser(String user){
 
-        Optional<User> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = userRepo.findByName(user);
 
-        usuario.ifPresent(value -> repoUsuario.delete(value));
+        usuario.ifPresent(value -> userRepo.delete(value));
 
         return converterUser.convert(usuario);
     }
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsuarioResource sendWarning(String user,Integer type){
 
-        Optional<User> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = userRepo.findByName(user);
 
         if (usuario.isPresent()) {
             String email= usuario.get().getEmail();

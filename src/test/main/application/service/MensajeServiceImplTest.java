@@ -9,7 +9,7 @@ import main.domain.resource.MensajeResource;
 import main.persistence.entity.Mensaje;
 import main.persistence.entity.Usuario;
 import main.persistence.repository.MessageRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 
 import main.rest.forms.MessageForm;
 

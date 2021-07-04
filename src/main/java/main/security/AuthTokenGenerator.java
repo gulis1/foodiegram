@@ -6,7 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import main.persistence.entity.Jwtoken;
 import main.persistence.entity.User;
 import main.persistence.repository.JwtokenRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class AuthTokenGenerator {
     private JwtokenRepo repoJwtoke;
 
     @Autowired
-    private RepoUsuario repoUser;
+    private UserRepo repoUser;
 
 
     @Value("${jwt.auth.secret}")

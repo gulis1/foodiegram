@@ -17,7 +17,7 @@ import main.persistence.entity.Usuario;
 import main.persistence.entity.Valoracion;
 import main.persistence.repository.CommentRepo;
 import main.persistence.repository.PostRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import main.persistence.repository.RatingRepo;
 
 import main.rest.forms.CommentForm;

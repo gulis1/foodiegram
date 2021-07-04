@@ -5,7 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import main.persistence.entity.Refreshtoken;
 import main.persistence.entity.User;
 import main.persistence.repository.RefreshtokenRepo;
-import main.persistence.repository.RepoUsuario;
+import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class RefreshTokenGenerator {
     RefreshtokenRepo repoRefresh;
 
     @Autowired
-    RepoUsuario repoUser;
+    UserRepo repoUser;
 
     @Value("${jwt.refresh.secret}")
     private String secretKey;
