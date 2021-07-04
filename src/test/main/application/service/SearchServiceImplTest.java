@@ -4,17 +4,13 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 import main.domain.converter.PreviewColabJOINUserConverter;
-import main.domain.converter.PreviewPubliJOINUserConverter;
 import main.domain.converter.PreviewUserConverter;
 import main.domain.resource.PreviewColabJOINUser;
 import main.domain.resource.PreviewPubliJOINUser;
 import main.domain.resource.PreviewUsuario;
 
 import main.persistence.entity.ColabJOINUser;
-import main.persistence.entity.PubliJOINUser;
 import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColabJOINUser;
-import main.persistence.repository.RepoPubliJOINUser;
 import main.persistence.repository.RepoUsuario;
 
 import org.junit.jupiter.api.Test;

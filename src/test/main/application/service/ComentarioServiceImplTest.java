@@ -7,7 +7,7 @@ import main.domain.converter.ComentarioConverter;
 import main.domain.resource.ComentarioResource;
 
 import main.persistence.entity.Comentario;
-import main.persistence.repository.RepoComentario;
+import main.persistence.repository.CommentRepo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

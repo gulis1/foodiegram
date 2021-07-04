@@ -16,12 +16,12 @@ public class Refreshtoken {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
-    private Integer userid;
+    private Integer refreshtokenid;
+    private Integer user;
     private Date expiredate;
 
-    public Refreshtoken(Integer userid, Date expiredate) {
-        this.userid = userid;
+    public Refreshtoken(Integer user, Date expiredate) {
+        this.user = user;
         this.expiredate = expiredate;
     }
 

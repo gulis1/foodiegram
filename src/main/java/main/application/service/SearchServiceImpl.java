@@ -1,17 +1,17 @@
 package main.application.service;
 
 import main.domain.converter.ColaboradorConverter;
-import main.domain.converter.PreviewPubliJOINUserConverter;
+import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.converter.PreviewUserConverter;
 import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPubliJOINUser;
+import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
-import main.persistence.entity.Colaborador;
-import main.persistence.entity.PubliJOINUser;
-import main.persistence.entity.Usuario;
+import main.persistence.entity.Restaurant;
+import main.persistence.entity.Post;
+import main.persistence.entity.User;
 
-import main.persistence.repository.RepoColaborador;
-import main.persistence.repository.RepoPubliJOINUser;
+import main.persistence.repository.PostRepo;
+import main.persistence.repository.RestaurantRepo;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,17 +24,17 @@ import java.util.stream.Collectors;
 public class SearchServiceImpl implements SearchService {
 
     private final PreviewUserConverter converterPreviewUser = new PreviewUserConverter();
-    private final PreviewPubliJOINUserConverter converterPreviewPubliJUser = new PreviewPubliJOINUserConverter();
+    private final PreviewPublicacionConverter converterPreviewPubli = new PreviewPublicacionConverter();
     private final ColaboradorConverter collabConverter = new ColaboradorConverter();
 
     @Autowired
     private RepoUsuario repoUser;
 
     @Autowired
-    private RepoColaborador collabRepo;
+    private RestaurantRepo collabRepo;
 
     @Autowired
-    private RepoPubliJOINUser repoPubliJUser;
+    private PostRepo postRepo;
 
     // BUSQUEDA DE USUARIOS
     //
@@ -42,21 +42,21 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<PreviewUsuario> getUserList(String username) {
 
-        List<Usuario> userList = repoUser.findBynameContainingIgnoreCase(username);
+        List<User> userList = repoUser.findBynameContainingIgnoreCase(username);
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de usuarios por numero de publicaciones
     public List<PreviewUsuario> getUserListByPubli() {
 
-        List<Usuario> userList = repoUser.findByPopuPubli();
+        List<User> userList = repoUser.findByPopuPubli();
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de usuarios por numero de valoraciones recibidas
     public List<PreviewUsuario> getUserListByVal() {
 
-        List<Usuario> userList = repoUser.findByPopuVal();
+        List<User> userList = repoUser.findByPopuVal();
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
@@ -66,23 +66,15 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<ColaboradorResource> getColabListByName(String colabname) {
 
-        List<Colaborador> collabs = collabRepo.findByUsername(colabname);
+        List<Restaurant> collabs = collabRepo.findByUsername(colabname);
         return collabs.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
-    }
-
-    // devuelve una lista de colaboradores cuyo origin contenga origin
-    @Override
-    public List<ColaboradorResource> getColabListByOrigin(String origin) {
-
-        List<Colaborador> colabJuser = collabRepo.findByOrigin(origin);
-        return colabJuser.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de colaboradores cuyo type contenga type
     @Override
     public List<ColaboradorResource> getColabListByType(String type) {
 
-        List<Colaborador> colabJuser = collabRepo.findByType(type);
+        List<Restaurant> colabJuser = collabRepo.findByType(type);
         return colabJuser.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
@@ -90,9 +82,9 @@ public class SearchServiceImpl implements SearchService {
     //
     // devuelve una lista de publicaciones cuyo texto contenga un hashtag coincidente con tag
     @Override
-    public List<PreviewPubliJOINUser> getPubliListByTag(String tag) {
+    public List<PreviewPublicacion> getPubliListByTag(String tag) {
 
-        List<PubliJOINUser> publiJuser = repoPubliJUser.findByTag(tag);
-        return publiJuser.stream().map(converterPreviewPubliJUser::convert).collect(Collectors.toList());
+        List<Post> publiJuser = postRepo.findByTag(tag);
+        return publiJuser.stream().map(x -> converterPreviewPubli.convert(Optional.of(x))).collect(Collectors.toList());
     }
 }

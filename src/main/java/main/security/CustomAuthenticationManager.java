@@ -1,7 +1,7 @@
 package main.security;
 
 
-import main.persistence.entity.Usuario;
+import main.persistence.entity.User;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +27,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        Optional<Usuario> usuario = userRepo.findByName(username);
+        Optional<User> usuario = userRepo.findByName(username);
 
         if (!usuario.isPresent() || !encoder.matches(password, usuario.get().getPasswd()))
             throw new BadCredentialsException("1000");
@@ -36,7 +36,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
             throw new DisabledException("1001");
 
         else
-            return new UsernamePasswordAuthenticationToken(usuario.get().getId(), password, null);
+            return new UsernamePasswordAuthenticationToken(usuario.get().getUserid(), password, null);
 
 
     }

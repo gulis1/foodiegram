@@ -12,28 +12,32 @@ import java.util.Collection;
 @Entity
 @Data
 @NoArgsConstructor
-public class Mensaje {
+public class Comment {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
-    private Integer iduser1;
-    private Integer iduser2;
+    private Integer commentid;
+    private Integer post;
     private String text;
 
-    public Mensaje (Integer idUser1, Integer idUser2, String text) {
-        this.iduser1 = idUser1;
-        this.iduser2 = idUser2;
+    public Comment(Integer idPubli, User usuario, String text) {
+        this.post = idPubli;
+        this.autor=usuario;
         this.text = text;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user")
+    private User autor;
+
     @PreRemove
+    @PreUpdate
     private void preventUnauthorizedRemove() throws ForbiddenException {
 
         Integer deleterId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (!deleterId.equals(iduser1) && !authorities.contains(RoleEnum.ROLE_MOD) && !authorities.contains(RoleEnum.ROLE_ADMIN))
+        if (!deleterId.equals(this.getAutor().getUserid()) && !authorities.contains(RoleEnum.ROLE_MOD) && !authorities.contains(RoleEnum.ROLE_ADMIN))
             throw new ForbiddenException("You're not allowed to do that");
     }
 

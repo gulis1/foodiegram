@@ -5,7 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import main.persistence.entity.Refreshtoken;
-import main.persistence.repository.RepoRefreshtoken;
+import main.persistence.repository.RefreshtokenRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class TokenRefresher {
     private String secretKey;
 
     @Autowired
-    RepoRefreshtoken repo;
+    RefreshtokenRepo repo;
 
     @Autowired
     AuthTokenGenerator generator;
@@ -27,7 +27,7 @@ public class TokenRefresher {
     public String refresh(String token) throws ExpiredJwtException, MalformedJwtException {
 
         Claims claims =  Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
-        Optional<Refreshtoken> lastToken = repo.findByUserid(Integer.parseInt(claims.getSubject()));
+        Optional<Refreshtoken> lastToken = repo.findByUser(Integer.parseInt(claims.getSubject()));
 
         if (lastToken.isPresent() && claims.getExpiration().compareTo(lastToken.get().getExpiredate()) < 0)
             throw new ExpiredJwtException(null, claims, "A new token for this user has been created");

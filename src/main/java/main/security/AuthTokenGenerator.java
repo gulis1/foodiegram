@@ -4,8 +4,8 @@ package main.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import main.persistence.entity.Jwtoken;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoJwtoken;
+import main.persistence.entity.User;
+import main.persistence.repository.JwtokenRepo;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AuthTokenGenerator {
 
     @Autowired
-    private RepoJwtoken repoJwtoke;
+    private JwtokenRepo repoJwtoke;
 
     @Autowired
     private RepoUsuario repoUser;
@@ -30,21 +30,21 @@ public class AuthTokenGenerator {
 
     public String buildToken(String username, int minutes) {
 
-        Usuario user = repoUser.getByName(username);
-        return getToken(user.getId(), username, minutes, user.getRole().toString());
+        User user = repoUser.getByName(username);
+        return getToken(user.getUserid(), username, minutes, user.getRole().toString());
     }
 
     public String buildToken(Integer userID, int minutes) {
 
-        Usuario user = repoUser.getOne(userID);
-        return getToken(user.getId(), user.getName(), minutes, user.getRole().toString());
+        User user = repoUser.getById(userID);
+        return getToken(user.getUserid(), user.getName(), minutes, user.getRole().toString());
     }
 
     private String getToken(Integer userID, String userName, int minutes, String role) {
 
         minutes *= 60000;
 
-        Optional<Jwtoken> dbToken = repoJwtoke.findByUserid(userID);
+        Optional<Jwtoken> dbToken = repoJwtoke.findByUser(userID);
 
         if(dbToken.isPresent())
             dbToken.get().setExpiredate(new Date(System.currentTimeMillis() + minutes));

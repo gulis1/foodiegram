@@ -7,12 +7,12 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class IDamigo implements Serializable {
+public class FollowID implements Serializable {
 
-    private Integer iduser1;
-    private Integer iduser2;
+    private Integer follower;
+    private Integer followed;
 
-    protected IDamigo(){}
+    protected FollowID(){}
 
 
 

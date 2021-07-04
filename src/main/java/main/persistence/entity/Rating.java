@@ -3,24 +3,24 @@ package main.persistence.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.persistence.IDs.IDvaloracion;
+import main.persistence.IDs.RatingID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
 @Entity
-@IdClass(IDvaloracion.class)
+@IdClass(RatingID.class)
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class Valoracion {
+public class Rating {
 
   @Id
-  private Integer idpubli;
+  private Integer post;
   @Id
-  private Integer iduser;
+  private Integer user;
 
-  private Float punt;
+  private Float score;
 
 }

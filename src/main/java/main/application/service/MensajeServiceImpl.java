@@ -2,9 +2,9 @@ package main.application.service;
 
 import main.domain.converter.MensajeConverter;
 import main.domain.resource.MensajeResource;
-import main.persistence.entity.Mensaje;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoMensaje;
+import main.persistence.entity.Message;
+import main.persistence.entity.User;
+import main.persistence.repository.MessageRepo;
 import main.persistence.repository.RepoUsuario;
 import main.rest.forms.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class MensajeServiceImpl implements MensajeService{
     private final MensajeConverter converterMens = new MensajeConverter();
 
     @Autowired
-    RepoMensaje repoMens;
+    MessageRepo repoMens;
 
     @Autowired
     RepoUsuario repoUser;
@@ -30,9 +30,9 @@ public class MensajeServiceImpl implements MensajeService{
 
     @Override
     public MensajeResource deleteMensaje(Integer mensID) throws NoPermissionException {
-        Optional<Mensaje> mens = repoMens.findById(mensID);
+        Optional<Message> mens = repoMens.findById(mensID);
 
-        mens.ifPresent(mensaje -> repoMens.delete(mensaje));
+        mens.ifPresent(message -> repoMens.delete(message));
 
         return converterMens.convert(mens);
 
@@ -41,13 +41,13 @@ public class MensajeServiceImpl implements MensajeService{
     @Override
     public MensajeResource setMensaje(Integer userID, MessageForm mensaje) throws IllegalArgumentException {
 
-        Optional<Usuario> user2 = repoUser.findByName(mensaje.getReceiver());
+        Optional<User> user2 = repoUser.findByName(mensaje.getReceiver());
 
         if (!user2.isPresent())
             throw new IllegalArgumentException("That user does not exist.");
 
 
-        Mensaje mens = new Mensaje(userID, user2.get().getId(), mensaje.getText());
+        Message mens = new Message(userID, user2.get().getUserid(), mensaje.getText());
         repoMens.save(mens);
 
         return converterMens.convert(Optional.of(mens));
@@ -58,11 +58,11 @@ public class MensajeServiceImpl implements MensajeService{
     public List<MensajeResource> getMensajes(Integer userID) {
 
 
-        Optional<Usuario> user = repoUser.findById(userID);
+        Optional<User> user = repoUser.findById(userID);
 
         if (user.isPresent()) {
-            List<Mensaje> mensajes = repoMens.findByIduser1OrIduser2(user.get().getId(), user.get().getId());
-            return mensajes.stream().map(mensaje -> converterMens.convert(Optional.of(mensaje))).collect(Collectors.toList());
+            List<Message> messages = repoMens.findBySenderOrReceiver(user.get().getUserid(), user.get().getUserid());
+            return messages.stream().map(message -> converterMens.convert(Optional.of(message))).collect(Collectors.toList());
         }
 
         else return null;

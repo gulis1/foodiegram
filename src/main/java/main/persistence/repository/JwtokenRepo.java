@@ -1,14 +1,14 @@
 package main.persistence.repository;
 
-import main.persistence.entity.Patrocinio;
+import main.persistence.entity.Jwtoken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface RepoPatrocinio extends JpaRepository<Patrocinio, Integer> {
+public interface JwtokenRepo extends JpaRepository<Jwtoken, Integer> {
 
-    Optional<Patrocinio> findByCollab_Id(int collabID);
+    Optional<Jwtoken> findByUser(Integer userid);
 
 }

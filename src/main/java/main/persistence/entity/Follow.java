@@ -3,25 +3,24 @@ package main.persistence.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.persistence.IDs.IDmeetUp;
+import main.persistence.IDs.FollowID;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+
 @Entity
-@IdClass(IDmeetUp.class)
+@IdClass(FollowID.class)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="meetup")
-public class MeetUp {
+@NoArgsConstructor
+@Table(name="follow")
+public class Follow {
 
     @Id
-    private Integer id;
+    private Integer follower;
     @Id
-    private Integer iduser;
-
-
+    private Integer followed;
 }

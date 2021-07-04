@@ -3,9 +3,9 @@ package main.application.service.manageAccountService;
 import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.converter.PublicacionConverter;
 import main.domain.resource.PreviewPublicacion;
-import main.persistence.entity.Publicacion;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.entity.Post;
+import main.persistence.entity.User;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class ViewImagesImpl implements  ViewImages{
     PreviewPublicacionConverter converterPreview = new PreviewPublicacionConverter();
 
     @Autowired
-    RepoPublicacion repoPost;
+    PostRepo repoPost;
 
     @Autowired
     RepoUsuario repoUser;
@@ -29,12 +29,12 @@ public class ViewImagesImpl implements  ViewImages{
     @Override
     public List<PreviewPublicacion> viewPost(Integer idUser) {
 
-        Optional<Usuario> user = repoUser.findById(idUser);
+        Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent()) //comprobamos que existe el usuario con idUser
             return null;
         else{
-            List<Publicacion> post = repoPost.findByIduserOrderByIdDesc(idUser);
+            List<Post> post = repoPost.findByUser_useridOrderByPostidDesc(idUser);
             return post.stream().map(x -> converterPreview.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }

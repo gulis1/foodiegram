@@ -2,8 +2,8 @@ package main.application.service;
 
 import main.domain.converter.ComentarioConverter;
 import main.domain.resource.ComentarioResource;
-import main.persistence.entity.Comentario;
-import main.persistence.repository.RepoComentario;
+import main.persistence.entity.Comment;
+import main.persistence.repository.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ComentarioServiceImpl implements ComentarioService {
 
     @Autowired
-    RepoComentario repoComen;
+    CommentRepo repoComen;
 
     private ComentarioConverter comentarioConverter = new ComentarioConverter();
 
@@ -23,7 +23,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     public ComentarioResource editComentario(Integer comID, String text) throws IllegalArgumentException, NoPermissionException {
 
 
-        Optional<Comentario> comment = repoComen.findById(comID);
+        Optional<Comment> comment = repoComen.findById(comID);
 
         if (!comment.isPresent())
             return null;
@@ -45,7 +45,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     @Override
     public ComentarioResource deleteComentario(Integer comID) throws NoPermissionException {
 
-        Optional<Comentario> comment = repoComen.findById(comID);
+        Optional<Comment> comment = repoComen.findById(comID);
 
         comment.ifPresent(comentario -> repoComen.delete(comentario));
 

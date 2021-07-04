@@ -2,7 +2,7 @@ package main.application.service.manageAccountService;
 
 import main.domain.converter.UsuarioConverter;
 import main.domain.resource.UsuarioResource;
-import main.persistence.entity.Usuario;
+import main.persistence.entity.User;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,13 +37,13 @@ public class ManageInfoImpl implements ManageInfo{
     @Override
     public UsuarioResource changeName(Integer idUser, String newName) throws IllegalArgumentException{
 
-        Optional<Usuario> user = repoUser.findById(idUser);
+        Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
             return null;
 
         else{
-            Optional<Usuario> nameUnique = repoUser.findByName(newName);
+            Optional<User> nameUnique = repoUser.findByName(newName);
 
             if(!nameUnique.isPresent())//si no hay usuarios con newName, podrá cambiar el nombre
                 user.get().setName(newName);
@@ -58,7 +58,7 @@ public class ManageInfoImpl implements ManageInfo{
 
     @Override
     public UsuarioResource changePasswd(Integer idUser, String newPasswd) {
-        Optional<Usuario> user = repoUser.findById(idUser);
+        Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
             return null;
@@ -73,7 +73,7 @@ public class ManageInfoImpl implements ManageInfo{
 
     @Override
     public UsuarioResource changeEmail(Integer idUser, String newMail) {
-        Optional<Usuario> user = repoUser.findById(idUser);
+        Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
             return null;
@@ -87,7 +87,7 @@ public class ManageInfoImpl implements ManageInfo{
     @Override
     public UsuarioResource changeProfilePicture(Integer idUser, MultipartFile newProfilePic) throws IOException {
 
-        Optional<Usuario> user = repoUser.findById(idUser);
+        Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
             return null;
@@ -98,7 +98,7 @@ public class ManageInfoImpl implements ManageInfo{
             throw new IllegalArgumentException("Only jpeg and png images are supported.");
 
 
-        File folder = new File(apacheRootFolder + "/" + user.get().getId());
+        File folder = new File(apacheRootFolder + "/" + user.get().getUserid());
         folder.mkdirs();
 
         String name = folder.getAbsolutePath() + "/pfp." + matcher.group(1);
@@ -106,7 +106,7 @@ public class ManageInfoImpl implements ManageInfo{
         stream.write(newProfilePic.getBytes());
         stream.close();
 
-        String address = String.format("%s/%s/pfp.%s", apacheAddress, user.get().getId(), matcher.group(1));
+        String address = String.format("%s/%s/pfp.%s", apacheAddress, user.get().getUserid(), matcher.group(1));
         user.get().setImage(address);
         repoUser.save(user.get());
 

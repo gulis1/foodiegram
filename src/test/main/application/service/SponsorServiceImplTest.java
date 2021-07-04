@@ -8,8 +8,8 @@ import main.domain.resource.PatrocinioResource;
 
 import main.persistence.entity.Colaborador;
 import main.persistence.entity.Patrocinio;
-import main.persistence.repository.RepoColaborador;
-import main.persistence.repository.RepoPatrocinio;
+import main.persistence.repository.RestaurantRepo;
+import main.persistence.repository.SponsorRepo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

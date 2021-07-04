@@ -6,7 +6,7 @@ import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.*;
 import main.persistence.entity.Jwtoken;
 import main.persistence.entity.RoleEnum;
-import main.persistence.repository.RepoJwtoken;
+import main.persistence.repository.JwtokenRepo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,9 +27,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final String authSecret;
     private final String logoutSecret;
 
-    private RepoJwtoken repoTokens;
+    private JwtokenRepo repoTokens;
 
-    public JwtTokenFilter(RepoJwtoken repoToken, String authSecret, String logoutSecret) {
+    public JwtTokenFilter(JwtokenRepo repoToken, String authSecret, String logoutSecret) {
         this.repoTokens = repoToken;
         this.authSecret = authSecret;
         this.logoutSecret = logoutSecret;
@@ -98,7 +98,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         Claims claims =  Jwts.parser().setSigningKey(authSecret.getBytes()).parseClaimsJws(jwtToken).getBody();
 
-        Optional<Jwtoken> lastToken = repoTokens.findByUserid(Integer.parseInt(claims.getSubject()));
+        Optional<Jwtoken> lastToken = repoTokens.findByUser(Integer.parseInt(claims.getSubject()));
 
         if (lastToken.isPresent() && claims.getExpiration().compareTo(lastToken.get().getExpiredate()) < 0)
             throw new ExpiredJwtException(null, claims, "Someone logged in from another computer");

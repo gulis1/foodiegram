@@ -6,15 +6,15 @@ import main.domain.converter.ValoracionConverter;
 import main.domain.resource.ComentarioResource;
 import main.domain.resource.PublicacionResource;
 import main.domain.resource.ValoracionResource;
-import main.persistence.IDs.IDvaloracion;
-import main.persistence.entity.Comentario;
-import main.persistence.entity.Publicacion;
-import main.persistence.entity.Usuario;
-import main.persistence.entity.Valoracion;
-import main.persistence.repository.RepoComentario;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.IDs.RatingID;
+import main.persistence.entity.Comment;
+import main.persistence.entity.Post;
+import main.persistence.entity.Rating;
+import main.persistence.entity.User;
+import main.persistence.repository.CommentRepo;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
-import main.persistence.repository.RepoValoracion;
+import main.persistence.repository.RatingRepo;
 import main.rest.forms.CommentForm;
 import main.rest.forms.PostForm;
 import main.rest.forms.RatingForm;
@@ -46,13 +46,13 @@ PublicationServiceImpl implements PublicationService {
     private final Pattern imagePattern = Pattern.compile(".+\\.(png|jpg|jpeg)$", Pattern.CASE_INSENSITIVE);
 
     @Autowired
-    private RepoPublicacion repoPubli;
+    private PostRepo repoPubli;
 
     @Autowired
-    private RepoValoracion repoVal;
+    private RatingRepo repoVal;
 
     @Autowired
-    private RepoComentario repoComen;
+    private CommentRepo repoComen;
 
     @Autowired
     private RepoUsuario repoUsuario;
@@ -78,7 +78,7 @@ PublicationServiceImpl implements PublicationService {
             throw new IllegalArgumentException("Text or loc should be not null");
 
 
-        Optional<Publicacion> publi = repoPubli.findById(pubID);
+        Optional<Post> publi = repoPubli.findById(pubID);
 
         if (publi.isPresent()) {
 
@@ -96,7 +96,7 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public PublicacionResource deletePost(Integer pubID) throws NoPermissionException {
 
-        Optional<Publicacion> publi = repoPubli.findById(pubID);
+        Optional<Post> publi = repoPubli.findById(pubID);
 
         publi.ifPresent(publicacion -> repoPubli.delete(publicacion));
 
@@ -123,7 +123,7 @@ PublicationServiceImpl implements PublicationService {
             }
         }
 
-        Publicacion publi = new Publicacion(form.getText(), userID, country, city);
+        Post publi = new Post(form.getText(), new User(userID), country, city);
         publi = repoPubli.save(publi);
 
         if (form.getImage() != null) {
@@ -139,13 +139,13 @@ PublicationServiceImpl implements PublicationService {
                 File folder = new File(apacheRootFolder + "/users/" + userID);
                 folder.mkdirs();
 
-                String name = folder.getAbsolutePath() + "/" + publi.getId() + "." + matcher.group(1);
+                String name = folder.getAbsolutePath() + "/" + publi.getPostid() + "." + matcher.group(1);
                 FileOutputStream stream = new FileOutputStream(name);
                 stream.write(form.getImage().getBytes());
                 stream.close();
 
                 // Si se ha conseguido guardar la imagen, se le asocia a la publicacion una direccion en la BD.
-                String address = String.format("%s/users/%s/%s.%s", apacheAddress, userID, publi.getId(), matcher.group(1));
+                String address = String.format("%s/users/%s/%s.%s", apacheAddress, userID, publi.getPostid(), matcher.group(1));
                 publi.setImage(address);
                 repoPubli.save(publi);
             } catch (IOException e) {
@@ -162,13 +162,13 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public List<ValoracionResource> getRatings(Integer pubID) {
 
-        Optional<Publicacion> publi = repoPubli.findById(pubID);
+        Optional<Post> publi = repoPubli.findById(pubID);
 
         if (!publi.isPresent())
             return null;
 
         else {
-            List<Valoracion> valoraciones = repoVal.findByIdpubli(pubID);
+            List<Rating> valoraciones = repoVal.findByPost(pubID);
             return valoraciones.stream().map(x -> converterVal.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
@@ -180,7 +180,7 @@ PublicationServiceImpl implements PublicationService {
             throw new IllegalArgumentException("Punt must be a integer between 0 and 5");
 
         else {
-            Valoracion valora = new Valoracion(form.getPubID(), form.getUserID(), form.getScore());
+            Rating valora = new Rating(form.getPubID(), form.getUserID(), form.getScore());
             repoVal.save(valora);
 
             return converterVal.convert(Optional.of(valora));
@@ -191,16 +191,16 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public ValoracionResource getRating(Integer pubID, String user) {
 
-        Optional<Usuario> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = repoUsuario.findByName(user);
 
-        return usuario.map(value -> converterVal.convert(repoVal.findById(new IDvaloracion(pubID, value.getId())))).orElse(null);
+        return usuario.map(value -> converterVal.convert(repoVal.findById(new RatingID(pubID, value.getUserid())))).orElse(null);
 
     }
 
     @Override
     public ValoracionResource deleteRating(RatingForm form) {
 
-        Optional<Valoracion> valor = repoVal.findById(new IDvaloracion(form.getPubID(), form.getUserID()));
+        Optional<Rating> valor = repoVal.findById(new RatingID(form.getPubID(), form.getUserID()));
 
         valor.ifPresent(valoracion -> repoVal.delete(valoracion));
 
@@ -210,14 +210,14 @@ PublicationServiceImpl implements PublicationService {
     @Override
     public List<ComentarioResource> getComments(Integer pubID) {
 
-        Optional<Publicacion> pub = repoPubli.findById(pubID);
+        Optional<Post> pub = repoPubli.findById(pubID);
 
         if (!pub.isPresent())
             return null;
 
         else {
 
-            List<Comentario> comentarios = repoComen.findByIdpubliOrderByIdAsc(pubID);
+            List<Comment> comentarios = repoComen.findByPostOrderByCommentidAsc(pubID);
             return comentarios.stream().map(x -> converterCom.convert(Optional.of(x))).collect(Collectors.toList());
         }
 
@@ -230,7 +230,7 @@ PublicationServiceImpl implements PublicationService {
             throw new IllegalArgumentException("Text must be not null");
 
 
-        Comentario comment = new Comentario(form.getPubID(), new Usuario(form.getUserID()), form.getText());
+        Comment comment = new Comment(form.getPubID(), new User(form.getUserID()), form.getText());
         repoComen.save(comment);
         return converterCom.convert(Optional.of(comment));
 

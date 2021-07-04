@@ -15,10 +15,10 @@ import main.persistence.entity.Comentario;
 import main.persistence.entity.Publicacion;
 import main.persistence.entity.Usuario;
 import main.persistence.entity.Valoracion;
-import main.persistence.repository.RepoComentario;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.repository.CommentRepo;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
-import main.persistence.repository.RepoValoracion;
+import main.persistence.repository.RatingRepo;
 
 import main.rest.forms.CommentForm;
 import main.rest.forms.RatingForm;

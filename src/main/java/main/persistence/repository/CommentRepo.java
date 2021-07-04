@@ -1,13 +1,14 @@
 package main.persistence.repository;
 
-import main.persistence.entity.Comentario;
+import main.persistence.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface RepoComentario extends JpaRepository<Comentario, Integer> {
+public interface CommentRepo extends JpaRepository<Comment, Integer> {
 
-    List<Comentario> findByIdpubliOrderByIdAsc(Integer idpubli);
+    List<Comment> findByPostOrderByCommentidAsc(Integer idpubli);
+
 }

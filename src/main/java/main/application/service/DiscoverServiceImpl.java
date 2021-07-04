@@ -7,11 +7,11 @@ import main.domain.converter.PreviewUserConverter;
 import main.domain.resource.ColaboradorResource;
 import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
-import main.persistence.entity.Colaborador;
-import main.persistence.entity.Publicacion;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColaborador;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.entity.Restaurant;
+import main.persistence.entity.Post;
+import main.persistence.entity.User;
+import main.persistence.repository.RestaurantRepo;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class DiscoverServiceImpl implements DiscoverService {
 
     @Autowired
-    private RepoPublicacion repoPublicacion;
+    private PostRepo repoPublicacion;
 
     @Autowired
     private RepoUsuario repoUsuario;
 
     @Autowired
-    private RepoColaborador repoColab;
+    private RestaurantRepo repoColab;
 
     private PreviewUserConverter usuarioConverter = new PreviewUserConverter();
     private PreviewPublicacionConverter publicacionConverter = new PreviewPublicacionConverter();
@@ -42,7 +42,7 @@ public class DiscoverServiceImpl implements DiscoverService {
 
         Integer userid=Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        List<Publicacion> publi = repoPublicacion.fromFriends(userid);
+        List<Post> publi = repoPublicacion.fromFriends(userid);
 
         return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
 
@@ -51,7 +51,7 @@ public class DiscoverServiceImpl implements DiscoverService {
 
     public List<PreviewPublicacion> discoverBestRated(String period, String country, String city) throws IllegalArgumentException{
 
-        List<Publicacion> publi = repoPublicacion.bestRated(getDayAmount(period), country, city);
+        List<Post> publi = repoPublicacion.bestRated(getDayAmount(period), country, city);
 
         return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
@@ -59,14 +59,14 @@ public class DiscoverServiceImpl implements DiscoverService {
     @Override
     public List<PreviewPublicacion> discoverMostRated(String period, String country, String city) {
 
-        List<Publicacion> publi = repoPublicacion.mostRated(getDayAmount(period),  country, city);
+        List<Post> publi = repoPublicacion.mostRated(getDayAmount(period),  country, city);
 
         return publi.stream().map(x -> publicacionConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     @Override
     public List<PreviewUsuario> findFollowedByFriends(Integer userid) {
-        List<Usuario> list = repoUsuario.findFollowedByFriends(userid);
+        List<User> list = repoUsuario.findFollowedByFriends(userid);
 
         return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
@@ -74,12 +74,12 @@ public class DiscoverServiceImpl implements DiscoverService {
     @Override
     public List<PreviewUsuario> userWhoFollowXAlsoFollowY(String userName) {
 
-        Optional<Usuario> user = repoUsuario.findByName(userName);
+        Optional<User> user = repoUsuario.findByName(userName);
 
         if (!user.isPresent())
             return null;
 
-        List<Usuario> list = repoUsuario.usersFollowedByUsersWhoFollow(user.get().getId());
+        List<User> list = repoUsuario.usersFollowedByUsersWhoFollow(user.get().getUserid());
 
         return list.stream().map(x -> usuarioConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }
@@ -87,7 +87,7 @@ public class DiscoverServiceImpl implements DiscoverService {
     @Override
     public List<ColaboradorResource> findCollabs(String country, String city) {
 
-        List<Colaborador> collabs = repoColab.descubrirCollab(country,city);
+        List<Restaurant> collabs = repoColab.descubrirCollab(country,city);
 
         return collabs.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
     }

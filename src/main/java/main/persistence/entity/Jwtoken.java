@@ -17,12 +17,12 @@ public class Jwtoken {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
-    private Integer userid;
+    private Integer jwtokenid;
+    private Integer user;
     private Date expiredate;
 
-    public Jwtoken(Integer userid, Date expiredate) {
-        this.userid = userid;
+    public Jwtoken(Integer user, Date expiredate) {
+        this.user = user;
         this.expiredate = expiredate;
     }
 

@@ -3,10 +3,10 @@ package main.application.service;
 
 import main.domain.converter.ColaboradorConverter;
 import main.domain.resource.ColaboradorResource;
-import main.persistence.entity.Colaborador;
+import main.persistence.entity.Restaurant;
 import main.persistence.entity.RoleEnum;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColaborador;
+import main.persistence.entity.User;
+import main.persistence.repository.RestaurantRepo;
 import main.persistence.repository.RepoUsuario;
 import main.rest.forms.CollaborateForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
     private RepoUsuario repoUsuario;
 
     @Autowired
-    private RepoColaborador repoColaborador;
+    private RestaurantRepo repoColaborador;
 
     @Autowired
     private RestService restService;
@@ -36,7 +36,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         String city=null;
         String street= null;
 
-        Usuario user = repoUsuario.getById(userid);
+        User user = repoUsuario.getById(userid);
 
         if (form.getLatitud() != null && form.getLongitud() != null) {
             Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
@@ -51,7 +51,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
             }
         }
 
-        Colaborador colaborador = new Colaborador(form.getOrigin(), form.getType(), country, city, street, user);
+        Restaurant colaborador = new Restaurant(form.getOrigin(), form.getType(), country, city, street, user);
         user.setRole(RoleEnum.ROLE_COL);
         repoUsuario.save(user);
         repoColaborador.save(colaborador);
@@ -61,7 +61,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
 
     @Override
     public ColaboradorResource getCollab(Integer userID) {
-        return converterCol.convert(repoColaborador.findByOwner_Id(userID));
+        return converterCol.convert(repoColaborador.findByOwner_Userid(userID));
     }
 
 

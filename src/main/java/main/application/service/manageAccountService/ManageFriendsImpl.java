@@ -3,13 +3,11 @@ package main.application.service.manageAccountService;
 import main.domain.converter.AmigoConverter;
 import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.resource.AmigoResource;
-import main.domain.resource.PreviewPublicacion;
-import main.persistence.IDs.IDamigo;
-import main.persistence.entity.Amigo;
-import main.persistence.entity.Publicacion;
-import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoAmigo;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.IDs.FollowID;
+import main.persistence.entity.Follow;
+import main.persistence.entity.User;
+import main.persistence.repository.FollowRepo;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ManageFriendsImpl implements ManageFriends{
@@ -31,26 +28,26 @@ public class ManageFriendsImpl implements ManageFriends{
     RepoUsuario repoUser;
 
     @Autowired
-    RepoAmigo repoAmigo;
+    FollowRepo followRepo;
 
     @Autowired
-    RepoPublicacion repoPost;
+    PostRepo repoPost;
 
     @Override
     public AmigoResource addFriend(Integer id, String name)throws IllegalArgumentException {
 
-        Optional<Usuario> user  = repoUser.findByName(name);
+        Optional<User> user  = repoUser.findByName(name);
 
-        if(!user.isPresent() || user.get().getId().equals(id)) //comprobamos que el usuario existe
+        if(!user.isPresent() || user.get().getUserid().equals(id)) //comprobamos que el usuario existe
             throw new IllegalArgumentException("There is not a user with name: " + name);
 
         else{
             List<String> friends = getFriends(id);
 
             if(!friends.contains(name)){
-                Amigo friend = new Amigo(id, user.get().getId());
+                Follow friend = new Follow(id, user.get().getUserid());
 
-                repoAmigo.save(friend);
+                followRepo.save(friend);
                 return friendConverter.convert(Optional.of(friend));
 
             }
@@ -62,15 +59,15 @@ public class ManageFriendsImpl implements ManageFriends{
 
     @Override
     public AmigoResource removeFriend(Integer id, String name) throws IllegalArgumentException{
-        Optional<Usuario> user = repoUser.findByName(name);
+        Optional<User> user = repoUser.findByName(name);
 
         if(!user.isPresent())//comprobamos que el usuario existe
             throw new IllegalArgumentException("There is not a user with name: " + name);
         else{
-            Optional<Amigo> friend = repoAmigo.findById(new IDamigo(id, user.get().getId())); //comprobamos que son amigos
+            Optional<Follow> friend = followRepo.findById(new FollowID(id, user.get().getUserid())); //comprobamos que son amigos
 
             if(friend.isPresent()){
-                repoAmigo.delete(friend.get());
+                followRepo.delete(friend.get());
                 return friendConverter.convert(friend);
             }
 
@@ -83,15 +80,15 @@ public class ManageFriendsImpl implements ManageFriends{
 
     @Override
     public List<String> getFriends(Integer id){
-        Optional<Usuario> user = repoUser.findById(id);
+        Optional<User> user = repoUser.findById(id);
 
         if(!user.isPresent()) return null;
         else{
-            List<Amigo> friends = repoAmigo.findAll();
+            List<Follow> friends = followRepo.findAll();
             List<String> friendsName = new ArrayList<>();
-            for(Amigo friend : friends){
-                if(user.get().getId().equals(friend.getIduser1())){
-                    friendsName.add(repoUser.getOne(friend.getIduser2()).getName());
+            for(Follow friend : friends){
+                if(user.get().getUserid().equals(friend.getFollower())){
+                    friendsName.add(repoUser.getOne(friend.getFollowed()).getName());
                 }
 
             }

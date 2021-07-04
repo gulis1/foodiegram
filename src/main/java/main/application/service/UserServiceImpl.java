@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private RepoUsuario repoUsuario;
 
     @Autowired
-    private RepoVerifytoken repoToken;
+    private VerifytokenRepo repoToken;
 
     @Autowired
     private RepoUsuario_baneado repoUsuario_baneado;
@@ -40,10 +40,10 @@ public class UserServiceImpl implements UserService {
     private SendEmailService sendEmailService;
 
     @Autowired
-    private RepoPublicacion repoPubli;
+    private PostRepo repoPubli;
 
     @Autowired
-    private RepoValoracion repoVal;
+    private RatingRepo repoVal;
 
 
     @Value("${domain}")
@@ -60,14 +60,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<PreviewPublicacion> getPosts(String user) {
 
-        Optional<Usuario> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = repoUsuario.findByName(user);
 
         if (!usuario.isPresent())
             return null;
 
         else {
 
-            List<Publicacion> publicaciones = repoPubli.findByIduserOrderByIdDesc(usuario.get().getId());
+            List<Post> publicaciones = repoPubli.findByUser_useridOrderByPostidDesc(usuario.get().getUserid());
             return publicaciones.stream().map(x -> converterPreview.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
@@ -75,14 +75,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<ValoracionResource> getRatings(String user) {
 
-        Optional<Usuario> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = repoUsuario.findByName(user);
 
         if (!usuario.isPresent())
             return null;
 
         else {
 
-            List<Valoracion> valoracionU = repoVal.findByIduser(usuario.get().getId());
+            List<Rating> valoracionU = repoVal.findByUser(usuario.get().getUserid());
             return valoracionU.stream().map(x -> converterVal.convert(Optional.of(x))).collect(Collectors.toList());
         }
     }
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            Usuario newUser = new Usuario(user.getUsername(), encoder.encode(user.getPassword()),null, user.getEmail());
+            User newUser = new User(user.getUsername(), encoder.encode(user.getPassword()),null, user.getEmail());
             repoUsuario.save(newUser);
 
             Verifytoken verifyToken=new Verifytoken(user.getEmail(), token);
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        Optional<Usuario> newUser = repoUsuario.findByEmail(verToken.get().getEmail());
+        Optional<User> newUser = repoUsuario.findByEmail(verToken.get().getEmail());
 
         if (!newUser.isPresent())
             return null;
@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario_baneadoResource banUser(String user, String severity) throws IllegalArgumentException{
         //nombre es unico
-        Optional<Usuario> newUser = repoUsuario.findByName(user);
+        Optional<User> newUser = repoUsuario.findByName(user);
 
         if (!newUser.isPresent())
             return null;
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
 
 
         date=this.calculateDate(Severity);
-        Usuario_baneado bannedUser = new Usuario_baneado(newUser.get().getId(),date);
+        Usuario_baneado bannedUser = new Usuario_baneado(newUser.get().getUserid(),date);
 
         repoUsuario_baneado.save(bannedUser);
         repoUsuario.save(newUser.get());
@@ -201,14 +201,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Usuario_baneadoResource unbanUser(String user) throws IllegalArgumentException{
 
-        Optional<Usuario> newUser = repoUsuario.findByName(user);
+        Optional<User> newUser = repoUsuario.findByName(user);
 
         if (!newUser.isPresent())
             throw new IllegalArgumentException("Usuario no existe");
 
         newUser.get().setEnabled(true);
 
-        Optional<Usuario_baneado> bannedUser = repoUsuario_baneado.findById(newUser.get().getId());
+        Optional<Usuario_baneado> bannedUser = repoUsuario_baneado.findById(newUser.get().getUserid());
 
         if (bannedUser.isPresent()) {
             repoUsuario_baneado.delete(bannedUser.get());
@@ -224,7 +224,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsuarioResource deleteUser(String user){
 
-        Optional<Usuario> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = repoUsuario.findByName(user);
 
         usuario.ifPresent(value -> repoUsuario.delete(value));
 
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UsuarioResource sendWarning(String user,Integer type){
 
-        Optional<Usuario> usuario = repoUsuario.findByName(user);
+        Optional<User> usuario = repoUsuario.findByName(user);
 
         if (usuario.isPresent()) {
             String email= usuario.get().getEmail();

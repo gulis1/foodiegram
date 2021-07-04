@@ -1,7 +1,7 @@
 package main.application.service;
 
 import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPubliJOINUser;
+import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
 
 import java.util.List;
@@ -24,14 +24,11 @@ public interface SearchService {
     // devuelve una lista de colaboradores cuyo nombre contenga colabname
     List<ColaboradorResource> getColabListByName(String colabname);
 
-    // devuelve una lista de colaboradores cuyo origin contenga origin
-    List<ColaboradorResource> getColabListByOrigin(String origin);
-
     // devuelve una lista de colaboradores cuyo type contenga type
     List<ColaboradorResource> getColabListByType(String type);
 
     // BUSQUEDA DE PUBLICACIONES
     //
     // devuelve una lista de publicaciones cuyo texto contenga un hashtag coincidente con tag
-    List<PreviewPubliJOINUser> getPubliListByTag(String tag);
+    List<PreviewPublicacion> getPubliListByTag(String tag);
 }

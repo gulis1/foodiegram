@@ -8,7 +8,7 @@ import main.domain.resource.ColaboradorResource;
 
 import main.persistence.entity.Colaborador;
 import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColaborador;
+import main.persistence.repository.RestaurantRepo;
 import main.persistence.repository.RepoUsuario;
 
 import main.rest.forms.CollaborateForm;

@@ -14,9 +14,10 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class Verifytoken {
+
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Integer verifytokenid;
     private String email;
     private Integer token;
     private Date expiredate;

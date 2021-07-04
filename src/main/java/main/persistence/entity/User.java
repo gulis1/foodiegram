@@ -8,11 +8,11 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class Usuario {
+public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Integer userid;
     private String name;
     private String passwd;
     private String email;
@@ -21,11 +21,11 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    public Usuario(Integer id) {
-        this.id = id;
+    public User(Integer id) {
+        this.userid = id;
     }
 
-    public Usuario(String name, String passwd, String image, String email) {
+    public User(String name, String passwd, String image, String email) {
         this.name = name;
         this.passwd = passwd;
         this.image = image;

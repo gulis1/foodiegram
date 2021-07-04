@@ -11,8 +11,7 @@ import main.domain.resource.PreviewUsuario;
 import main.persistence.entity.ColabJOINUser;
 import main.persistence.entity.Publicacion;
 import main.persistence.entity.Usuario;
-import main.persistence.repository.RepoColabJOINUser;
-import main.persistence.repository.RepoPublicacion;
+import main.persistence.repository.PostRepo;
 import main.persistence.repository.RepoUsuario;
 
 import org.junit.jupiter.api.Test;

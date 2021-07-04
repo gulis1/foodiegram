@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface RepoVerifytoken extends JpaRepository<Verifytoken, Integer> {
+public interface VerifytokenRepo extends JpaRepository<Verifytoken, Integer> {
 
     Optional<Verifytoken> findByToken(Integer token);
 

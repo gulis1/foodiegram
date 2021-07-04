@@ -2,14 +2,13 @@ package main.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import main.persistence.entity.Usuario;
+import main.persistence.entity.User;
 import main.persistence.repository.RepoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class LogoutTokenGenerator {
@@ -23,10 +22,10 @@ public class LogoutTokenGenerator {
     public String getToken(String username, Integer minutes) {
 
         minutes *= 60000;
-        Usuario user = repo.getByName(username);
+        User user = repo.getByName(username);
         
         return  Jwts.builder()
-                .setSubject(user.getId().toString())
+                .setSubject(user.getUserid().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + minutes))
                 .signWith(SignatureAlgorithm.HS512, secretKey.getBytes()).compact();

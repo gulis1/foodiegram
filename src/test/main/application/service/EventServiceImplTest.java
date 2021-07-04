@@ -3,16 +3,10 @@ package main.application.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import main.domain.converter.EventoConverter;
-import main.domain.converter.MeetUpConverter;
 import main.domain.resource.EventoResource;
 import main.domain.resource.MeetupResource;
 
-import main.persistence.IDs.IDmeetUp;
 import main.persistence.entity.Evento;
-import main.persistence.entity.MeetUp;
-import main.persistence.repository.RepoEvento;
-import main.persistence.repository.RepoMeetup;
 
 import main.rest.forms.EventForm;
 

@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.util.Map;
-
+import java.util.concurrent.TimeoutException;
 
 
 @Service
@@ -57,8 +57,8 @@ public class RestService {
         return data;
     }
 
-    public Map<String, Object> fallback(Double lat, Double lon) {
-        return  null;
+    public Map<String, Object> fallback(Double lat, Double lon, TimeoutException e) {
+        return null;
     }
 
     private Map<String, Object> getJSON(String url) {

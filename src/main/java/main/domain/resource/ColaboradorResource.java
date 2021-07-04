@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 public class ColaboradorResource {
 
     private Integer idUser;
-    private String origin;
     private String type;
     private String pais;
     private String ciudad;

@@ -2,7 +2,7 @@ package main.rest.controller;
 
 import main.application.service.SearchService;
 import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPubliJOINUser;
+import main.domain.resource.PreviewPublicacion;
 import main.domain.resource.PreviewUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,16 +63,6 @@ public class SearchRestController {
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 
-    // busca a colaboradores cuyo origin contenga el string "origin" y devuelve una lista
-    // con los datos de colaborador y su foto de perfil
-    // si no encuentra devuelve una lista vacia
-    @RequestMapping(value = "/colab/origin/{origin}", method = RequestMethod.GET)
-    public ResponseEntity<List<ColaboradorResource>> getColabListByOrigin(@PathVariable String origin) {
-
-        List<ColaboradorResource> colabList = service.getColabListByOrigin(origin);
-        return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
-    }
-
     // busca a colaboradores cuyo type contenga el string "type" y devuelve una lista
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
@@ -90,9 +80,9 @@ public class SearchRestController {
     // la publicacion
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/publi/{tag}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewPubliJOINUser>> getPubliListByTag(@PathVariable String tag) {
+    public ResponseEntity<List<PreviewPublicacion>> getPubliListByTag(@PathVariable String tag) {
 
-        List<PreviewPubliJOINUser> publiList = service.getPubliListByTag("#" + tag);
+        List<PreviewPublicacion> publiList = service.getPubliListByTag("#" + tag);
         return publiList != null ? ResponseEntity.ok(publiList) : ResponseEntity.notFound().build();
     }
 }

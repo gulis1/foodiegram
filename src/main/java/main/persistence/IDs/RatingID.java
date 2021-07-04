@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class IDvaloracion implements Serializable {
+public class RatingID implements Serializable {
 
-    private Integer idpubli;
-    private Integer iduser;
+    private Integer post;
+    private Integer user;
 
-    protected IDvaloracion() {}
+    protected RatingID() {}
 
 }
