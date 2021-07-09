@@ -3,7 +3,7 @@ package main.rest.controller;
 import main.application.service.ComentarioService;
 import main.application.service.PublicationService;
 import main.application.service.UserService;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/mod")
-public class ControllerModerador {
+public class ModeratorController {
 
     @Autowired
     private UserService service;
@@ -28,7 +28,7 @@ public class ControllerModerador {
     @RequestMapping(value="/sendWarning",method=RequestMethod.POST)
     public ResponseEntity<?> sendWarning(@RequestPart ("user")String user,@RequestPart ("type")String type) {
     try{
-        UsuarioResource warning=service.sendWarning(user,Integer.parseInt(type));
+        UserResource warning=service.sendWarning(user,Integer.parseInt(type));
         return ResponseEntity.ok(warning);
     }catch (IllegalArgumentException  e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

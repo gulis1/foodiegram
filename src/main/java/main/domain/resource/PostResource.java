@@ -8,7 +8,7 @@ import java.sql.Date;
 @Resource
 @Data
 
-public class PublicacionResource {
+public class PostResource {
 
     private Integer id;
     private Integer iduser;

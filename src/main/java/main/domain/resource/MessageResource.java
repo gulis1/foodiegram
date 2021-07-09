@@ -6,11 +6,11 @@ import javax.annotation.Resource;
 
 @Resource
 @Data
-public class UsuarioResource {
+public class MessageResource {
 
     private Integer id;
-    private String name;
-    private String email;
-    private String image;
-
+    private Integer iduser1;
+    private Integer iduser2;
+    private String text;
+    
 }

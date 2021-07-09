@@ -8,7 +8,7 @@ import com.paypal.api.payments.ShippingAddress;
 import com.paypal.api.payments.Transaction;
 import main.application.service.PaypalService;
 import main.application.service.SponsorService;
-import main.domain.resource.PatrocinioResource;
+import main.domain.resource.SponsorResource;
 import main.paypal.PaymentDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,9 +44,9 @@ public class SponsorController {
     // devuelve un patrocinio especifico buscado por id de colaborador
     // devuelve null si no existe
     @GetMapping
-    public ResponseEntity<PatrocinioResource> getSponsorship() {
+    public ResponseEntity<SponsorResource> getSponsorship() {
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        PatrocinioResource sponsorship = sponsorService.getSponsorship(userID);
+        SponsorResource sponsorship = sponsorService.getSponsorship(userID);
         return sponsorship != null ? ResponseEntity.ok(sponsorship) : ResponseEntity.notFound().build();
     }
 
@@ -117,7 +117,7 @@ public class SponsorController {
        try {
 
            Payment payment = paypalService.executePayment(paymentId, payerId);
-           PatrocinioResource sponsorship = null;
+           SponsorResource sponsorship = null;
 
            // se obtiene el patrocinio actual del colaborador
            String type = payment.getTransactions().get(0).getItemList().getItems().get(0).getName();

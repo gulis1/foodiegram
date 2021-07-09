@@ -69,26 +69,22 @@
 }
 
 #post-modal-ratings {
-    position: absolute;
-    bottom: 3px;
-    left: 10px;
     font-family: Arial,serif;
+    margin-left: 5px;
 }
 
 #post-modal-date {
-    position: absolute;
-    bottom: -15px;
-    right: 10px;
     font-family: Arial,serif;
     font-size: smaller;
+    right: 5px;
+    position: absolute;
 }
 
 #post-modal-loc {
-    position: absolute;
-    bottom: 0;
-    right: 10px;
     font-family: Arial,serif;
     font-size: smaller;
+    right: 5px;
+    position: absolute;
 }
 
 #post-modal-comments-container {
@@ -159,6 +155,14 @@
     color: cornflowerblue;
 }
 
+.nav-item {
+    transform: translateY(4px);
+}
+
+.form-control:focus {
+
+    box-shadow: none;
+}
 
 ::-webkit-scrollbar {
     width: 3px;

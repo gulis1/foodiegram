@@ -1,16 +1,15 @@
 package main.domain.resource;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.annotation.Resource;
 
 @Resource
 @Data
-public class MensajeResource {
+@AllArgsConstructor
+public class SponsorResource {
 
     private Integer id;
-    private Integer iduser1;
-    private Integer iduser2;
-    private String text;
-    
+    private java.sql.Date endtime;
 }

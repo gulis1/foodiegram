@@ -1,8 +1,8 @@
 package main.application.service;
 
 
-import main.domain.converter.ColaboradorConverter;
-import main.domain.resource.ColaboradorResource;
+import main.domain.converter.RestaurantConverter;
+import main.domain.resource.RestaurantResource;
 import main.persistence.entity.Restaurant;
 import main.persistence.entity.RoleEnum;
 import main.persistence.entity.User;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class ColaboradorServiceImpl implements ColaboradorService {
 
-    private ColaboradorConverter converterCol = new ColaboradorConverter();
+    private RestaurantConverter converterCol = new RestaurantConverter();
 
     @Autowired
     private UserRepo userRepo;
@@ -30,7 +30,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
     private RestService restService;
 
     @Override
-    public ColaboradorResource upgradeUser(Integer userid, CollaborateForm form) {
+    public RestaurantResource upgradeUser(Integer userid, CollaborateForm form) {
 
         String country=null;
         String city=null;
@@ -60,7 +60,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
     }
 
     @Override
-    public ColaboradorResource getCollab(Integer userID) {
+    public RestaurantResource getCollab(Integer userID) {
         return converterCol.convert(repoColaborador.findByOwner_Userid(userID));
     }
 

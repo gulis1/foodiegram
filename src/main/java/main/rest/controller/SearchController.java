@@ -1,9 +1,9 @@
 package main.rest.controller;
 
 import main.application.service.SearchService;
-import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.PreviewUsuario;
+import main.domain.resource.PostPreview;
+import main.domain.resource.RestaurantResource;
+import main.domain.resource.UserPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/search")
-public class SearchRestController {
+public class SearchController {
 
     @Autowired
     private SearchService service;
@@ -25,9 +25,9 @@ public class SearchRestController {
     // con los nombres de usuario y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/users/name/{username}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewUsuario>> getUserList(@PathVariable String username) {
+    public ResponseEntity<List<UserPreview>> getUserList(@PathVariable String username) {
 
-        List<PreviewUsuario> userList = service.getUserList(username);
+        List<UserPreview> userList = service.getUserList(username);
         return userList != null ? ResponseEntity.ok(userList) : ResponseEntity.notFound().build();
     }
 
@@ -35,9 +35,9 @@ public class SearchRestController {
     // con los nombres de usuario y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/users/publi", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewUsuario>> getUserListByPubli() {
+    public ResponseEntity<List<UserPreview>> getUserListByPubli() {
 
-        List<PreviewUsuario> userList = service.getUserListByPubli();
+        List<UserPreview> userList = service.getUserListByPubli();
         return userList != null ? ResponseEntity.ok(userList) : ResponseEntity.notFound().build();
     }
 
@@ -45,9 +45,9 @@ public class SearchRestController {
     // con los nombres de usuario y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/users/pval", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewUsuario>> getUserListByVal() {
+    public ResponseEntity<List<UserPreview>> getUserListByVal() {
 
-        List<PreviewUsuario> userList = service.getUserListByVal();
+        List<UserPreview> userList = service.getUserListByVal();
         return userList != null ? ResponseEntity.ok(userList) : ResponseEntity.notFound().build();
     }
 
@@ -57,9 +57,9 @@ public class SearchRestController {
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/colab/name/{colabname}", method = RequestMethod.GET)
-    public ResponseEntity<List<ColaboradorResource>> getColabListByName(@PathVariable String colabname) {
+    public ResponseEntity<List<RestaurantResource>> getColabListByName(@PathVariable String colabname) {
 
-        List<ColaboradorResource> colabList = service.getColabListByName(colabname);
+        List<RestaurantResource> colabList = service.getColabListByName(colabname);
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 
@@ -67,9 +67,9 @@ public class SearchRestController {
     // con los datos de colaborador y su foto de perfil
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/colab/type/{type}", method = RequestMethod.GET)
-    public ResponseEntity<List<ColaboradorResource>> getColabListByType(@PathVariable String type) {
+    public ResponseEntity<List<RestaurantResource>> getColabListByType(@PathVariable String type) {
 
-        List<ColaboradorResource> colabList = service.getColabListByType(type);
+        List<RestaurantResource> colabList = service.getColabListByType(type);
         return colabList != null ? ResponseEntity.ok(colabList) : ResponseEntity.notFound().build();
     }
 
@@ -80,9 +80,9 @@ public class SearchRestController {
     // la publicacion
     // si no encuentra devuelve una lista vacia
     @RequestMapping(value = "/publi/{tag}", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewPublicacion>> getPubliListByTag(@PathVariable String tag) {
+    public ResponseEntity<List<PostPreview>> getPubliListByTag(@PathVariable String tag) {
 
-        List<PreviewPublicacion> publiList = service.getPubliListByTag("#" + tag);
+        List<PostPreview> publiList = service.getPubliListByTag("#" + tag);
         return publiList != null ? ResponseEntity.ok(publiList) : ResponseEntity.notFound().build();
     }
 }

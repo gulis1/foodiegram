@@ -1,7 +1,7 @@
 package main.application.service;
 
 import main.domain.converter.PatrocinioConverter;
-import main.domain.resource.PatrocinioResource;
+import main.domain.resource.SponsorResource;
 import main.persistence.entity.Restaurant;
 import main.persistence.entity.Sponsor;
 import main.persistence.repository.RestaurantRepo;
@@ -31,7 +31,7 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     // devuelve un patrocinio existente o null en caso contrario
-    public PatrocinioResource getSponsorship(Integer id) {
+    public SponsorResource getSponsorship(Integer id) {
         return converterSponsor.convert(repoSponsor.findByRestaurant_restaurantid(id));
     }
 
@@ -54,7 +54,7 @@ public class SponsorServiceImpl implements SponsorService {
     //
     // crea un nuevo patrocinio
     // devuelve un patrocinio creado
-    public PatrocinioResource obtain(Integer userID, Integer type, Float money) {
+    public SponsorResource obtain(Integer userID, Integer type, Float money) {
 
         Restaurant col = repoColab.getByOwner_Userid(userID);
 
@@ -87,7 +87,7 @@ public class SponsorServiceImpl implements SponsorService {
     //
     // amplia el tiempo de patrocinio
     // devuelve un patrocinio modificado
-    public PatrocinioResource modify(Integer id, Integer type, Float money) {
+    public SponsorResource modify(Integer id, Integer type, Float money) {
 
         Optional<Sponsor> sponsorship = repoSponsor.findById(id);
 

@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 
 @Resource
 @Data
-public class ColaboradorResource {
+public class RestaurantResource {
 
     private Integer idUser;
     private String type;

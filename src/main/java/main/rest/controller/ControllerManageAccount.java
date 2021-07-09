@@ -4,9 +4,9 @@ import main.application.service.UserService;
 import main.application.service.manageAccountService.ManageFriends;
 import main.application.service.manageAccountService.ManageInfo;
 import main.application.service.manageAccountService.ViewImages;
-import main.domain.resource.AmigoResource;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.FollowResource;
+import main.domain.resource.PostPreview;
+import main.domain.resource.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> add(@RequestPart(value = "name", required = true) String name)throws IllegalArgumentException{
         try{
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            AmigoResource friend = manageFriends.addFriend(userID, name);
+            FollowResource friend = manageFriends.addFriend(userID, name);
             return friend != null ? ResponseEntity.ok(friend) : ResponseEntity.notFound().build();
         }
 
@@ -58,7 +58,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> remove(@RequestPart(value = "name", required = true) String name)throws IllegalArgumentException{
         try{
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            AmigoResource friend = manageFriends.removeFriend(userID, name);
+            FollowResource friend = manageFriends.removeFriend(userID, name);
             return friend != null ? ResponseEntity.ok(friend) : ResponseEntity.notFound().build();
         }
         catch (IllegalArgumentException e){
@@ -69,10 +69,10 @@ public class ControllerManageAccount {
 
     //permite ver las imagenes del usuario con nombre name si el amigo del usuario con id
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewPublicacion>> viewImagesofFriend(@RequestPart(value = "name", required = true) String name){
+    public ResponseEntity<List<PostPreview>> viewImagesofFriend(@RequestPart(value = "name", required = true) String name){
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<PreviewPublicacion> publicacionesAmigo = userService.getPosts(name);
+        List<PostPreview> publicacionesAmigo = userService.getPosts(name);
         return publicacionesAmigo != null ? ResponseEntity.ok(publicacionesAmigo) : ResponseEntity.notFound().build();
     }
     //-------------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> changeName(@RequestPart(value = "newName", required = true) String newName) {
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        UsuarioResource user = manageInfo.changeName(userID, newName);
+        UserResource user = manageInfo.changeName(userID, newName);
         return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -93,7 +93,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> changePasswd(@RequestPart(value = "newPasswd", required = true) String newPasswd) {
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        UsuarioResource user = manageInfo.changePasswd(userID, newPasswd);
+        UserResource user = manageInfo.changePasswd(userID, newPasswd);
         return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -102,7 +102,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> changeEmail(@RequestPart(value = "newEmail", required = true) String newEmail) {
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        UsuarioResource user = manageInfo.changeEmail(userID, newEmail);
+        UserResource user = manageInfo.changeEmail(userID, newEmail);
         return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -112,7 +112,7 @@ public class ControllerManageAccount {
 
         try {
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            UsuarioResource user = manageInfo.changeProfilePicture(userID, image);
+            UserResource user = manageInfo.changeProfilePicture(userID, image);
             return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
         }
 
@@ -134,7 +134,7 @@ public class ControllerManageAccount {
     public ResponseEntity<?> unsubscribe() {
 
         String userName = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
-        UsuarioResource user = userService.deleteUser(userName);
+        UserResource user = userService.deleteUser(userName);
         return user!= null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
@@ -144,10 +144,10 @@ public class ControllerManageAccount {
 
     //permite ver tus publicaciones
     @RequestMapping(value = "/viewImage", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewPublicacion>> viewMyImages() {
+    public ResponseEntity<List<PostPreview>> viewMyImages() {
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<PreviewPublicacion> _listPost = viewImagesService.viewPost(userID);
+        List<PostPreview> _listPost = viewImagesService.viewPost(userID);
         return _listPost != null ? ResponseEntity.ok(_listPost) : ResponseEntity.notFound().build();
     }
     //-------------------------------------------------------------------------------------------------------------------------

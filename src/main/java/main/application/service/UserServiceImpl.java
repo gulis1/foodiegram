@@ -1,10 +1,10 @@
 package main.application.service;
 
 import main.domain.converter.*;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.PostPreview;
+import main.domain.resource.RatingResource;
+import main.domain.resource.UserResource;
 import main.domain.resource.Usuario_baneadoResource;
-import main.domain.resource.ValoracionResource;
 import main.persistence.entity.*;
 import main.persistence.repository.*;
 import main.rest.forms.UserForm;
@@ -53,12 +53,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UsuarioResource getUserByName(String user) {
+    public UserResource getUserByName(String user) {
         return converterUser.convert(userRepo.findByName(user));
     }
 
     @Override
-    public List<PreviewPublicacion> getPosts(String user) {
+    public List<PostPreview> getPosts(String user) {
 
         Optional<User> usuario = userRepo.findByName(user);
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ValoracionResource> getRatings(String user) {
+    public List<RatingResource> getRatings(String user) {
 
         Optional<User> usuario = userRepo.findByName(user);
 
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsuarioResource register(UserForm user) throws IllegalArgumentException {
+    public UserResource register(UserForm user) throws IllegalArgumentException {
 
         if(user.getUsername().length()>=20)
             throw new IllegalArgumentException("The name is to long, please insert a name BELOW 20 characters.");
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            User newUser = new User(user.getUsername(), encoder.encode(user.getPassword()),null, user.getEmail());
+            User newUser = new User(user.getUsername(), encoder.encode(user.getPassword()),"https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png", user.getEmail());
             userRepo.save(newUser);
 
             Verifytoken verifyToken=new Verifytoken(user.getEmail(), token);
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsuarioResource verify(Integer token) {//token  de entrada
+    public UserResource verify(Integer token) {//token  de entrada
        //token de entrada comparar token con la id del user
         //
         Optional<Verifytoken> verToken = repoToken.findByToken(token);
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UsuarioResource deleteUser(String user){
+    public UserResource deleteUser(String user){
 
         Optional<User> usuario = userRepo.findByName(user);
 
@@ -240,7 +240,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UsuarioResource sendWarning(String user,Integer type){
+    public UserResource sendWarning(String user, Integer type){
 
         Optional<User> usuario = userRepo.findByName(user);
 

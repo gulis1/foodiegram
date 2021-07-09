@@ -8,11 +8,8 @@ import javax.annotation.Resource;
 @Resource
 @Data
 @AllArgsConstructor
-public class EventoResource {
+public class UserPreview {
 
-    private Integer id;
-    private Integer idcolab;
-    private String text;
+    private String name;
     private String image;
-    private java.sql.Date date;
 }

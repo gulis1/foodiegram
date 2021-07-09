@@ -1,7 +1,7 @@
 package main.rest.controller;
 
 import main.application.service.ComentarioService;
-import main.domain.resource.ComentarioResource;
+import main.domain.resource.CommentResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import javax.naming.NoPermissionException;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/comments/{comID}")
-public class ControllerComentario {
+public class CommentController {
 
     @Autowired
     ComentarioService service;
@@ -25,7 +25,7 @@ public class ControllerComentario {
     public ResponseEntity<?> editComment(@PathVariable Integer comID, @RequestPart(value="text") String text){
 
        try{
-           ComentarioResource comment = service.editComentario(comID, text);
+           CommentResource comment = service.editComentario(comID, text);
            return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
        }
 
@@ -43,7 +43,7 @@ public class ControllerComentario {
     public ResponseEntity<?> deleteComment(@PathVariable Integer comID) {
 
         try{
-            ComentarioResource comment = service.deleteComentario(comID);
+            CommentResource comment = service.deleteComentario(comID);
             return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
         }
 

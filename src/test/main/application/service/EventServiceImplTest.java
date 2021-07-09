@@ -3,9 +3,6 @@ package main.application.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-import main.domain.resource.EventoResource;
-import main.domain.resource.MeetupResource;
-
 import main.persistence.entity.Evento;
 
 import main.rest.forms.EventForm;

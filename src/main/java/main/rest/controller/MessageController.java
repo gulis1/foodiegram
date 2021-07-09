@@ -2,7 +2,7 @@ package main.rest.controller;
 
 
 import main.application.service.MensajeService;
-import main.domain.resource.MensajeResource;
+import main.domain.resource.MessageResource;
 import main.rest.forms.MessageForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/messages")
-public class ControllerMensajes {
+public class MessageController {
 
     @Autowired
     MensajeService service;
@@ -28,7 +28,7 @@ public class ControllerMensajes {
     public ResponseEntity<?> getMensajes() {
 
         Integer userid = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-        List<MensajeResource> mens = service.getMensajes(userid);
+        List<MessageResource> mens = service.getMensajes(userid);
         return mens !=  null ? ResponseEntity.ok(mens) : ResponseEntity.notFound().build();
 
     }
@@ -39,7 +39,7 @@ public class ControllerMensajes {
 
         try {
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            MensajeResource mens = service.setMensaje(userID, form);
+            MessageResource mens = service.setMensaje(userID, form);
             return ResponseEntity.ok(mens);
         }
 
@@ -53,7 +53,7 @@ public class ControllerMensajes {
     public ResponseEntity<?> deleteMensaje(@PathVariable Integer mensID) {
 
         try {
-            MensajeResource  mens = service.deleteMensaje(mensID);
+            MessageResource mens = service.deleteMensaje(mensID);
             return mensID != null ? ResponseEntity.ok(mens) : ResponseEntity.notFound().build();
         }
 

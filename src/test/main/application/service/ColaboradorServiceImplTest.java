@@ -3,7 +3,7 @@ package main.application.service;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
-import main.domain.converter.ColaboradorConverter;
+import main.domain.converter.RestaurantConverter;
 import main.domain.resource.ColaboradorResource;
 
 import main.persistence.entity.Colaborador;

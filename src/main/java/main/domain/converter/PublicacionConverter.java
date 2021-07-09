@@ -1,6 +1,6 @@
 package main.domain.converter;
 
-import main.domain.resource.PublicacionResource;
+import main.domain.resource.PostResource;
 import main.persistence.entity.Post;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -9,16 +9,16 @@ import java.text.DecimalFormat;
 import java.util.Optional;
 
 @Component
-public class PublicacionConverter implements Converter<Optional<Post>, PublicacionResource> {
+public class PublicacionConverter implements Converter<Optional<Post>, PostResource> {
 
     @Override
-    public PublicacionResource convert(Optional<Post> source){
+    public PostResource convert(Optional<Post> source){
 
         DecimalFormat df = new DecimalFormat("#.##");
         if (!source.isPresent())
             return null;
 
-        PublicacionResource response = new PublicacionResource();
+        PostResource response = new PostResource();
         response.setId(source.get().getPostid());
         response.setIduser(source.get().getUser().getUserid());
         response.setText(source.get().getText());

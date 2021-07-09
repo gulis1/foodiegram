@@ -2,9 +2,9 @@ package main.rest.controller;
 
 
 import main.application.service.PublicationService;
-import main.domain.resource.ComentarioResource;
-import main.domain.resource.PublicacionResource;
-import main.domain.resource.ValoracionResource;
+import main.domain.resource.CommentResource;
+import main.domain.resource.PostResource;
+import main.domain.resource.RatingResource;
 import main.rest.forms.CommentForm;
 import main.rest.forms.PostForm;
 import main.rest.forms.RatingForm;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/posts")
-public class ControllerPublicacion {
+public class PostController {
 
     @Autowired
     private PublicationService service;
@@ -35,7 +35,7 @@ public class ControllerPublicacion {
 
         try {
             Integer userid=Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            PublicacionResource publi = service.upload(userid,form);
+            PostResource publi = service.upload(userid,form);
             return publi != null ? ResponseEntity.ok(publi) : ResponseEntity.notFound().build();
         }
 
@@ -51,9 +51,9 @@ public class ControllerPublicacion {
     }
 
     @RequestMapping(value="/{pubID}", method = RequestMethod.GET)
-    public ResponseEntity<PublicacionResource> getPost(@PathVariable Integer pubID) {
+    public ResponseEntity<PostResource> getPost(@PathVariable Integer pubID) {
 
-        PublicacionResource publi =  service.getPost(pubID);
+        PostResource publi =  service.getPost(pubID);
         return publi != null ? ResponseEntity.ok(publi) : ResponseEntity.notFound().build();
 
     }
@@ -62,7 +62,7 @@ public class ControllerPublicacion {
     ResponseEntity<?> edit(@PathVariable Integer pubID, @RequestPart(value = "text", required = false) String text) {
 
         try {
-            PublicacionResource publi = service.editPost(pubID, text);
+            PostResource publi = service.editPost(pubID, text);
             return publi != null ? ResponseEntity.ok(publi) : ResponseEntity.notFound().build();
         }
 
@@ -78,7 +78,7 @@ public class ControllerPublicacion {
     @RequestMapping(value="/{pubID}",method = RequestMethod.DELETE)
     ResponseEntity<?> delete(@PathVariable Integer pubID) {
         try {
-            PublicacionResource publi = service.deletePost(pubID);
+            PostResource publi = service.deletePost(pubID);
             return publi != null ? ResponseEntity.ok(publi) : ResponseEntity.notFound().build();
         }
 
@@ -92,9 +92,9 @@ public class ControllerPublicacion {
 
     //devuleve un JSON con todas la valoraciones de una publicacion
     @RequestMapping(value = "/{pubID}/ratings", method = RequestMethod.GET)
-    public ResponseEntity<List<ValoracionResource>> getRatings(@PathVariable Integer pubID) {
+    public ResponseEntity<List<RatingResource>> getRatings(@PathVariable Integer pubID) {
 
-        List<ValoracionResource> valoraciones = service.getRatings(pubID);
+        List<RatingResource> valoraciones = service.getRatings(pubID);
         return valoraciones != null ? ResponseEntity.ok(valoraciones) : ResponseEntity.notFound().build();
 
     }
@@ -107,7 +107,7 @@ public class ControllerPublicacion {
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
             form.setUserID(userID);
             form.setPubID(pubID);
-            ValoracionResource valoracion = service.setRating(form);
+            RatingResource valoracion = service.setRating(form);
             return ResponseEntity.ok(valoracion);
         }
 
@@ -120,10 +120,10 @@ public class ControllerPublicacion {
 
    //devuele si un usuario a valorado una publicacion
    @RequestMapping(value="/{pubID}/ratings/me", method = RequestMethod.GET)
-    public ResponseEntity<ValoracionResource> getRating(@PathVariable Integer pubID){
+    public ResponseEntity<RatingResource> getRating(@PathVariable Integer pubID){
 
         String user = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
-        ValoracionResource val=  service.getRating(pubID, user);
+        RatingResource val=  service.getRating(pubID, user);
 
         return val != null ? ResponseEntity.ok(val) : ResponseEntity.notFound().build();
 
@@ -131,21 +131,21 @@ public class ControllerPublicacion {
 
     //borra una valoracion dentro una publicacion de un usuario
     @RequestMapping(value = "/{pubID}/ratings", method=RequestMethod.DELETE)
-    public ResponseEntity<ValoracionResource> deleteRating(RatingForm form, @PathVariable Integer pubID){
+    public ResponseEntity<RatingResource> deleteRating(RatingForm form, @PathVariable Integer pubID){
 
         Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
         form.setUserID(userID);
         form.setPubID(pubID);
-        ValoracionResource val = service.deleteRating(form);
+        RatingResource val = service.deleteRating(form);
         return val != null ? ResponseEntity.ok(val) : ResponseEntity.notFound().build();
 
     }
 
 
     @RequestMapping(value="/{pubID}/comments", method=RequestMethod.GET)
-    public ResponseEntity<List<ComentarioResource>> getComments(@PathVariable Integer pubID) {
+    public ResponseEntity<List<CommentResource>> getComments(@PathVariable Integer pubID) {
 
-        List<ComentarioResource> comentarios = service.getComments(pubID);
+        List<CommentResource> comentarios = service.getComments(pubID);
         return comentarios != null ? ResponseEntity.ok(comentarios) : ResponseEntity.notFound().build();
 
     }
@@ -159,7 +159,7 @@ public class ControllerPublicacion {
             Integer userID = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
             form.setUserID(userID);
             form.setPubID(pubID);
-            ComentarioResource comment = service.setComment(form);
+            CommentResource comment = service.setComment(form);
             return ResponseEntity.ok(comment);
         }
 

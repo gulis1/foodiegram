@@ -1,6 +1,6 @@
 package main.domain.converter;
 
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.UserResource;
 import main.persistence.entity.User;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class UsuarioConverter implements Converter<Optional<User>, UsuarioResource> {
+public class UsuarioConverter implements Converter<Optional<User>, UserResource> {
 
     @Override
-    public UsuarioResource convert(Optional<User> source ){
+    public UserResource convert(Optional<User> source ){
 
         if (!source.isPresent())
             return null;
 
-        UsuarioResource response = new UsuarioResource();
+        UserResource response = new UserResource();
         response.setId(source.get().getUserid());
         response.setName(source.get().getName());
         response.setEmail(source.get().getEmail());

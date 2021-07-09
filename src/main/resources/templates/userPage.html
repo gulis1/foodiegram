@@ -16,7 +16,7 @@
 </head>
 <body class="foodiegram-bg">
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-dark static-top mb-5 shadow">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top mb-5 shadow">
     <div class="container">
 
         <script>
@@ -25,61 +25,43 @@
             }
         </script>
 
-        <a onclick="deleteCookies()" class="navbar-brand text-white" th:href="@{/pruebas}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-left" style="font-size: 2rem; color: white;" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
-                <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
-            </svg>
-        </a>
-
-
-
-        <div class="navbar-brand text-center">
-            <h3 class="navbar-brand mt-3 text-white">Foodiegram</h3>
+        <div style="width: 10%;">
+            <h1 class="navbar-brand text-white nav-item" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
         </div>
 
 
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" style="display: flex; flex-direction: row-reverse;">
+
+            <div class="d-flex" method="post">
+                <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="searchBar" style="background-color: #343a40; color: white; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; border-color: white; display: flex; justify-content: center; align-items: center;"/>
+                <button class="btn btn-outline-light" onclick="buscar(this)" style="border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                    <h5 class="bi bi-search nav-item"></h5>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive" style="width: 10%;">
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item">
-                    <div class="d-flex" method="post">
-                        <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" id="searchBar"/>
-                        <button class="btn btn-outline-success" onclick="buscar(this)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search" style="font-size: 2rem; color: white;" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </button>
-                    </div>
+                    <a class="btn btn-outline-light" th:href="@{/pruebas/upload}" style="border: none;">
+                        <h4 class="bi bi-upload"></h4>
+                    </a>
+
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/pruebas/upload}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-upload" style="font-size: 2rem; color: white;" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                            <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                        </svg>
+                <li class=" nav-item">
+                    <a class="btn btn-outline-light" th:href="@{/pruebas/friends}" style="border: none;">
+                        <h4 class="bi bi-people"></h4>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/pruebas/friends}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-people-fill" style="font-size: 2rem; color: white;" viewBox="0 0 16 16">
-                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                            <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
-                            <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
-                        </svg>
-
+                    <a class="btn btn-outline-light" onclick="deleteCookies()" th:href="@{/pruebas}" style="border: none;">
+                        <h4  class="bi bi-gear-wide-connected"></h4 >
                     </a>
-                </li>
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/pruebas/manageAccount}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-gear" style="font-size: 2rem; color: white;" viewBox="0 0 16 16">
-                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-                        </svg>
-                    </a>
                 </li>
 
             </ul>
@@ -88,64 +70,116 @@
     </div>
 </nav>
 
+<div style="display: block; height: 150px;">
+
+</div>
+
+
+<div style="width: 100%; height: 20%; display: flex; justify-content: center;">
+
+    <div style="width: max(15vh, 200px); height: max(15vh, 200px);">
+        <div style="width: 50%; height: 100%; background-color: #343a40; transform: translateX(100%);">
+        </div>
+        <img th:src="${user.image}" alt="ERROR" style="border-radius: 50%; height: 100%; width: 100%; transform: translateY(-100%); user-select: none;"/>
+
+    </div>
+
+
+    <div style="height: max(15vh, 200px); display: flex; align-items: center; background-color: #343a40; border-top-right-radius: 20px; border-bottom-right-radius: 20px; transform: translateX(-1px);">
+        <h1 th:text="${user.name}" style="color: white; margin: 10px; user-select: none;"></h1>
+    </div>
+
+</div>
+
+<div style="display: block; height: 20px;">
+
+</div>
+
 <!-- Page Content -->
 <div class="container" style="position: relative">
 
     <div id="page-mask">
 
-            <div id="post-modal">
+        <div id="post-modal">
 
-                <img class="modal-click-box" id="post-modal-image"/>
+            <img class="modal-click-box" id="post-modal-image"/>
 
-                <div class="modal-click-box" id="post-modal-right">
+            <div class="modal-click-box" id="post-modal-right">
 
-                    <div id = "post-modal-details">
-                        <p id="post-modal-text"></p>
-                        <p id="post-modal-ratings"></p>
-                        <p id="post-modal-loc"></p>
-                        <p id="post-modal-date"></p>
+                <div id = "post-modal-details">
 
-                        <div style="width: 50%; height: 20%; bottom: 0; left: 10px; position: absolute" >
-                            <p>
-                                <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i></p>
-                        </div>
-                    </div >
+                    <p id="post-modal-text"></p>
 
 
+                    <div style="width: 100%; height: 30%; bottom: 0; position: absolute;">
 
-                    <div id="post-modal-comments-container">
+                        <div style="width: 50%; height: 100%; position: absolute; left: 0;">
 
-                        <ul id="post-modal-comments" style="padding-top: 10px;">
+                            <div style="width: 100%; height: 50%; top: 0; position: absolute;">
+                                <p id="post-modal-ratings"></p>
+                            </div>
 
-                        </ul>
-
-                    </div>
-
-                    <div id="post-modal-comment-input">
-
-                        <div style="width: 80%; height: 100%;">
-                            <label style="width: 100%; height: 100%">
-                                <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off" style="width: 100%; height: 100%; border: none; padding-left: 10px;"/>
-                            </label>
+                            <div id="post-modals-stars" style="width: 100%; height: 50%; bottom: 0; position: absolute;" >
+                                <p style="margin-left: 5px;">
+                                    <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                    <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                    <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                    <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                    <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                </p>
+                            </div>
                         </div>
 
-                        <div id="post-modal-send-button-container">
-                            <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
+                        <div style="width: 50%; height: 100%; position: absolute; right: 0;">
+
+                            <div style="width: 100%; height: 50%; top: 0; position: absolute;">
+                                <p id="post-modal-date"></p>
+                            </div>
+
+                            <div style="width: 100%; height: 50%; bottom: 0; position: absolute;">
+                                <p id="post-modal-loc"></p>
+                            </div>
+
                         </div>
 
                     </div>
+
+
+
+                </div >
+
+
+
+                <div id="post-modal-comments-container">
+
+                    <ul id="post-modal-comments" style="padding-top: 10px;">
+
+                    </ul>
+
+                </div>
+
+                <div id="post-modal-comment-input">
+
+                    <div style="width: 80%; height: 100%;">
+                        <label style="width: 100%; height: 100%">
+                            <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off" style="width: 100%; height: 100%; border: none; padding-left: 10px;"/>
+                        </label>
+                    </div>
+
+                    <div id="post-modal-send-button-container">
+                        <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
+                    </div>
+
                 </div>
             </div>
+        </div>
 
     </div>
 
     <div th:if="${postList.empty}">
         <p class="text-center text-white"> Upload Posts! </p>
     </div>
+
 
     <div class="cards user-images">
 
@@ -179,7 +213,7 @@
             <div style="width: 100%; display: flex;" >
 
                 <div style="width: 20%; display: flex; justify-content: center">
-<!--                    <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />-->
+                    <!--                    <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />-->
                     <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />
                 </div>
 
@@ -191,10 +225,6 @@
 
         </li>
     </template>
-
-
-
-
 
 </div>
 </body>

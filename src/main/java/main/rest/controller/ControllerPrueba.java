@@ -5,9 +5,10 @@ import main.application.service.PublicationService;
 import main.application.service.SearchService;
 import main.application.service.UserService;
 import main.application.service.manageAccountService.ManageFriends;
-import main.domain.resource.AmigoResource;
-import main.domain.resource.PublicacionResource;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.FollowResource;
+import main.domain.resource.PostResource;
+import main.domain.resource.UserResource;
+import main.persistence.entity.User;
 import main.rest.forms.*;
 import main.security.AuthTokenGenerator;
 import main.security.LogoutTokenGenerator;
@@ -38,9 +39,6 @@ public class ControllerPrueba {
     private UserService userService;
 
     @Autowired
-    private UserService service;
-
-    @Autowired
     private ManageFriends friendsService;
 
     @Autowired
@@ -57,15 +55,6 @@ public class ControllerPrueba {
 
     @Autowired
     private LogoutTokenGenerator logoutTokenGenerator;
-
-
-
-    //devuelve un id de usuario dado un nombre
-    public UsuarioResource getUserByName(String userName) {
-
-        UsuarioResource usuario = service.getUserByName(userName);
-        return usuario;
-    }
 
 
 
@@ -151,7 +140,7 @@ public class ControllerPrueba {
             response.addCookie(loggedInCookie);
 
             // Se redirige al usuario a su pagina personal
-            response.sendRedirect("/pruebas/me");
+            response.sendRedirect("/pruebas/" + user.getUsername());
         }
 
         catch (NullPointerException e) {
@@ -182,7 +171,7 @@ public class ControllerPrueba {
     public void registerUser(@ModelAttribute("newUser") UserForm user, HttpServletResponse response, Model model) throws IOException {
 
         try {
-            UsuarioResource newUser = service.register(user);
+            UserResource newUser = userService.register(user);
             //model.addAttribute("userLog", new UserForm());
             response.sendRedirect("/pruebas");
             //return new ModelAndView("landingPage");
@@ -201,17 +190,6 @@ public class ControllerPrueba {
         }
     }
 
-    //---------------------------------------PERSONAL PAGE---------------------------------------//
-
-    @GetMapping("/me")
-    ModelAndView personalPage(Model model){
-        String user = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
-
-        model.addAttribute("search" , new SearchForm());
-        model.addAttribute("postList", userService.getPosts(user));
-
-        return new ModelAndView("userPage");
-    }
 
     //---------------------------------------UPLOAD POST---------------------------------------//
 
@@ -228,7 +206,7 @@ public class ControllerPrueba {
 
         try {
             Integer userId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            PublicacionResource publi = postService.upload(userId, post);
+            PostResource publi = postService.upload(userId, post);
             //model.addAttribute("search" , new SearchForm());
             //model.addAttribute("postList", getPosts(userId));
             //return new ModelAndView("userPage");
@@ -278,9 +256,9 @@ public class ControllerPrueba {
 
         try{
             if(friend.getType().equals("add")){
-                AmigoResource amigoResource = friendsService.addFriend(userId, friend.getFriendName());
+                FollowResource followResource = friendsService.addFriend(userId, friend.getFriendName());
             }else{
-                AmigoResource amigoResource = friendsService.removeFriend(userId, friend.getFriendName());
+                FollowResource followResource = friendsService.removeFriend(userId, friend.getFriendName());
             }
             //List<String> friends = friendsService.getFriends(userId);
             //model.addAttribute("friends", friends);
@@ -309,26 +287,17 @@ public class ControllerPrueba {
         return new ModelAndView("search");
     }
 
-    //---------------------------------------Friends Page---------------------------------------//
-    /*
-    @GetMapping("/friendsPage")
-    ModelAndView friendsPage(Model model){
 
-        model.addAttribute("userName", "friend");
-        model.addAttribute("profilePic", "https://offloadmedia.feverup.com/madridsecreto.co/wp-content/uploads/2019/06/08103837/shutterstock_1051494194-1.jpg" );
-        model.addAttribute("postList", userService.getPosts(getUserByName("user1").getName()));
+    @GetMapping("/{userName}")
+    ModelAndView userPage(@PathVariable String userName, HttpServletResponse response,Model model){
 
-        return new ModelAndView("friendsPage");
-    }
-    */
-    @GetMapping("/friendsPage/{userName}")
-    ModelAndView friendsPage(@PathVariable String userName, HttpServletResponse response,Model model){
+        UserResource user = userService.getUserByName(userName);
 
-        model.addAttribute("userName", userName.toString());
-        model.addAttribute("profilePic", getUserByName(userName).getImage());
-        model.addAttribute("postList", userService.getPosts(getUserByName(userName).getName()));
+        model.addAttribute("user", user);
+        model.addAttribute("profilePic", userService.getUserByName(userName).getImage());
+        model.addAttribute("postList", userService.getPosts(userName));
 
-        return new ModelAndView("friendsPage");
+        return new ModelAndView("userPage");
     }
 
 

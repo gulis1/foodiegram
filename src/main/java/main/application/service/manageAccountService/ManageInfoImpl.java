@@ -1,7 +1,7 @@
 package main.application.service.manageAccountService;
 
 import main.domain.converter.UsuarioConverter;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.UserResource;
 import main.persistence.entity.User;
 import main.persistence.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class ManageInfoImpl implements ManageInfo{
 
 
     @Override
-    public UsuarioResource changeName(Integer idUser, String newName) throws IllegalArgumentException{
+    public UserResource changeName(Integer idUser, String newName) throws IllegalArgumentException{
 
         Optional<User> user = repoUser.findById(idUser);
 
@@ -57,7 +57,7 @@ public class ManageInfoImpl implements ManageInfo{
     }
 
     @Override
-    public UsuarioResource changePasswd(Integer idUser, String newPasswd) {
+    public UserResource changePasswd(Integer idUser, String newPasswd) {
         Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
@@ -72,7 +72,7 @@ public class ManageInfoImpl implements ManageInfo{
     }
 
     @Override
-    public UsuarioResource changeEmail(Integer idUser, String newMail) {
+    public UserResource changeEmail(Integer idUser, String newMail) {
         Optional<User> user = repoUser.findById(idUser);
 
         if(!user.isPresent())
@@ -85,7 +85,7 @@ public class ManageInfoImpl implements ManageInfo{
     }
 
     @Override
-    public UsuarioResource changeProfilePicture(Integer idUser, MultipartFile newProfilePic) throws IOException {
+    public UserResource changeProfilePicture(Integer idUser, MultipartFile newProfilePic) throws IOException {
 
         Optional<User> user = repoUser.findById(idUser);
 

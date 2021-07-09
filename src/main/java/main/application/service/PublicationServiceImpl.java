@@ -3,9 +3,9 @@ package main.application.service;
 import main.domain.converter.ComentarioConverter;
 import main.domain.converter.PublicacionConverter;
 import main.domain.converter.ValoracionConverter;
-import main.domain.resource.ComentarioResource;
-import main.domain.resource.PublicacionResource;
-import main.domain.resource.ValoracionResource;
+import main.domain.resource.CommentResource;
+import main.domain.resource.PostResource;
+import main.domain.resource.RatingResource;
 import main.persistence.IDs.RatingID;
 import main.persistence.entity.Comment;
 import main.persistence.entity.Post;
@@ -67,12 +67,12 @@ PublicationServiceImpl implements PublicationService {
     private String apacheRootFolder;
 
     @Override
-    public PublicacionResource getPost(Integer pubID) {
+    public PostResource getPost(Integer pubID) {
         return converterPubli.convert(repoPubli.findById(pubID));
     }
 
     @Override
-    public PublicacionResource editPost(Integer pubID, String text) throws IllegalArgumentException, NoPermissionException {
+    public PostResource editPost(Integer pubID, String text) throws IllegalArgumentException, NoPermissionException {
 
         if (text == null)
             throw new IllegalArgumentException("Text or loc should be not null");
@@ -94,7 +94,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public PublicacionResource deletePost(Integer pubID) throws NoPermissionException {
+    public PostResource deletePost(Integer pubID) throws NoPermissionException {
 
         Optional<Post> publi = repoPubli.findById(pubID);
 
@@ -107,7 +107,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public PublicacionResource upload(Integer userID, PostForm form) throws IOException, IllegalArgumentException {
+    public PostResource upload(Integer userID, PostForm form) throws IOException, IllegalArgumentException {
         String country = null;
         String city = null;
 
@@ -160,7 +160,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<ValoracionResource> getRatings(Integer pubID) {
+    public List<RatingResource> getRatings(Integer pubID) {
 
         Optional<Post> publi = repoPubli.findById(pubID);
 
@@ -174,7 +174,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public ValoracionResource setRating(RatingForm form) throws IllegalArgumentException {
+    public RatingResource setRating(RatingForm form) throws IllegalArgumentException {
 
         if (form.getScore() < 0 || form.getScore() > 5)
             throw new IllegalArgumentException("Punt must be a integer between 0 and 5");
@@ -189,7 +189,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public ValoracionResource getRating(Integer pubID, String user) {
+    public RatingResource getRating(Integer pubID, String user) {
 
         Optional<User> usuario = userRepo.findByName(user);
 
@@ -198,7 +198,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public ValoracionResource deleteRating(RatingForm form) {
+    public RatingResource deleteRating(RatingForm form) {
 
         Optional<Rating> valor = repoVal.findById(new RatingID(form.getPubID(), form.getUserID()));
 
@@ -208,7 +208,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public List<ComentarioResource> getComments(Integer pubID) {
+    public List<CommentResource> getComments(Integer pubID) {
 
         Optional<Post> pub = repoPubli.findById(pubID);
 
@@ -224,7 +224,7 @@ PublicationServiceImpl implements PublicationService {
     }
 
     @Override
-    public ComentarioResource setComment( CommentForm form) throws IllegalArgumentException {
+    public CommentResource setComment(CommentForm form) throws IllegalArgumentException {
 
         if (form.getText() == null || form.getText().length() == 0)
             throw new IllegalArgumentException("Text must be not null");

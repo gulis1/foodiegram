@@ -4,9 +4,9 @@ package main.rest.controller;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import main.application.service.UserService;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.UsuarioResource;
-import main.domain.resource.ValoracionResource;
+import main.domain.resource.PostPreview;
+import main.domain.resource.UserResource;
+import main.domain.resource.RatingResource;
 import main.rest.forms.UserForm;
 import main.security.AuthTokenGenerator;
 import main.security.LogoutTokenGenerator;
@@ -29,7 +29,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/users")
-public class ControllerUsuario {
+public class UserController {
 
     @Autowired
     private UserService service;
@@ -55,7 +55,7 @@ public class ControllerUsuario {
     @RequestMapping(value = "/{user}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByName(@PathVariable String user, @RequestParam(required = false) String id) {
 
-        UsuarioResource usuario = service.getUserByName(user);
+        UserResource usuario = service.getUserByName(user);
         return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
     }
 
@@ -67,18 +67,18 @@ public class ControllerUsuario {
 
     // Devuelve una lista con todas las IDs de las publicaciones del usuario y las imagenes correspondientes.
     @RequestMapping(value = "/{user}/posts", method = RequestMethod.GET)
-    public ResponseEntity<List<PreviewPublicacion>> getPosts(@PathVariable String user) {
+    public ResponseEntity<List<PostPreview>> getPosts(@PathVariable String user) {
 
-        List<PreviewPublicacion> publicaciones = service.getPosts(user);
+        List<PostPreview> publicaciones = service.getPosts(user);
         return publicaciones != null ? ResponseEntity.ok(publicaciones) : ResponseEntity.notFound().build();
     }
 
 
     //no se si lo llegaremos a usar
     @RequestMapping(value = "/{user}/ratings", method = RequestMethod.GET)
-    public ResponseEntity<List<ValoracionResource>> getRatingsUser(@PathVariable String user) {
+    public ResponseEntity<List<RatingResource>> getRatingsUser(@PathVariable String user) {
 
-        List<ValoracionResource> valoraciones = service.getRatings(user);
+        List<RatingResource> valoraciones = service.getRatings(user);
         return valoraciones != null ? ResponseEntity.ok(valoraciones) : ResponseEntity.notFound().build();
 
     }
@@ -87,7 +87,7 @@ public class ControllerUsuario {
     public ResponseEntity<?> registerUser(UserForm user) {
 
         try {
-            UsuarioResource newUser = service.register(user);
+            UserResource newUser = service.register(user);
             return ResponseEntity.ok(newUser);
         }
 
@@ -106,7 +106,7 @@ public class ControllerUsuario {
 
         try {
 
-            UsuarioResource newUser = service.verify(token);
+            UserResource newUser = service.verify(token);
             return ResponseEntity.ok(newUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

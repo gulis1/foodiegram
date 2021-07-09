@@ -1,7 +1,7 @@
 package main.rest.controller;
 
 import main.application.service.UserService;
-import main.domain.resource.UsuarioResource;
+import main.domain.resource.UserResource;
 import main.domain.resource.Usuario_baneadoResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class ControllerAdmin {
     @RequestMapping(value="/deleteUser",method=RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@RequestPart("user") String user) {
         try{
-            UsuarioResource bannedUser=service.deleteUser(user);
+            UserResource bannedUser=service.deleteUser(user);
             return ResponseEntity.ok(bannedUser);
         }catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

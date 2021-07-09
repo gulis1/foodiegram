@@ -2,7 +2,7 @@ package main.application.service.manageAccountService;
 
 import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.converter.PublicacionConverter;
-import main.domain.resource.PreviewPublicacion;
+import main.domain.resource.PostPreview;
 import main.persistence.entity.Post;
 import main.persistence.entity.User;
 import main.persistence.repository.PostRepo;
@@ -27,7 +27,7 @@ public class ViewImagesImpl implements  ViewImages{
     UserRepo repoUser;
 
     @Override
-    public List<PreviewPublicacion> viewPost(Integer idUser) {
+    public List<PostPreview> viewPost(Integer idUser) {
 
         Optional<User> user = repoUser.findById(idUser);
 

@@ -1,11 +1,11 @@
 package main.application.service;
 
-import main.domain.converter.ColaboradorConverter;
+import main.domain.converter.RestaurantConverter;
 import main.domain.converter.PreviewPublicacionConverter;
 import main.domain.converter.PreviewUserConverter;
-import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.PreviewUsuario;
+import main.domain.resource.PostPreview;
+import main.domain.resource.RestaurantResource;
+import main.domain.resource.UserPreview;
 import main.persistence.entity.Restaurant;
 import main.persistence.entity.Post;
 import main.persistence.entity.User;
@@ -25,7 +25,7 @@ public class SearchServiceImpl implements SearchService {
 
     private final PreviewUserConverter converterPreviewUser = new PreviewUserConverter();
     private final PreviewPublicacionConverter converterPreviewPubli = new PreviewPublicacionConverter();
-    private final ColaboradorConverter collabConverter = new ColaboradorConverter();
+    private final RestaurantConverter collabConverter = new RestaurantConverter();
 
     @Autowired
     private UserRepo repoUser;
@@ -40,21 +40,21 @@ public class SearchServiceImpl implements SearchService {
     //
     // devuelve una lista de usuarios cuyo nombre contenga username
     @Override
-    public List<PreviewUsuario> getUserList(String username) {
+    public List<UserPreview> getUserList(String username) {
 
         List<User> userList = repoUser.findBynameContainingIgnoreCase(username);
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de usuarios por numero de publicaciones
-    public List<PreviewUsuario> getUserListByPubli() {
+    public List<UserPreview> getUserListByPubli() {
 
         List<User> userList = repoUser.findByPopuPubli();
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
     }
 
     // devuelve una lista de usuarios por numero de valoraciones recibidas
-    public List<PreviewUsuario> getUserListByVal() {
+    public List<UserPreview> getUserListByVal() {
 
         List<User> userList = repoUser.findByPopuVal();
         return userList.stream().map(x -> converterPreviewUser.convert(Optional.of(x))).collect(Collectors.toList());
@@ -64,7 +64,7 @@ public class SearchServiceImpl implements SearchService {
     //
     // devuelve una lista de colaboradores cuyo nombre contenga colabname
     @Override
-    public List<ColaboradorResource> getColabListByName(String colabname) {
+    public List<RestaurantResource> getColabListByName(String colabname) {
 
         List<Restaurant> collabs = collabRepo.findByUsername(colabname);
         return collabs.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
@@ -72,7 +72,7 @@ public class SearchServiceImpl implements SearchService {
 
     // devuelve una lista de colaboradores cuyo type contenga type
     @Override
-    public List<ColaboradorResource> getColabListByType(String type) {
+    public List<RestaurantResource> getColabListByType(String type) {
 
         List<Restaurant> colabJuser = collabRepo.findByType(type);
         return colabJuser.stream().map(x -> collabConverter.convert(Optional.of(x))).collect(Collectors.toList());
@@ -82,7 +82,7 @@ public class SearchServiceImpl implements SearchService {
     //
     // devuelve una lista de publicaciones cuyo texto contenga un hashtag coincidente con tag
     @Override
-    public List<PreviewPublicacion> getPubliListByTag(String tag) {
+    public List<PostPreview> getPubliListByTag(String tag) {
 
         List<Post> publiJuser = postRepo.findByTag(tag);
         return publiJuser.stream().map(x -> converterPreviewPubli.convert(Optional.of(x))).collect(Collectors.toList());

@@ -2,9 +2,9 @@ package main.rest.controller;
 
 
 import main.application.service.DiscoverService;
-import main.domain.resource.ColaboradorResource;
-import main.domain.resource.PreviewPublicacion;
-import main.domain.resource.PreviewUsuario;
+import main.domain.resource.RestaurantResource;
+import main.domain.resource.PostPreview;
+import main.domain.resource.UserPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/discover")
-public class ControllerDescubrir {
+public class DiscoverController {
 
     @Autowired
     private DiscoverService service;
@@ -33,7 +33,7 @@ public class ControllerDescubrir {
 
         try {
 
-            List<PreviewPublicacion> pub = null;
+            List<PostPreview> pub = null;
 
             switch (findBy) {
 
@@ -68,7 +68,7 @@ public class ControllerDescubrir {
 
         try {
             Integer userid = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            List<PreviewUsuario> users = service.findFollowedByFriends(userid);
+            List<UserPreview> users = service.findFollowedByFriends(userid);
             return users != null ? ResponseEntity.ok(users) : ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -80,7 +80,7 @@ public class ControllerDescubrir {
     public ResponseEntity<?> userWhoFollowXAlsoFollowY(@PathVariable String userName) {
 
         try {
-            List<PreviewUsuario> users = service.userWhoFollowXAlsoFollowY(userName);
+            List<UserPreview> users = service.userWhoFollowXAlsoFollowY(userName);
             return users != null ? ResponseEntity.ok(users) : ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -96,7 +96,7 @@ public class ControllerDescubrir {
                                              @RequestParam(required = false, defaultValue = "%") String country) {
 
         try {
-            List<ColaboradorResource> collabs = service.findCollabs(country, city);
+            List<RestaurantResource> collabs = service.findCollabs(country, city);
             return collabs != null ? ResponseEntity.ok(collabs) : ResponseEntity.notFound().build();
         } catch (Exception e) {
 

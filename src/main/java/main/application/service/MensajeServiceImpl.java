@@ -1,7 +1,7 @@
 package main.application.service;
 
 import main.domain.converter.MensajeConverter;
-import main.domain.resource.MensajeResource;
+import main.domain.resource.MessageResource;
 import main.persistence.entity.Message;
 import main.persistence.entity.User;
 import main.persistence.repository.MessageRepo;
@@ -29,7 +29,7 @@ public class MensajeServiceImpl implements MensajeService{
 
 
     @Override
-    public MensajeResource deleteMensaje(Integer mensID) throws NoPermissionException {
+    public MessageResource deleteMensaje(Integer mensID) throws NoPermissionException {
         Optional<Message> mens = repoMens.findById(mensID);
 
         mens.ifPresent(message -> repoMens.delete(message));
@@ -39,7 +39,7 @@ public class MensajeServiceImpl implements MensajeService{
     }
 
     @Override
-    public MensajeResource setMensaje(Integer userID, MessageForm mensaje) throws IllegalArgumentException {
+    public MessageResource setMensaje(Integer userID, MessageForm mensaje) throws IllegalArgumentException {
 
         Optional<User> user2 = repoUser.findByName(mensaje.getReceiver());
 
@@ -55,7 +55,7 @@ public class MensajeServiceImpl implements MensajeService{
     }
 
     @Override
-    public List<MensajeResource> getMensajes(Integer userID) {
+    public List<MessageResource> getMensajes(Integer userID) {
 
 
         Optional<User> user = repoUser.findById(userID);

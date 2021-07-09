@@ -1,7 +1,7 @@
 package main.application.service;
 
 import main.domain.converter.ComentarioConverter;
-import main.domain.resource.ComentarioResource;
+import main.domain.resource.CommentResource;
 import main.persistence.entity.Comment;
 import main.persistence.repository.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
 
     @Override
-    public ComentarioResource editComentario(Integer comID, String text) throws IllegalArgumentException, NoPermissionException {
+    public CommentResource editComentario(Integer comID, String text) throws IllegalArgumentException, NoPermissionException {
 
 
         Optional<Comment> comment = repoComen.findById(comID);
@@ -43,7 +43,7 @@ public class ComentarioServiceImpl implements ComentarioService {
     }
 
     @Override
-    public ComentarioResource deleteComentario(Integer comID) throws NoPermissionException {
+    public CommentResource deleteComentario(Integer comID) throws NoPermissionException {
 
         Optional<Comment> comment = repoComen.findById(comID);
 

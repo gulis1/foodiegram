@@ -1,8 +1,8 @@
 package main.application.service.manageAccountService;
 
-import main.domain.converter.AmigoConverter;
+import main.domain.converter.FollowConverter;
 import main.domain.converter.PreviewPublicacionConverter;
-import main.domain.resource.AmigoResource;
+import main.domain.resource.FollowResource;
 import main.persistence.IDs.FollowID;
 import main.persistence.entity.Follow;
 import main.persistence.entity.User;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ManageFriendsImpl implements ManageFriends{
 
 
-    private final AmigoConverter friendConverter = new AmigoConverter();
+    private final FollowConverter friendConverter = new FollowConverter();
 
     PreviewPublicacionConverter converterPreview = new PreviewPublicacionConverter();
 
@@ -34,7 +34,7 @@ public class ManageFriendsImpl implements ManageFriends{
     PostRepo repoPost;
 
     @Override
-    public AmigoResource addFriend(Integer id, String name)throws IllegalArgumentException {
+    public FollowResource addFriend(Integer id, String name)throws IllegalArgumentException {
 
         Optional<User> user  = repoUser.findByName(name);
 
@@ -58,7 +58,7 @@ public class ManageFriendsImpl implements ManageFriends{
     }
 
     @Override
-    public AmigoResource removeFriend(Integer id, String name) throws IllegalArgumentException{
+    public FollowResource removeFriend(Integer id, String name) throws IllegalArgumentException{
         Optional<User> user = repoUser.findByName(name);
 
         if(!user.isPresent())//comprobamos que el usuario existe

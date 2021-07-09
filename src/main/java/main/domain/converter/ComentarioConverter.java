@@ -1,7 +1,7 @@
 package main.domain.converter;
 
 
-import main.domain.resource.ComentarioResource;
+import main.domain.resource.CommentResource;
 import main.persistence.entity.Comment;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class ComentarioConverter implements Converter<Optional<Comment>, ComentarioResource> {
+public class ComentarioConverter implements Converter<Optional<Comment>, CommentResource> {
 
     @Override
-    public ComentarioResource convert(Optional<Comment> source){
+    public CommentResource convert(Optional<Comment> source){
 
         if (!source.isPresent())
             return null;
 
-        ComentarioResource response=new ComentarioResource();
+        CommentResource response=new CommentResource();
         response.setId(source.get().getCommentid());
         response.setIdpubli(source.get().getPost());
         response.setIduser(source.get().getAutor().getUserid());
