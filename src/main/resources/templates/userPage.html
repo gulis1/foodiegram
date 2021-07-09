@@ -16,7 +16,7 @@
 </head>
 <body class="foodiegram-bg">
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-top mb-5 shadow">
+<nav class="navbar navbar-expand navbar-light bg-dark fixed-top mb-5 shadow">
     <div class="container">
 
         <script>
@@ -25,15 +25,15 @@
             }
         </script>
 
-        <div style="width: 10%;">
-            <h1 class="navbar-brand text-white nav-item" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
-        </div>
+
+        <h1 class="navbar-brand text-white nav-item" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
 
 
-        <div class="collapse navbar-collapse" style="display: flex; flex-direction: row-reverse;">
 
-            <div class="d-flex" method="post">
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="searchBar" style="background-color: #343a40; color: white; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; border-color: white; display: flex; justify-content: center; align-items: center;"/>
+        <div class="navbar">
+
+            <div style="display: flex;">
+                <input class="form-control"  type="text" placeholder="Search" aria-label="Search" id="searchBar" style="background-color: #343a40; color: white; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; border-color: white; display: flex; justify-content: center; align-items: center;"/>
                 <button class="btn btn-outline-light" onclick="buscar(this)" style="border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
                     <h5 class="bi bi-search nav-item"></h5>
                 </button>
@@ -41,7 +41,7 @@
 
         </div>
 
-        <div class="collapse navbar-collapse" id="navbarResponsive" style="width: 10%;">
+        <div class="navbar" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item">
@@ -74,29 +74,33 @@
 
 </div>
 
+<div style="display: flex; justify-content: center; width: 100%;">
 
-<div style="width: 100%; height: 20%; display: flex; justify-content: center;">
+    <div style="width: 60%; display: flex; justify-content: center;">
 
-    <div style="width: max(15vh, 200px); height: max(15vh, 200px);">
-        <div style="width: 50%; height: 100%; background-color: #343a40; transform: translateX(100%);">
+        <div style="width: max(15vh, 200px); height: max(15vh, 200px);">
+            <div style="width: 50%; height: 100%; background-color: #343a40; transform: translateX(100%);">
+            </div>
+            <img th:src="${user.image}" alt="ERROR" style="border-radius: 50%; height: 100%; width: 100%; transform: translateY(-100%); user-select: none;"/>
+
         </div>
-        <img th:src="${user.image}" alt="ERROR" style="border-radius: 50%; height: 100%; width: 100%; transform: translateY(-100%); user-select: none;"/>
-
-    </div>
 
 
-    <div style="height: max(15vh, 200px); display: flex; align-items: center; background-color: #343a40; border-top-right-radius: 20px; border-bottom-right-radius: 20px; transform: translateX(-1px);">
-        <h1 th:text="${user.name}" style="color: white; margin: 10px; user-select: none;"></h1>
+        <div style="height: max(15vh, 200px); display: flex; align-items: center; background-color: #343a40; border-top-right-radius: 20px; border-bottom-right-radius: 20px; transform: translateX(-1px);">
+            <h1 th:text="${user.name}" style="color: white; margin: 10px; user-select: none;"></h1>
+        </div>
+
     </div>
 
 </div>
 
-<div style="display: block; height: 20px;">
+
+<div style="display: block; height: 40px;">
 
 </div>
 
 <!-- Page Content -->
-<div class="container" style="position: relative">
+<div class="container" style="position: relative;">
 
     <div id="page-mask">
 

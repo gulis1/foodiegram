@@ -1,6 +1,7 @@
 .foodiegram-bg {
     height: 100vh;
     background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
+    background-attachment: fixed;
 }
 
 .user-images {
