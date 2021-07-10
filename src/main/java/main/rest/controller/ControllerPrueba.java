@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -202,7 +203,7 @@ public class ControllerPrueba {
     }
 
     @PostMapping("/postUpload")
-    void postUpload(@ModelAttribute("newPost") PostForm post, HttpServletResponse response,  Model model) throws IOException {
+    void postUpload(@Valid PostForm post, HttpServletResponse response, Model model) throws IOException {
 
         try {
             Integer userId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -289,7 +290,7 @@ public class ControllerPrueba {
 
 
     @GetMapping("/{userName}")
-    ModelAndView userPage(@PathVariable String userName, HttpServletResponse response,Model model){
+    ModelAndView userPage(@PathVariable String userName, HttpServletResponse response, Model model){
 
         UserResource user = userService.getUserByName(userName);
 

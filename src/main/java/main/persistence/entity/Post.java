@@ -19,6 +19,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer postid;
+    private String title;
     private String text;
     private String image;
     private String country;
@@ -27,7 +28,8 @@ public class Post {
     private Integer numratings;
     private Date day;
 
-    public Post(String text, User user, String image, String pais, String ciudad) {
+    public Post(String title, String text, User user, String image, String pais, String ciudad) {
+        this.title = title;
         this.text = text;
         this.image = image;
         this.user = user;
@@ -38,15 +40,8 @@ public class Post {
         this.day = new Date(Calendar.getInstance().getTime().getTime());
     }
 
-    public Post(String text, User user, String pais, String ciudad) {
-        this.text = text;
-        this.image = null;
-        this.user = user;
-        this.country = pais;
-        this.city = ciudad;
-        this.avg =0f;
-        this.numratings =0;
-        this.day = new Date(Calendar.getInstance().getTime().getTime());
+    public Post(String title, String text, User user, String pais, String ciudad) {
+       this(title, text, user, null, pais, ciudad);
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

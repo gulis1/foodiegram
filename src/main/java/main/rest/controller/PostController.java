@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 
 import javax.naming.NoPermissionException;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,14 +29,13 @@ public class PostController {
     @Autowired
     private PublicationService service;
 
-
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> upload(PostForm form) {
+    public ResponseEntity<?> upload(@Valid PostForm form) {
 
 
         try {
-            Integer userid=Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
-            PostResource publi = service.upload(userid,form);
+            Integer userid = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
+            PostResource publi = service.upload(userid, form);
             return publi != null ? ResponseEntity.ok(publi) : ResponseEntity.notFound().build();
         }
 
