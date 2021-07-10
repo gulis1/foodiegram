@@ -21,11 +21,14 @@ import main.rest.forms.RatingForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.NoPermissionException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -108,6 +111,12 @@ PublicationServiceImpl implements PublicationService {
 
     @Override
     public PostResource upload(Integer userID, PostForm form) throws IOException, IllegalArgumentException {
+
+        Matcher matcher = imagePattern.matcher(form.getImage().getOriginalFilename());
+
+        if (!matcher.matches())
+            throw new IllegalArgumentException("Only jpeg and png images are supported.");
+
         String country = null;
         String city = null;
 
@@ -123,37 +132,32 @@ PublicationServiceImpl implements PublicationService {
             }
         }
 
-        Post publi = new Post(form.getText(), new User(userID), country, city);
+        Post publi = new Post(form.getTitle(), form.getText(), new User(userID), country, city);
         publi = repoPubli.save(publi);
 
-        if (form.getImage() != null) {
+        try {
+            File folder = new File(apacheRootFolder + "/users/" + userID);
+            folder.mkdirs();
 
-            Matcher matcher = imagePattern.matcher(form.getImage().getOriginalFilename());
+            String name = folder.getAbsolutePath() + "/" + publi.getPostid() + "." + matcher.group(1);
+            FileOutputStream stream = new FileOutputStream(name);
+            stream.write(form.getImage().getBytes());
+            stream.close();
 
-            if (!matcher.matches())
-                throw new IllegalArgumentException("Only jpeg and png images are supported.");
+            // Si se ha conseguido guardar la imagen, se le asocia a la publicacion una direccion en la BD.
 
-            // Se crea una publicacion sin imagen
+            String address = String.format("%s/users/%s/%s.%s", apacheAddress, userID, publi.getPostid(), matcher.group(1));
 
-            try {
-                File folder = new File(apacheRootFolder + "/users/" + userID);
-                folder.mkdirs();
-
-                String name = folder.getAbsolutePath() + "/" + publi.getPostid() + "." + matcher.group(1);
-                FileOutputStream stream = new FileOutputStream(name);
-                stream.write(form.getImage().getBytes());
-                stream.close();
-
-                // Si se ha conseguido guardar la imagen, se le asocia a la publicacion una direccion en la BD.
-                String address = String.format("%s/users/%s/%s.%s", apacheAddress, userID, publi.getPostid(), matcher.group(1));
-                publi.setImage(address);
-                repoPubli.save(publi);
-            } catch (IOException e) {
-                repoPubli.delete(publi);
-                throw e;
-            }
-
+            publi.setImage(address);
+            repoPubli.save(publi);
         }
+
+        catch (IOException e) {
+            repoPubli.delete(publi);
+            throw e;
+        }
+
+
 
 
         return converterPubli.convert(Optional.of(publi));
