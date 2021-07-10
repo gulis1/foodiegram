@@ -12,6 +12,7 @@ public class PostResource {
 
     private Integer id;
     private Integer iduser;
+    private String title;
     private String text;
     private String image;
     private String ciudad;

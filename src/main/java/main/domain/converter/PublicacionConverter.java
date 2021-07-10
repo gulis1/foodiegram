@@ -21,6 +21,7 @@ public class PublicacionConverter implements Converter<Optional<Post>, PostResou
         PostResource response = new PostResource();
         response.setId(source.get().getPostid());
         response.setIduser(source.get().getUser().getUserid());
+        response.setTitle(source.get().getTitle());
         response.setText(source.get().getText());
         response.setImage(source.get().getImage());
         response.setCiudad(source.get().getCity());

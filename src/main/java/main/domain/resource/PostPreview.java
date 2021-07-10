@@ -11,7 +11,7 @@ public class PostPreview {
     private final Integer id;
     private final String image;
     private final String media;
-    private final String text;
+    private final String title;
 
 
 

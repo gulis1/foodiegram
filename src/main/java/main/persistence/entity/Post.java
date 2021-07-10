@@ -55,7 +55,7 @@ public class Post {
         Integer deleterId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
         Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-        if (!deleterId.equals(user) && !authorities.contains(RoleEnum.ROLE_MOD) && !authorities.contains(RoleEnum.ROLE_ADMIN))
+        if (!deleterId.equals(user.getUserid()) && !authorities.contains(RoleEnum.ROLE_MOD) && !authorities.contains(RoleEnum.ROLE_ADMIN))
             throw new ForbiddenException("You're not allowed to do that");
     }
 

@@ -14,6 +14,6 @@ public class PreviewPublicacionConverter implements Converter<Optional<Post>, Po
     public PostPreview convert(Optional<Post> source) {
 
         DecimalFormat df = new DecimalFormat("#.##");
-        return source.map(publicacion -> new PostPreview(publicacion.getPostid(), publicacion.getImage(), df.format(publicacion.getAvg()), publicacion.getText())).orElse(null);
+        return source.map(publicacion -> new PostPreview(publicacion.getPostid(), publicacion.getImage(), df.format(publicacion.getAvg()), publicacion.getTitle())).orElse(null);
     }
 }

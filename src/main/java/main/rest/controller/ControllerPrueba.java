@@ -207,11 +207,12 @@ public class ControllerPrueba {
 
         try {
             Integer userId = Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getName());
+            String userName = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
             PostResource publi = postService.upload(userId, post);
             //model.addAttribute("search" , new SearchForm());
             //model.addAttribute("postList", getPosts(userId));
             //return new ModelAndView("userPage");
-            response.sendRedirect("/pruebas/me");
+            response.sendRedirect("/pruebas/" + userName);
         }
 
         catch (IOException e) {
