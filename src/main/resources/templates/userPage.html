@@ -3,8 +3,8 @@
 <head>
     <title>PersonalPage</title>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!--    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>-->
+<!--    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
@@ -16,58 +16,54 @@
 </head>
 <body class="foodiegram-bg">
 <!-- Navigation -->
-<nav class="navbar navbar-expand navbar-light bg-dark fixed-top mb-5 shadow">
-    <div class="container">
 
-        <script>
-            function deleteCookies() {
-                document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
-            }
-        </script>
+<script>
+    function deleteCookies() {
+        document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    }
+</script>
+
+<nav class="navbar">
+
+    <ul class="navbar-nav">
+
+        <li class="nav-item">
+            <h1 class="brand" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
+        </li>
+
+        <li class="nav-item">
+
+            <input class="form-control"  type="text" placeholder="Search" aria-label="Search" id="searchBar"/>
+
+            <a id="searchButton" onclick="buscar(this)">
+                <h4 class="bi bi-search"></h4>
+            </a>
+        </li>
 
 
-        <h1 class="navbar-brand text-white nav-item" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
+        <li class="nav-item">
+
+
+            <a class="nav-icon" th:href="@{/pruebas/upload}">
+                <h4 class="bi bi-upload"></h4>
+            </a>
+
+            <a class="nav-icon" th:href="@{/pruebas/friends}">
+                <h4 class="bi bi-people"></h4>
+            </a>
+
+            <a class="nav-icon" onclick="deleteCookies()" th:href="@{/pruebas}">
+                <h4 class="bi bi-gear-wide-connected"></h4 >
+            </a>
+
+        </li>
 
 
 
-        <div class="navbar">
 
-            <div style="display: flex;">
-                <input class="form-control"  type="text" placeholder="Search" aria-label="Search" id="searchBar" style="background-color: #343a40; color: white; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0; border-color: white; display: flex; justify-content: center; align-items: center;"/>
-                <button class="btn btn-outline-light" onclick="buscar(this)" style="border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                    <h5 class="bi bi-search nav-item"></h5>
-                </button>
-            </div>
+    </ul>
 
-        </div>
 
-        <div class="navbar" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item">
-                    <a class="btn btn-outline-light" th:href="@{/pruebas/upload}" style="border: none;">
-                        <h4 class="bi bi-upload"></h4>
-                    </a>
-
-                </li>
-
-                <li class=" nav-item">
-                    <a class="btn btn-outline-light" th:href="@{/pruebas/friends}" style="border: none;">
-                        <h4 class="bi bi-people"></h4>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="btn btn-outline-light" onclick="deleteCookies()" th:href="@{/pruebas}" style="border: none;">
-                        <h4  class="bi bi-gear-wide-connected"></h4 >
-                    </a>
-
-                </li>
-
-            </ul>
-        </div>
-
-    </div>
 </nav>
 
 <div style="display: block; height: 150px;">
