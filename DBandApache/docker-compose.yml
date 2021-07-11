@@ -1,0 +1,36 @@
+version: "3.3"
+
+services:
+
+  foodiegramDB:
+    image: mysql
+    
+    environment:
+      - MYSQL_ROOT_PASSWORD=cr7
+      - MYSQL_DATABASE=foodiegram
+
+    volumes:
+      - foodiegramDB:/var/lib/mysql
+      - type: bind
+        source: ./BD
+        target: /docker-entrypoint-initdb.d
+      
+    ports:
+      - 3306:3306
+
+  apache:
+    
+    build: .
+    
+    volumes: 
+      - type: bind
+        source: ./images
+        target: /usr/local/apache2/htdocs
+
+    ports:
+      - 4555:4555
+
+ 
+
+volumes:
+  foodiegramDB:
