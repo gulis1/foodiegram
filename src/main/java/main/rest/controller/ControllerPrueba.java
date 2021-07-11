@@ -117,7 +117,7 @@ public class ControllerPrueba {
             String authToken = authTokenGenerator.buildToken(user.getUsername(), 15);
             Cookie cookieA = new Cookie("authToken",authToken);
             cookieA.setHttpOnly(true);
-            cookieA.setMaxAge(900);
+            cookieA.setMaxAge(18000);
             cookieA.setPath("/");
             response.addCookie(cookieA);
 

@@ -2,7 +2,7 @@ function loadPublication(data) {
 
     document.getElementById("post-modal-image").src = data.image;
     document.getElementById("post-modal-title").innerText = data.title;
-    // document.getElementById("post-modal-text").innerText = data.text;
+    document.getElementById("post-modal-text").innerText = data.text;
     document.getElementById("post-modal-ratings").innerHTML = data.media + '<i class="bi bi-star"></i>' + '  ' + data.numerototalval + '<i class="bi bi-person"></i>';
     document.getElementById("post-modal-date").innerText = data.fecha;
 

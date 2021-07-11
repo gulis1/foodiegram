@@ -1,11 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 .foodiegram-bg {
     height: 100vh;
-    background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
-    background-attachment: fixed;
+    background: fixed linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
 }
 
+.foodiegram-bg2 {
+    height: 100vh;
+    background: fixed linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#navbar-separator1 {
+    width: 100%;
+    height: 6rem;
+    display: block;
+}
+
+#navbar-separator2 {
+    display: block;
+    width: 100%;
+    height: calc(12rem + 5px);
+}
+
+.bi {
+    margin: 0;
+}
 .user-images {
-    max-width: 101%;
+    width: 60%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     justify-items: center;
@@ -17,6 +44,13 @@
     height:350px;
     border-radius: 10px;
     border: none;
+    background-color: #343a40;
+    color: white;
+}
+
+.post-card-top {
+    width: 100%;
+    height: 60%;
 }
 
 .post-card-image {
@@ -31,6 +65,19 @@
     -webkit-user-drag: none;
     user-select: none;
     z-index: 1;
+}
+.post-card-bottom {
+    box-sizing: border-box;
+    padding: 10px;
+    height: 40%;
+    font-size: 1.5rem;
+
+    font-family: Arial, monospace;
+}
+.card-text {
+    overflow: hidden;
+    margin: 0;
+    font-size: 1rem;
 }
 
 #post-modal {
@@ -47,26 +94,73 @@
     max-height: 100%;
 }
 
-#post-modal-details {
-    width: 100%;
-    height:25%;
-    position: relative;
-    border-bottom: 1px solid lightgray;
-}
-
 #post-modal-right {
     width: 15%;
     background-color: rgb(255,255,255);
     border-left: 1px solid lightgray;
     min-width: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+#post-modal-details {
+    width: 100%;
+    height:30%;
+    border-bottom: 1px solid lightgray;
+    position: relative;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#post-modal-footer {
+    width: 100%;
+    height: 75%;
+}
+
+#post-modal-title {
+    margin: 0;
+}
+
+#post-modal-title-div {
+    width: 100%;
+    height: 17%;
+}
+
+#post-modal-text-div {
+    width: 100%;
+    height: 83%;
+    overflow-y: scroll;
+    margin-bottom: 8px;
+    scroll-padding: 3px 0 5px 0;
+}
+
+#post-modal-ratings-container {
+    width: 100%;
+    height: 25%;
+    bottom: 0;
+    display: flex;
+    border-top: 1px solid gray;
+}
+
+.post-modal-ratings-half {
+    height: 100%;
+    flex: 1;
+}
+
+.post-modal-ratings-quarter {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    align-items: flex-end;
 }
 
 
 #post-modal-text {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    margin: 0;
     font-family: Arial,serif;
+    font-size: 0.9rem;
 }
 
 #post-modal-ratings {
@@ -79,6 +173,7 @@
     font-size: smaller;
     right: 5px;
     position: absolute;
+    margin: 0 0 0 5px;
 }
 
 #post-modal-loc {
@@ -86,19 +181,29 @@
     font-size: smaller;
     right: 5px;
     position: absolute;
+    margin: 0 0 0 5px;
+}
+#post-modal-ratings {
+    margin: 0;
+}
+
+#post-modal-stars {
+    padding-left: 5px;
 }
 
 #post-modal-comments-container {
     width: 100%;
-    height:65%;
+    height:60%;
 }
 
 #post-modal-comments {
     list-style: none;
-    padding:0;
+    padding-left: 0;
+    padding-top: 5px;
+    margin: 0;
     overflow-y: scroll;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 5px);
 }
 
 .comment-pfp {
@@ -121,6 +226,18 @@
     height:10%;
     display: flex;
     border-top: lightgray 1px solid;
+    padding: 0;
+
+}
+
+#post-modal-comment-input-field {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding-bottom: 0;
+    padding-top: 0;
+    padding-left: 5px;
+    font-size: 1rem;
 }
 
 #page-mask {
@@ -156,9 +273,7 @@
     color: cornflowerblue;
 }
 
-.nav-item {
-    transform: translateY(4px);
-}
+
 
 .form-control:focus {
 
@@ -185,40 +300,45 @@
 .navbar {
     background-color: #343a40;
     position: fixed;
-    width: 100vw;
+    width: 100%;
     height: 4rem;
     top: 0;
     left: 0;
     display: flex;
     justify-content: center;
     font-size: 2rem;
+    z-index: 10;
 }
 
 .navbar-nav {
 
-    width: 70vw;
+    width: 60%;
     height: 100%;
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
-    justify-content: center;
-    align-items: center;º
+    justify-content: space-between;
+    align-items: center;
 }
 
-
-
 .nav-item {
-    width: 100%;
     height: 100%;
     display: flex;
+    color: white;
     justify-content: center;
     align-items: center;
-    transform: translateY(-1px);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.userPic {
+    aspect-ratio: 1/1;
+    height: 3rem;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
 .nav-item:first-child {
-
     justify-content: flex-start;
 }
 
@@ -228,10 +348,10 @@
 }
 
 .nav-icon {
-    color: white;
     margin-left: 10px;
     margin-right: 10px;
     transition: 200ms ease;
+    color: white;
 }
 
 .nav-icon:hover {
@@ -241,6 +361,11 @@
 
 .brand {
     color: white;
+    font-family: Pacifico, monospace;
+}
+
+.bi-star {
+    margin-top: 0;
 }
 
 #searchBar {
@@ -266,21 +391,155 @@
 #searchButton:hover {
     font-size: 3rem;
     color: cornflowerblue;
+}
 
+#mobileUser {
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    font-size: 3rem;
+    height: 5rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: #343a40;
+    color: white;
+    z-index: 10;
 }
 
 
 @media only screen and (max-width: 1200px) {
 
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+
+    #mobileUser {
+        display: flex;
+    }
+
     .navbar {
         top: unset;
         bottom: 0;
-
+        height: 9rem;
+        font-size: 5rem;
+        padding-bottom: 3rem;
+        border-top: 2px gray solid;
     }
 
     .navbar-nav {
-        width: 100vw;
-        padding-left: 10px;
-        padding-right: 10px;
+        width: 90%;
+    }
+
+    #primaryUser {
+        display: none;
+    }
+
+    .post-card {
+        width: calc(33.333vw - 10px);
+    }
+
+    .user-images {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-items: center;
+        grid-gap: 5px;
+
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+
+    .nav-item {
+        flex: 1;
+    }
+
+    .nav-item:first-child {
+        display: none;
+    }
+
+    .nav-item:last-child {
+        justify-content: space-between;
+    }
+
+    .nav-icon:hover {
+        font-size: 6rem;
+    }
+
+    #searchButton:hover {
+        font-size: 6rem;
+    }
+
+    .post-card {
+        height: 500px;
+    }
+
+    .post-card-image{
+        border-radius: 0;
+    }
+
+    .post-card-top {
+        height: 70%;
+    }
+
+    .post-card-bottom {
+        height: 30%;
+        background-color: #888888;
+    }
+
+    .card-text {
+        font-size: 1.5rem;
+    }
+
+    .foodiegram-bg2 {
+       background: #343a40;
+    }
+
+    #post-modal {
+
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        top: 5rem;
+    }
+
+    #post-modal-details {
+        display: flex;
+        font-size: 2rem;
+    }
+
+    #post-modal-footer {
+        flex: 3;
+        height: 100%;
+    }
+
+    #post-modal-title-div {
+        height: 25%;
+    }
+
+    #post-modal-text-div {
+        height: 75%;
+        padding-top: 10px;
+    }
+
+    #post-modal-text {
+        font-size: 1.5rem;
+    }
+
+    #post-modal-ratings-container {
+        flex: 1;
+        border: none;
+    }
+
+    #post-modal-image {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+    }
+
+    #post-modal-right {
+        width: 100%;
+        min-height: 50%;
     }
 }

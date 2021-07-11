@@ -3,18 +3,17 @@
 <head>
     <title>PersonalPage</title>
 
-<!--    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>-->
-<!--    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
-
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
 
     <link rel="stylesheet"  href="/css/styles.css"/>
     <script src="/js/postClick.js"></script>
 
+    <meta name='viewport'
+          content='width=device-width, initial-scale=0.4, maximum-scale=0.4, user-scalable=no' >
 
 </head>
-<body class="foodiegram-bg">
+<body class="foodiegram-bg2">
 <!-- Navigation -->
 
 <script>
@@ -23,26 +22,44 @@
     }
 </script>
 
+<nav id="mobileUser">
+
+
+    <img class="userPic" th:src="${user.image}"/>
+    <p th:text="${user.name}" style="margin: 0;"></p>
+
+
+</nav>
+
 <nav class="navbar">
 
     <ul class="navbar-nav">
 
         <li class="nav-item">
-            <h1 class="brand" style="font-size: 2rem;">𝓯𝓸𝓸𝓭𝓲𝓮𝓰𝓻𝓪𝓶</h1>
+            <h1 class="brand" style="font-size: 2rem;">foodiegram.</h1>
         </li>
 
-        <li class="nav-item">
+        <li id="primaryUser" class="userInfo nav-item">
+            <img class="userPic" th:src="${user.image}"/>
+            <p th:text="${user.name}"></p>
+        </li>
+<!--        <li class="nav-item">-->
 
-            <input class="form-control"  type="text" placeholder="Search" aria-label="Search" id="searchBar"/>
+<!--&lt;!&ndash;            <input class="form-control"  type="text" placeholder="Search" aria-label="Search" id="searchBar"/>&ndash;&gt;-->
+
+
+<!--        </li>-->
+
+
+        <li class="nav-item">
 
             <a id="searchButton" onclick="buscar(this)">
                 <h4 class="bi bi-search"></h4>
+
+                <div class="searchResults">
+
+                </div>
             </a>
-        </li>
-
-
-        <li class="nav-item">
-
 
             <a class="nav-icon" th:href="@{/pruebas/upload}">
                 <h4 class="bi bi-upload"></h4>
@@ -57,43 +74,15 @@
             </a>
 
         </li>
-
-
-
-
     </ul>
 
 
 </nav>
 
-<div style="display: block; height: 150px;">
+<div id="navbar-separator1">
 
 </div>
 
-<div style="display: flex; justify-content: center; width: 100%;">
-
-    <div style="width: 60%; display: flex; justify-content: center;">
-
-        <div style="width: max(15vh, 200px); height: max(15vh, 200px);">
-            <div style="width: 50%; height: 100%; background-color: #343a40; transform: translateX(100%);">
-            </div>
-            <img th:src="${user.image}" alt="ERROR" style="border-radius: 50%; height: 100%; width: 100%; transform: translateY(-100%); user-select: none;"/>
-
-        </div>
-
-
-        <div style="height: max(15vh, 200px); display: flex; align-items: center; background-color: #343a40; border-top-right-radius: 20px; border-bottom-right-radius: 20px; transform: translateX(-1px);">
-            <h1 th:text="${user.name}" style="color: white; margin: 10px; user-select: none;"></h1>
-        </div>
-
-    </div>
-
-</div>
-
-
-<div style="display: block; height: 40px;">
-
-</div>
 
 <!-- Page Content -->
 <div class="container" style="position: relative;">
@@ -106,37 +95,46 @@
 
             <div class="modal-click-box" id="post-modal-right">
 
-                <div id = "post-modal-details">
+                <div id="post-modal-details">
 
-                    <h4 id="post-modal-title"></h4>
+                    <div id="post-modal-footer">
 
+                        <div id="post-modal-title-div">
+                            <h3 id="post-modal-title"></h3>
+                        </div>
 
-                    <div style="width: 100%; height: 30%; bottom: 0; position: absolute;">
+                        <div id="post-modal-text-div">
+                            <p id="post-modal-text"></p>
+                        </div>
 
-                        <div style="width: 50%; height: 100%; position: absolute; left: 0;">
+                    </div>
 
-                            <div style="width: 100%; height: 50%; top: 0; position: absolute;">
+                    <div id="post-modal-ratings-container">
+
+                        <div class="post-modal-ratings-half">
+
+                            <div class="post-modal-ratings-quarter">
                                 <p id="post-modal-ratings"></p>
                             </div>
 
-                            <div id="post-modals-stars" style="width: 100%; height: 50%; bottom: 0; position: absolute;" >
-                                <p style="margin-left: 5px;">
+                            <div id="post-modals-stars" class="post-modal-ratings-quarter" >
+
                                     <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
                                     <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
                                     <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
                                     <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
                                     <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                </p>
+
                             </div>
                         </div>
 
-                        <div style="width: 50%; height: 100%; position: absolute; right: 0;">
+                        <div class="post-modal-ratings-half">
 
-                            <div style="width: 100%; height: 50%; top: 0; position: absolute;">
+                            <div class="post-modal-ratings-quarter">
                                 <p id="post-modal-date"></p>
                             </div>
 
-                            <div style="width: 100%; height: 50%; bottom: 0; position: absolute;">
+                            <div class="post-modal-ratings-quarter">
                                 <p id="post-modal-loc"></p>
                             </div>
 
@@ -152,7 +150,7 @@
 
                 <div id="post-modal-comments-container">
 
-                    <ul id="post-modal-comments" style="padding-top: 10px;">
+                    <ul id="post-modal-comments">
 
                     </ul>
 
@@ -161,9 +159,9 @@
                 <div id="post-modal-comment-input">
 
                     <div style="width: 80%; height: 100%;">
-                        <label style="width: 100%; height: 100%">
-                            <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off" style="width: 100%; height: 100%; border: none; padding-left: 10px;"/>
-                        </label>
+
+                        <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"/>
+
                     </div>
 
                     <div id="post-modal-send-button-container">
@@ -181,39 +179,45 @@
     </div>
 
 
-    <div class="cards user-images">
+    <div class="user-images">
 
-        <div class="card text-white bg-dark border-dark post-card" th:each="image : ${postList}">
+        <div class="post-card" th:each="image : ${postList}">
 
-            <div style="width: 100%; height: 60%">
-                <img class="card-img-top post-card-image" onclick="onPostClicked(this)" th:src="${image.image}"  alt="AN ERROR TOOK PLACE LOADING THE PHOTO" th:attr="data-postid=${image.id}"/>
+            <div class="post-card-top">
+                <img class="post-card-image" onclick="onPostClicked(this)" th:src="${image.image}"  alt="AN ERROR TOOK PLACE LOADING THE PHOTO" th:attr="data-postid=${image.id}"/>
             </div>
 
 
-<!--            <div class="card-body">-->
-<!--                <p class="card-text" th:text="${image.text}"></p>-->
-<!--                <div style="position: absolute;bottom: -10px;right: 10px;">-->
-<!--                    <p>-->
-<!--                        <i class="card-text"  th:text="${image.media}"></i>-->
-<!--                        <i class="bi bi-star"></i>-->
-<!--                    </p>-->
-<!--                </div>-->
+            <div class="post-card-bottom">
+                <div style="width: 100%; height: 80%;">
+                    <p class="card-text" th:text="${image.title}"></p>
+                </div>
+
+                <div style="width: 100%; height: 20%;">
+                    <p style="margin: 0; text-align: right;">
+                        <i class="card-text"  th:text="${image.media}"></i>
+                        <i class="bi bi-star"></i>
+                    </p>
+                </div>
 
 
-<!--            </div>-->
+            </div>
         </div>
+
+
 
     </div>
 
 
+
+
     <template>
 
-        <li class="list-group-item" style=" padding-left: 0; padding-top: 2px; border:none;">
+        <li class="list-group-item" style="; border:none;">
 
             <div style="width: 100%; display: flex;" >
 
-                <div style="width: 20%; display: flex; justify-content: center">
-                    <!--                    <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />-->
+                <div style="width: 20%; display: flex; justify-content: center; align-items: center;">
                     <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />
                 </div>
 
@@ -225,6 +229,10 @@
 
         </li>
     </template>
+
+</div>
+
+<div id="navbar-separator2">
 
 </div>
 </body>
