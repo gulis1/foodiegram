@@ -25,7 +25,7 @@ spring.datasource.password=cr7
 apache.address = http://localhost:4555
 
 # The root folder of the apache server.
-apache.rootFolder = ./DBandApache/images
+apache.rootFolder = ./Compose/images
 
 # Gmail stuff
 spring.mail.protocol=smtp
@@ -42,7 +42,7 @@ spring.mail.password=
 # Changing these defaults is recommended.
 jwt.auth.secret = 1234
 jwt.refresh.secret = 2345
-jwt.logout.secret = 3456
+jwt.loggedIn.secret = 3456
 
 # Paypal credentials. (WIP)
 paypal.id =
