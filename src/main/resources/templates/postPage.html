@@ -60,14 +60,11 @@
         </ul>
     </nav>
 
-    <div id="post-modal" class="modal-2" style="width: 100%; overflow-y: scroll;" th:attr="data-postid=${post.id}">
+    <div id="post-modal"style="width: 100%; overflow-y: scroll;" th:attr="data-postid=${post.id}">
 
-        <div style="width: 100%; height: auto; max-height: 75%;" id="post-modal-imageM-container">
-            <img th:src="${post.image}" class="modal-click-box" id="post-modal-imageM"/>
+        <div id="post-modal-image-container">
+            <img th:src="${post.image}" class="modal-click-box" id="post-modal-image"/>
         </div>
-
-        <img th:src="${post.image}" class="modal-click-box" id="post-modal-imageD"/>
-
 
         <div class="modal-click-box" id="post-modal-right">
 
