@@ -1,6 +1,8 @@
 package main.rest.controller;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import main.application.service.PublicationService;
 import main.application.service.SearchService;
 import main.application.service.UserService;
@@ -8,10 +10,12 @@ import main.application.service.manageAccountService.ManageFriends;
 import main.domain.resource.FollowResource;
 import main.domain.resource.PostResource;
 import main.domain.resource.UserResource;
+import main.persistence.entity.Post;
 import main.rest.forms.*;
 import main.security.AuthTokenGenerator;
 import main.security.LoggedInTokenGenerator;
 import main.security.RefreshTokenGenerator;
+import main.security.TokenRefresher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
 
@@ -55,6 +60,9 @@ public class ControllerPrueba {
 
     @Autowired
     private LoggedInTokenGenerator loggedInTokenGenerator;
+
+    @Autowired
+    private TokenRefresher tokenRefresher;
 
 
 
@@ -125,7 +133,7 @@ public class ControllerPrueba {
             Cookie cookieR = new Cookie("refreshToken", refreshToken);
             cookieR.setHttpOnly(true);
             cookieR.setMaxAge(18000);
-            cookieR.setPath("/users/refresh");
+            cookieR.setPath("/pruebas/refresh");
 
 
 
@@ -140,7 +148,7 @@ public class ControllerPrueba {
             response.addCookie(loggedInCookie);
 
             // Se redirige al usuario a su pagina personal
-            response.sendRedirect("/pruebas/" + user.getUsername());
+            response.sendRedirect("/pruebas/me/");
         }
 
         catch (NullPointerException e) {
@@ -199,6 +207,14 @@ public class ControllerPrueba {
         model.addAttribute("newPost", new PostForm());
 
         return new ModelAndView("uploadPost");
+    }
+
+    @GetMapping("/me")
+    void me(HttpServletResponse response, Model model) throws IOException {
+        String username = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
+        UserResource user = userService.getUserByName(username);
+
+        response.sendRedirect("/pruebas/" + username);
     }
 
     @PostMapping("/postUpload")
@@ -290,21 +306,52 @@ public class ControllerPrueba {
 
 
     @GetMapping("/{userName}")
-    ModelAndView userPage(@PathVariable String userName, HttpServletResponse response, Model model){
+    ModelAndView userPage(@PathVariable String userName, Model model){
 
         UserResource user = userService.getUserByName(userName);
 
         model.addAttribute("user", user);
-        model.addAttribute("profilePic", userService.getUserByName(userName).getImage());
         model.addAttribute("postList", userService.getPosts(userName));
 
         return new ModelAndView("userPage");
     }
 
+    @GetMapping("/posts/{postId}")
+    ModelAndView postPage(@PathVariable Integer postId, Model model) {
 
-    @GetMapping("/collab")
-    ModelAndView myCollab(Model model){
-        return new ModelAndView("collab");
+        PostResource post = postService.getPost(postId);
+        UserResource author = userService.getUser(post.getIduser());
+
+        model.addAttribute("user", author);
+        model.addAttribute("post", post);
+
+        return new ModelAndView("postPage");
+
     }
 
+    @RequestMapping(value="/refresh", method=RequestMethod.GET)
+    public void refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken, HttpServletResponse response) throws IOException {
+
+        try {
+            String token = tokenRefresher.refresh(refreshToken);
+            Cookie cookieA = new Cookie("authToken", token);
+            cookieA.setHttpOnly(true);
+            cookieA.setMaxAge(900);
+            cookieA.setPath("/");
+            response.addCookie(cookieA);
+
+            response.sendRedirect("/pruebas/me");
+        }
+
+        catch (ExpiredJwtException | MalformedJwtException | IllegalArgumentException e) {
+            response.sendRedirect("/pruebas");
+        }
+    }
+
+
+
+    @GetMapping("/collab")
+    ModelAndView myCollab(Model model) {
+        return new ModelAndView("collab");
+    }
 }

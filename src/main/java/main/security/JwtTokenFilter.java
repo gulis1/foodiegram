@@ -66,7 +66,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             BrowserType type = agent.getBrowser().getBrowserType();
 
             if (type == BrowserType.WEB_BROWSER || type == BrowserType.MOBILE_BROWSER || type == BrowserType.APP) {
-                response.sendRedirect("/pruebas");
+                response.sendRedirect("/pruebas/refresh");
             }
 
             else {

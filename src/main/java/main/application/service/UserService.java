@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface UserService  {
 
+    UserResource getUser(Integer userID);
+
     // Devuelve la info del usuario, o null si el usuario no existe.
     UserResource getUserByName(String user);
 

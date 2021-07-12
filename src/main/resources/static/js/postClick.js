@@ -41,19 +41,28 @@ function loadComments(comments) {
     comments.forEach(generateComment);}
 
 function onPostClicked(e) {
-    resetRating();
 
-    document.getElementById("post-modal-comment-input-field").value = "";
-    document.getElementById("post-modal").dataset.postid = e.dataset.postid;
+    if (window.matchMedia("only screen and (min-width: 1200px)").matches) {
+
+        resetRating();
+
+        document.getElementById("post-modal-comment-input-field").value = "";
+        document.getElementById("post-modal").dataset.postid = e.dataset.postid;
 
 
-    // Se llama a /posts/postID para obtener la info de la publicacion
-    $.get("/posts/" + e.dataset.postid, loadPublication);
+        // Se llama a /posts/postID para obtener la info de la publicacion
+        $.get("/posts/" + e.dataset.postid, loadPublication);
 
-    // Se llama a /posts/postId/comments para obtener la lista de los comentarios
-    $.get("/posts/" + e.dataset.postid + "/comments", loadComments);
+        // Se llama a /posts/postId/comments para obtener la lista de los comentarios
+        $.get("/posts/" + e.dataset.postid + "/comments", loadComments);
 
-    $.get("/posts/" + e.dataset.postid + "/ratings/me", loadRatings);
+        $.get("/posts/" + e.dataset.postid + "/ratings/me", loadRatings);
+
+    }
+
+    else
+        window.location.href = "/pruebas/posts/" + e.dataset.postid;
+
 
 }
 

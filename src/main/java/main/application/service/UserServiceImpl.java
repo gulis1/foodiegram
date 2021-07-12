@@ -53,6 +53,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public UserResource getUser(Integer userID) {
+        return converterUser.convert(userRepo.findById(userID));
+    }
+
+    @Override
     public UserResource getUserByName(String user) {
         return converterUser.convert(userRepo.findByName(user));
     }

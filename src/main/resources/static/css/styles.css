@@ -6,12 +6,12 @@
 }
 
 .foodiegram-bg2 {
-    height: 100vh;
     background: fixed linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
 }
 
 .container {
     width: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
 }
@@ -82,9 +82,9 @@
 
 #post-modal {
     position: absolute;
-    width: 100%;
-    height: 50%;
-    top: 20%;
+    width: auto;
+    height: 70vh;
+    top: 12.5%;
     display:flex;
     justify-content: center;
 }
@@ -116,7 +116,9 @@
 
 #post-modal-footer {
     width: 100%;
-    height: 75%;
+    height: calc(100% - 2rem);
+    display: flex;
+    flex-direction: column;
 }
 
 #post-modal-title {
@@ -130,18 +132,16 @@
 
 #post-modal-text-div {
     width: 100%;
-    height: 83%;
     overflow-y: scroll;
     margin-bottom: 8px;
-    scroll-padding: 3px 0 5px 0;
+    border-bottom: 1px solid lightcyan;
 }
 
 #post-modal-ratings-container {
     width: 100%;
-    height: 25%;
+    height: 2rem;
     bottom: 0;
     display: flex;
-    border-top: 1px solid gray;
 }
 
 .post-modal-ratings-half {
@@ -408,6 +408,10 @@
     z-index: 10;
 }
 
+.modal-2 {
+
+}
+
 
 @media only screen and (max-width: 1200px) {
 
@@ -497,11 +501,14 @@
     }
 
     #post-modal {
-
+        position: relative;
+        width: auto;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        top: 5rem;
+        top: 6rem;
+        height: auto;
+        left: 0;
     }
 
     #post-modal-details {
@@ -515,16 +522,17 @@
     }
 
     #post-modal-title-div {
-        height: 25%;
+        height: 1.6rem;
+        width: 100%;
     }
 
     #post-modal-text-div {
-        height: 75%;
-        padding-top: 10px;
+        /*padding-top: 10px;*/
     }
 
     #post-modal-text {
         font-size: 1.5rem;
+        font-weight: bold;
     }
 
     #post-modal-ratings-container {
@@ -533,13 +541,26 @@
     }
 
     #post-modal-image {
-        max-width: 100%;
         width: 100%;
         height: auto;
+        /*object-fit: cover;*/
+        max-height: unset;
+        max-width: unset;
     }
 
     #post-modal-right {
         width: 100%;
         min-height: 50%;
     }
+
+   .modal-2 {
+        calc(100vh - 15rem;)
+    }
+
+   #post-modal-comments-container {
+
+       height: 80vh;
+
+   }
 }
+

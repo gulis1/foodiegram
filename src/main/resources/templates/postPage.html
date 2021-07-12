@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+    <link rel="stylesheet"  href="/css/styles.css"/>
+</head>
+
+<body class="foodiegram-bg2">
+
+    <nav id="mobileUser">
+
+
+        <img class="userPic" th:src="${user.image}"/>
+        <p th:text="${user.name}" style="margin: 0;"></p>
+
+
+    </nav>
+
+    <nav class="navbar">
+
+    <ul class="navbar-nav">
+
+        <li class="nav-item">
+            <h1 class="brand" style="font-size: 2rem;">foodiegram.</h1>
+        </li>
+
+        <li id="primaryUser" class="userInfo nav-item">
+            <img class="userPic" th:src="${user.image}" alt="woopsies"/>
+            <p th:text="${user.name}"></p>
+        </li>
+
+        <li class="nav-item">
+
+            <a id="searchButton" onclick="buscar(this)">
+                <h4 class="bi bi-search"></h4>
+
+                <div class="searchResults">
+
+                </div>
+            </a>
+
+            <a class="nav-icon" th:href="@{/pruebas/upload}">
+                <h4 class="bi bi-upload"></h4>
+            </a>
+
+            <a class="nav-icon" th:href="@{/pruebas/friends}">
+                <h4 class="bi bi-people"></h4>
+            </a>
+
+            <a class="nav-icon" onclick="deleteCookies()" th:href="@{/pruebas}">
+                <h4 class="bi bi-gear-wide-connected"></h4 >
+            </a>
+
+        </li>
+    </ul>
+
+</nav>
+
+        <div id="post-modal" class="modal-2" style="width: 100%; overflow-y: scroll;">
+
+            <div style="width: 100%; height: auto; max-height: 70vh;">
+                <img th:src="${post.image}" class="modal-click-box" id="post-modal-image"/>
+            </div>
+
+
+            <div class="modal-click-box" id="post-modal-right">
+
+                <div id="post-modal-details">
+
+                    <div id="post-modal-footer">
+
+                        <div id="post-modal-title-div">
+                            <p th:text="${post.title}" id="post-modal-title"></p>
+                        </div>
+
+                        <div id="post-modal-text-div">
+                            <p th:text="${post.text}"  id="post-modal-text"></p>
+                        </div>
+
+                    </div>
+
+
+
+                    <div id="post-modal-ratings-container">
+
+                        <div class="post-modal-ratings-half">
+
+                            <div class="post-modal-ratings-quarter">
+                                <p id="post-modal-ratings"></p>
+                            </div>
+
+                            <div id="post-modals-stars" class="post-modal-ratings-quarter" >
+
+                                <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+
+                            </div>
+                        </div>
+
+                        <div class="post-modal-ratings-half">
+
+                            <div class="post-modal-ratings-quarter">
+                                <p id="post-modal-date"></p>
+                            </div>
+
+                            <div class="post-modal-ratings-quarter">
+                                <p id="post-modal-loc"></p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div >
+
+
+
+                <div id="post-modal-comments-container">
+
+                    <ul id="post-modal-comments">
+
+                    </ul>
+
+                </div>
+
+                <div id="post-modal-comment-input">
+
+                    <div style="width: 80%; height: 100%;">
+
+                        <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"/>
+
+                    </div>
+
+                    <div id="post-modal-send-button-container">
+                        <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    <div style="height: 26rem; width: 100%;" >
+
+    </div>
+
+
+
+
+</body>
+</html>
