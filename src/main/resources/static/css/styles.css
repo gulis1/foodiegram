@@ -537,17 +537,17 @@
     }
 
     #post-modal-title-div {
-        height: 1.6rem;
+        height: 3.2rem;
         width: 100%;
     }
 
     #post-modal-title{
-        font-size: 1.5rem;
+        font-size: 2.4rem;
         margin: 0;
     }
 
     #post-modal-text {
-        font-size: 1.3rem;
+        font-size: 2rem;
         margin: 0;
     }
 
@@ -558,6 +558,7 @@
         height: auto;
         display: block;
         object-fit: scale-down;
+        object-position: 50% 50%;
     }
 
     #post-modal-imageD {
@@ -567,8 +568,8 @@
 
     #post-modal-right {
         width: 100%;
-        height: 100%;
         padding: 5px;
+        flex-grow: 1;
         box-sizing: border-box;
     }
 
@@ -593,7 +594,7 @@
     }
 
     #post-modal-text-div {
-        height: 100%;
+        flex-grow: 1;
     }
 
     .post-modal-ratings-quarter{
