@@ -286,7 +286,7 @@ begin
     declare numeroVal int;
     update numvalpubli
     set numpubli = numpubli-1 where old.user = user;
-    select count(*) into numeroVal from rating where postId = old.postId;
+    select count(*) into numeroVal from rating where post = old.postId;
     update numvalpubli
     set numval = numval-numVal where old.user = user;
 end;
