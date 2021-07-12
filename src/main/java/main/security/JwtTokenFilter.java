@@ -4,9 +4,7 @@ package main.security;
 import eu.bitwalker.useragentutils.BrowserType;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.*;
-import main.persistence.entity.Jwtoken;
 import main.persistence.entity.RoleEnum;
-import main.persistence.repository.JwtokenRepo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,38 +17,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final String authSecret;
-    private final String logoutSecret;
+    private final String loggedInSecret;
 
-    private JwtokenRepo repoTokens;
-
-    public JwtTokenFilter(JwtokenRepo repoToken, String authSecret, String logoutSecret) {
-        this.repoTokens = repoToken;
+    public JwtTokenFilter(String authSecret, String loggedInSecret) {
         this.authSecret = authSecret;
-        this.logoutSecret = logoutSecret;
+        this.loggedInSecret = loggedInSecret;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
-
-
         try {
             // Comprueba si se ha dado un token valido. Se lanza una UnsupportedJwtException si no es valido.
 
-            Cookie logoutCookie = getCookie(request, "loggedIn");
-            if (logoutCookie == null) {
+            Cookie loggedInCookie = getCookie(request, "loggedIn");
+            if (loggedInCookie == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 throw new MalformedJwtException("You need to log in to access this resource");
             }
 
 
-            Claims claims1 = checkLogoutCookie(logoutCookie);
+            Claims claims1 = checkLoggedInCookie(loggedInCookie);
 
 
             Cookie authCookie = getCookie(request, "authToken");
@@ -68,7 +60,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 
 
-        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
 
             UserAgent agent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
             BrowserType type = agent.getBrowser().getBrowserType();
@@ -85,10 +77,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
     }
 
-    private Claims checkLogoutCookie(Cookie cookie) throws UnsupportedJwtException, MalformedJwtException {
+    private Claims checkLoggedInCookie(Cookie cookie) throws UnsupportedJwtException, MalformedJwtException {
 
         String jwToken = cookie.getValue();
-        return Jwts.parser().setSigningKey(logoutSecret.getBytes()).parseClaimsJws(jwToken).getBody();
+        return Jwts.parser().setSigningKey(loggedInSecret.getBytes()).parseClaimsJws(jwToken).getBody();
 
     }
 
@@ -97,12 +89,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String jwtToken = cookie.getValue();
 
         Claims claims =  Jwts.parser().setSigningKey(authSecret.getBytes()).parseClaimsJws(jwtToken).getBody();
-
-        Optional<Jwtoken> lastToken = repoTokens.findByUser(Integer.parseInt(claims.getSubject()));
-
-        if (lastToken.isPresent() && claims.getExpiration().compareTo(lastToken.get().getExpiredate()) < 0)
-            throw new ExpiredJwtException(null, claims, "Someone logged in from another computer");
-
 
         return claims;
     }

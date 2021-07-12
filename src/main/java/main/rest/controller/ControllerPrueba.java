@@ -8,10 +8,9 @@ import main.application.service.manageAccountService.ManageFriends;
 import main.domain.resource.FollowResource;
 import main.domain.resource.PostResource;
 import main.domain.resource.UserResource;
-import main.persistence.entity.User;
 import main.rest.forms.*;
 import main.security.AuthTokenGenerator;
-import main.security.LogoutTokenGenerator;
+import main.security.LoggedInTokenGenerator;
 import main.security.RefreshTokenGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,7 +54,7 @@ public class ControllerPrueba {
     private RefreshTokenGenerator refreshTokenGenerator;
 
     @Autowired
-    private LogoutTokenGenerator logoutTokenGenerator;
+    private LoggedInTokenGenerator loggedInTokenGenerator;
 
 
 
@@ -117,7 +116,7 @@ public class ControllerPrueba {
             String authToken = authTokenGenerator.buildToken(user.getUsername(), 15);
             Cookie cookieA = new Cookie("authToken",authToken);
             cookieA.setHttpOnly(true);
-            cookieA.setMaxAge(18000);
+            cookieA.setMaxAge(900);
             cookieA.setPath("/");
             response.addCookie(cookieA);
 
@@ -132,7 +131,7 @@ public class ControllerPrueba {
 
             response.addCookie(cookieR);
 
-            String loginToken = logoutTokenGenerator.getToken(user.getUsername(), 300);
+            String loginToken = loggedInTokenGenerator.getToken(user.getUsername(), 300);
 
             Cookie loggedInCookie = new Cookie("loggedIn", loginToken);
             loggedInCookie.setPath("/");

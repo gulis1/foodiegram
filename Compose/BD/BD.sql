@@ -22,8 +22,6 @@ drop table if exists restaurant;
 drop table if exists rating;
 drop table if exists post;
 drop table if exists verifytoken;
-drop table if exists jwtoken;
-drop table if exists refreshtoken;
 drop table if exists numvalpubli;
 drop table if exists ban;
 drop table if exists user;
@@ -118,25 +116,6 @@ CREATE TABLE verifytoken (
   	UNIQUE(token),
   	UNIQUE(email)
 
-);
-
-CREATE TABLE jwtoken (
-    jwtokenId INT NOT NULL AUTO_INCREMENT,
-  	user INT NOT NULL,
-  	expiredate datetime,
- 	PRIMARY KEY (jwtokenId),
-  	FOREIGN KEY (user) REFERENCES user(userId) ON DELETE CASCADE,
-  	UNIQUE(user)
- );
-
-
-CREATE TABLE refreshtoken(
-	refreshtokenId INT NOT NULL AUTO_INCREMENT,
-  	user INT NOT NULL,
-  	expiredate datetime,
- 	PRIMARY KEY (refreshtokenId),
-  	FOREIGN KEY (user) REFERENCES user(userId) ON DELETE CASCADE,
-  	UNIQUE(user)
 );
 
 
@@ -248,9 +227,7 @@ CREATE EVENT borrarCosasExpiradas
   DO
   BEGIN
     delete from verifytoken where NOW() > expiredate;
-    delete from jwtoken where NOW() > expiredate;
     delete from ban where NOW() > expiredate;
-    delete from refreshtoken where NOW() > expiredate;
     delete from sponsor where NOW() > endtime;
 END;
 

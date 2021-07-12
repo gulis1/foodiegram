@@ -1,7 +1,5 @@
 package main.security;
 
-import main.persistence.repository.JwtokenRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -18,13 +16,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    JwtokenRepo repoTokens;
-
     @Value("${jwt.auth.secret}")
     private String authSecret;
 
-    @Value("${jwt.logout.secret}")
+    @Value("${jwt.loggedIn.secret}")
     private String logoutSecret;
 
     @Override
@@ -44,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mod/**").hasAnyRole("ADMIN", "MOD")
                 .antMatchers("/admin/**").hasRole("ADMIN");
 
-        http.addFilterAfter(new JwtTokenFilter(repoTokens, authSecret, logoutSecret), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new JwtTokenFilter(authSecret, logoutSecret), UsernamePasswordAuthenticationFilter.class);
 
 
     }

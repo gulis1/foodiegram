@@ -9,7 +9,7 @@ import main.domain.resource.UserResource;
 import main.domain.resource.RatingResource;
 import main.rest.forms.UserForm;
 import main.security.AuthTokenGenerator;
-import main.security.LogoutTokenGenerator;
+import main.security.LoggedInTokenGenerator;
 import main.security.RefreshTokenGenerator;
 import main.security.TokenRefresher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class UserController {
     private RefreshTokenGenerator refreshTokenGenerator;
 
     @Autowired
-    private LogoutTokenGenerator logoutTokenGenerator;
+    private LoggedInTokenGenerator loggedInTokenGenerator;
 
     @Autowired
     private TokenRefresher tokenRefresher;
@@ -142,7 +142,7 @@ public class UserController {
             response.addCookie(cookieR);
 
 
-            String loginToken = logoutTokenGenerator.getToken(user.getUsername(), 300);
+            String loginToken = loggedInTokenGenerator.getToken(user.getUsername(), 300);
 
             Cookie loggedInCookie = new Cookie("loggedIn", loginToken);
             loggedInCookie.setPath("/");

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class LogoutTokenGenerator {
+public class LoggedInTokenGenerator {
 
-    @Value("${jwt.logout.secret}")
+    @Value("${jwt.loggedIn.secret}")
     private String secretKey;
 
     @Autowired
