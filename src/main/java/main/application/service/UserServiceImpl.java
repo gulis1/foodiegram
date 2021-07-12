@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
 
             // Se envia el email de confirmacion
-            String mensaje="Enlace de verificación: " + "https://" + domain + ":8080/users/verify/" + token;
+            String mensaje="Enlace de verificación: " + "http://" + domain + ":8080/users/verify/" + token;
             String topic="Confirmación de correo electrónico en foodiegram.";
             sendEmailService.sendEmails(user.getEmail(), mensaje, topic);
 

@@ -60,8 +60,8 @@ public class PaypalServiceImpl implements PaypalService {
     private RedirectUrls getRedirectURLs() {
 
         RedirectUrls redirectUrls = new RedirectUrls();
-        redirectUrls.setCancelUrl("https://"+ domain+":8080/sponsor/payment/cancel.html");
-        redirectUrls.setReturnUrl("https://"+ domain+":8080/sponsor/payment/review");
+        redirectUrls.setCancelUrl("http://"+ domain+":8080/sponsor/payment/cancel.html");
+        redirectUrls.setReturnUrl("http://"+ domain+":8080/sponsor/payment/review");
 
         return redirectUrls;
     }
