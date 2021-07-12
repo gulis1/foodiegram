@@ -1,3 +1,7 @@
+# Creates the mysql and apache2 servers needed for Foodiegram to work.
+# To start them, having docker installed, open a terminal inside the compose
+# and type "docker-compose up"-
+
 version: "3.3"
 
 services:
