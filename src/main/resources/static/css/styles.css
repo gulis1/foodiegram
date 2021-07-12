@@ -6,7 +6,9 @@
 }
 
 .foodiegram-bg2 {
+    height: 99vh;
     background: fixed linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
+    box-sizing: border-box;
 }
 
 .container {
@@ -89,9 +91,13 @@
     justify-content: center;
 }
 
-#post-modal-image {
+#post-modal-imageD {
     max-width: 70%;
     max-height: 100%;
+}
+
+#post-modal-imageM-container {
+    display: none;
 }
 
 #post-modal-right {
@@ -101,7 +107,7 @@
     min-width: 230px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 
 }
 
@@ -121,15 +127,19 @@
     flex-direction: column;
 }
 
-#post-modal-title {
+#post-modal{
     margin: 0;
 }
 
 #post-modal-title-div {
     width: 100%;
-    height: 17%;
+    height: 1.2rem;
 }
-
+#post-modal-title {
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: bold;
+}
 #post-modal-text-div {
     width: 100%;
     overflow-y: scroll;
@@ -501,23 +511,26 @@
     }
 
     #post-modal {
-        position: relative;
+        position: fixed;
         width: auto;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        top: 6rem;
-        height: auto;
+        top: 5rem;
+        height: calc(100% - 16rem);
         left: 0;
+        padding-bottom: 0;
     }
 
     #post-modal-details {
-        display: flex;
         font-size: 2rem;
+        height: 100%;
+        border-bottom: none;
+        display: flex;
+        flex-direction: column;
     }
 
     #post-modal-footer {
-        flex: 3;
         height: 100%;
     }
 
@@ -526,41 +539,62 @@
         width: 100%;
     }
 
-    #post-modal-text-div {
-        /*padding-top: 10px;*/
+    #post-modal-title{
+        font-size: 1.5rem;
+        margin: 0;
     }
 
     #post-modal-text {
-        font-size: 1.5rem;
-        font-weight: bold;
+        font-size: 1.3rem;
+        margin: 0;
     }
 
-    #post-modal-ratings-container {
-        flex: 1;
-        border: none;
-    }
 
-    #post-modal-image {
+    #post-modal-imageM {
         width: 100%;
         height: auto;
-        /*object-fit: cover;*/
         max-height: unset;
         max-width: unset;
+        display: block;
     }
+
+    #post-modal-imageD {
+        display: none;
+    }
+
 
     #post-modal-right {
         width: 100%;
-        min-height: 50%;
+        height: 100%;
+        padding: 5px;
+        box-sizing: border-box;
     }
 
-   .modal-2 {
-        calc(100vh - 15rem;)
-    }
+   #post-modal-imageM-container {
+       display: block;
+   }
 
    #post-modal-comments-container {
-
-       height: 80vh;
-
+       display: none;
    }
+   #post-modal-comment-input {
+       display: none;
+   }
+
+    #post-modal-ratings-container {
+        width: 100%;
+        height: 10rem;
+        bottom: 0;
+        display: flex;
+        border: none;
+    }
+
+    #post-modal-text-div {
+        height: 100%;
+    }
+
+    .post-modal-ratings-quarter{
+        font-size: 3rem;
+    }
 }
 

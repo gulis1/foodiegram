@@ -1,8 +1,15 @@
 function loadPublication(data) {
+    try {
+        document.getElementById("post-modal-image").src = data.image;
+        document.getElementById("post-modal-title").innerText = data.title;
+        document.getElementById("post-modal-text").innerText = data.text;
+    }
 
-    document.getElementById("post-modal-image").src = data.image;
-    document.getElementById("post-modal-title").innerText = data.title;
-    document.getElementById("post-modal-text").innerText = data.text;
+    catch (err) {
+
+    }
+
+
     document.getElementById("post-modal-ratings").innerHTML = data.media + '<i class="bi bi-star"></i>' + '  ' + data.numerototalval + '<i class="bi bi-person"></i>';
     document.getElementById("post-modal-date").innerText = data.fecha;
 
@@ -60,10 +67,17 @@ function onPostClicked(e) {
 
     }
 
-    else
+    else {
         window.location.href = "/pruebas/posts/" + e.dataset.postid;
+    }
+}
 
+function cargar(e) {
+    resetRating();
+    // Se llama a /posts/postID para obtener la info de la publicacion
+    $.get("/posts/" + e.dataset.postid, loadPublication);
 
+    $.get("/posts/" + e.dataset.postid + "/ratings/me", loadRatings);
 }
 
 function sendComment(event) {
