@@ -25,7 +25,7 @@ spring.datasource.password=cr7
 apache.address = http://localhost:4555
 
 # The root folder of the apache server.
-apache.rootFolder = ./Compose/images
+apache.rootFolder = ./Compose/apache2/images
 
 # Gmail stuff
 spring.mail.protocol=smtp
