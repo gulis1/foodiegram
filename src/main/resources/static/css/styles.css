@@ -9,6 +9,7 @@
     height: 99vh;
     background: fixed linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(https://cdn.discordapp.com/attachments/734750766895595581/848359437122666516/cute-food-icon-doodle-background_57490-171.jpg);
     box-sizing: border-box;
+    position: absolute;
 }
 
 .container {
@@ -517,7 +518,7 @@
         justify-content: flex-start;
         align-items: center;
         top: 5rem;
-        height: calc(100% - 16rem);
+        height: calc(100% - 17rem);
         left: 0;
         padding-bottom: 0;
     }
@@ -577,6 +578,7 @@
    #post-modal-comments-container {
        display: none;
    }
+
    #post-modal-comment-input {
        display: none;
    }
@@ -584,7 +586,6 @@
     #post-modal-ratings-container {
         width: 100%;
         height: 10rem;
-        bottom: 0;
         display: flex;
         border: none;
     }
