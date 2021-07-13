@@ -78,13 +78,15 @@
 
 
 <!-- Page Content -->
-<div class="container" style="position: relative;">
+
 
     <div id="page-mask">
 
-        <div id="post-modal">
+        <div id="post-modal"style="width: 100%; overflow-y: scroll;">
 
-            <img class="modal-click-box" id="post-modal-image"/>
+            <div id="post-modal-image-container">
+                <img class="modal-click-box" id="post-modal-image"/>
+            </div>
 
             <div class="modal-click-box" id="post-modal-right">
 
@@ -93,7 +95,7 @@
                     <div id="post-modal-footer">
 
                         <div id="post-modal-title-div">
-                            <h3 id="post-modal-title"></h3>
+                            <p id="post-modal-title"></p>
                         </div>
 
                         <div id="post-modal-text-div">
@@ -112,11 +114,11 @@
 
                             <div id="post-modals-stars" class="post-modal-ratings-quarter" >
 
-                                    <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                    <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                    <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                    <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                    <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                                <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
 
                             </div>
                         </div>
@@ -133,9 +135,9 @@
 
                         </div>
 
+
+
                     </div>
-
-
 
                 </div >
 
@@ -163,15 +165,11 @@
 
                 </div>
             </div>
+
+
         </div>
-
     </div>
-
-    <div th:if="${postList.empty}">
-        <p class="text-center text-white"> Upload Posts! </p>
-    </div>
-
-
+<div class="container" style="position: relative;">
     <div class="user-images">
 
         <div class="post-card" th:each="image : ${postList}">
@@ -223,7 +221,7 @@
         </li>
     </template>
 
-</div>
+
 
 </div>
 </body>

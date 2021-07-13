@@ -49,7 +49,7 @@ function loadComments(comments) {
 
 function onPostClicked(e) {
 
-    if (window.matchMedia("only screen and (min-width: 1200px)").matches) {
+    if (window.matchMedia('all and (orientation:landscape)').matches) {
 
         resetRating();
 
@@ -166,4 +166,3 @@ document.addEventListener("keydown", e => {
             document.getElementById("page-mask").style.display = "none";
     }
 })
-
