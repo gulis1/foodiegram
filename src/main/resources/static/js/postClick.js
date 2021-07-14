@@ -49,33 +49,26 @@ function loadComments(comments) {
 
 function onPostClicked(e) {
 
-    if (window.matchMedia('all and (orientation:landscape)').matches) {
+    if (!window.matchMedia('(orientation: portrait)').matches)
+        cargar(e);
 
-        resetRating();
-
-        document.getElementById("post-modal-comment-input-field").value = "";
-        document.getElementById("post-modal").dataset.postid = e.dataset.postid;
-
-
-        // Se llama a /posts/postID para obtener la info de la publicacion
-        $.get("/posts/" + e.dataset.postid, loadPublication);
-
-        // Se llama a /posts/postId/comments para obtener la lista de los comentarios
-        $.get("/posts/" + e.dataset.postid + "/comments", loadComments);
-
-        $.get("/posts/" + e.dataset.postid + "/ratings/me", loadRatings);
-
-    }
-
-    else {
+    else
         window.location.href = "/pruebas/posts/" + e.dataset.postid;
-    }
+
 }
 
 function cargar(e) {
     resetRating();
+
+    document.getElementById("post-modal-comment-input-field").value = "";
+    document.getElementById("post-modal").dataset.postid = e.dataset.postid;
+
+
     // Se llama a /posts/postID para obtener la info de la publicacion
     $.get("/posts/" + e.dataset.postid, loadPublication);
+
+    // Se llama a /posts/postId/comments para obtener la lista de los comentarios
+    $.get("/posts/" + e.dataset.postid + "/comments", loadComments);
 
     $.get("/posts/" + e.dataset.postid + "/ratings/me", loadRatings);
 }
@@ -127,9 +120,6 @@ function drawRating(score) {
 function loadRatings(data) {
 
     drawRating(data.punt)
-
-
-
 }
 
 function setRating(target) {
@@ -146,6 +136,29 @@ function setRating(target) {
 function buscar(t) {
     let xDD= document.getElementById("searchBar");
     window.location.href = "/pruebas/search?name=" + xDD.value;
+}
+
+function viewComments(but) {
+
+    but.style.display = "none";
+    document.getElementById("post-modal-image-container").style.display = "none";
+    document.getElementById("post-modal-details").style.display = "none";
+    document.getElementById("post-modal-comments").style.display = "block";
+    document.getElementById("post-modal-comment-input").style.display = "flex";
+    document.getElementById("hide-comments-button").style.display = "block";
+    document.getElementsByClassName("foodiegram-bg2").item(0).style.bottom = "17rem";
+
+}
+
+function hideComments(but) {
+
+    but.style.display = "none";
+    document.getElementById("post-modal-image-container").style.display = "flex";
+    document.getElementById("post-modal-details").style.display = "flex";
+    document.getElementById("post-modal-comments").style.display = "none";
+    document.getElementById("post-modal-comment-input").style.display = "none";
+    document.getElementById("view-comments-button").style.display = "block";
+    document.getElementsByClassName("foodiegram-bg2").item(0).style.bottom = "12rem";
 }
 
 document.addEventListener("click", e => {
@@ -166,3 +179,4 @@ document.addEventListener("keydown", e => {
             document.getElementById("page-mask").style.display = "none";
     }
 })
+

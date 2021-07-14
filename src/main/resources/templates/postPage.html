@@ -14,10 +14,10 @@
 
     <nav id="mobileUser">
 
+        <i onclick="hideComments(this)" id="hide-comments-button" class="bi bi-chevron-left"></i>
 
         <img class="userPic" th:src="${user.image}"/>
-        <p th:text="${user.name}" style="margin: 0;"></p>
-
+        <a class="user-link" th:text="${user.name}" th:href="'/pruebas/' + ${user.name}"></a>
 
     </nav>
 
@@ -31,7 +31,7 @@
 
             <li id="primaryUser" class="userInfo nav-item">
                 <img class="userPic" th:src="${user.image}" alt="woopsies"/>
-                <p th:text="${user.name}"></p>
+                <a class="user-link" th:text="${user.name}" th:href="'/pruebas/' + ${user.name}"></a>
             </li>
 
             <li class="nav-item">
@@ -103,11 +103,11 @@
 
                     <div class="post-modal-ratings-half">
 
-                        <div class="post-modal-ratings-quarter">
+                        <div class="post-modal-ratings-quarter" style="justify-content: flex-end;">
                             <p id="post-modal-date"></p>
                         </div>
 
-                        <div class="post-modal-ratings-quarter">
+                        <div class="post-modal-ratings-quarter" style="justify-content: flex-end;">
                             <p id="post-modal-loc"></p>
                         </div>
 
@@ -117,45 +117,72 @@
 
                 </div>
 
-            <script>
-                cargar(document.getElementById("post-modal"));
-            </script>
 
             </div >
 
 
+            <ul id="post-modal-comments">
 
-            <div id="post-modal-comments-container">
+            </ul>
 
-                <ul id="post-modal-comments">
 
-                </ul>
-
-            </div>
 
             <div id="post-modal-comment-input">
 
-                <div style="width: 80%; height: 100%;">
-
-                    <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"/>
-
-                </div>
+                <textarea onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"></textarea>
 
                 <div id="post-modal-send-button-container">
                     <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
                 </div>
 
             </div>
+
+
+            <a id="view-comments-button" onclick="viewComments(this)">View Comments</a>
+
         </div>
 
 
     </div>
 
 
-    <div id="scroll-separator">
+    <template>
 
-    </div>
+        <li class="comment" style="border:none;">
 
+            <div style="width: 100%; display: flex; margin-bottom: 5px;" >
+
+                <div style="margin-right: 5px; display: flex; justify-content: center;">
+                    <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />
+                </div>
+
+                <div class="comment-text" style="flex-grow: 1; display: flex; word-break: break-word; padding-top: 0.5rem;">
+                    <p></p>
+                </div>
+
+            </div>
+
+        </li>
+    </template>
+
+    <script>
+        cargar(document.getElementById("post-modal"));
+    </script>
+
+    <script>
+        window.addEventListener("resize", () => {
+
+            if (window.innerWidth > window.innerHeight) {
+                document.getElementById("post-modal-comments").style.display = "block";
+                document.getElementById("post-modal-comment-input").style.display = "flex";
+                document.getElementById("post-modal-image-container").style.display = "flex";
+                document.getElementById("post-modal-details").style.display = "block";
+                document.getElementsByClassName("foodiegram-bg2").item(0).style.bottom = "12rem";
+            }
+
+
+        })
+    </script>
 
 </body>
 </html>

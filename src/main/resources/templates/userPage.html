@@ -23,12 +23,8 @@
 </script>
 
 <nav id="mobileUser">
-
-
     <img class="userPic" th:src="${user.image}"/>
-    <p th:text="${user.name}" style="margin: 0;"></p>
-
-
+    <a class="user-link" th:text="${user.name}" th:href="'/pruebas/' + ${user.name}"></a>
 </nav>
 
 <nav class="navbar">
@@ -41,7 +37,7 @@
 
         <li id="primaryUser" class="userInfo nav-item">
             <img class="userPic" th:src="${user.image}"/>
-            <p th:text="${user.name}"></p>
+            <a class="user-link" th:text="${user.name}" th:href="'/pruebas/' + ${user.name}"></a>
         </li>
 
         <li class="nav-item">
@@ -72,147 +68,132 @@
 
 </nav>
 
-<div id="navbar-separator1">
+<div id="page-mask">
 
+    <div id="post-modal">
+
+        <div id="post-modal-image-container">
+            <img class="modal-click-box" id="post-modal-image"/>
+        </div>
+
+        <div class="modal-click-box" id="post-modal-right">
+
+            <div id="post-modal-details">
+
+                <div id="post-modal-footer">
+
+                    <div id="post-modal-title-div">
+                        <p id="post-modal-title"></p>
+                    </div>
+
+                    <div id="post-modal-text-div">
+                        <p id="post-modal-text"></p>
+                    </div>
+
+                </div>
+
+                <div id="post-modal-ratings-container">
+
+                    <div class="post-modal-ratings-half">
+
+                        <div class="post-modal-ratings-quarter">
+                            <p id="post-modal-ratings"></p>
+                        </div>
+
+                        <div id="post-modals-stars" class="post-modal-ratings-quarter" >
+
+                            <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                            <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                            <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                            <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+                            <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
+
+                        </div>
+                    </div>
+
+                    <div class="post-modal-ratings-half">
+
+                        <div class="post-modal-ratings-quarter" style="justify-content: flex-end;">
+                            <p id="post-modal-date"></p>
+                        </div>
+
+                        <div class="post-modal-ratings-quarter" style="justify-content: flex-end;">
+                            <p id="post-modal-loc"></p>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div >
+
+            <ul id="post-modal-comments">
+
+            </ul>
+
+            <div id="post-modal-comment-input">
+
+                <div style="width: 80%; height: 100%;">
+
+                    <textarea onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"></textarea>
+
+                </div>
+
+                <div id="post-modal-send-button-container">
+                    <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
 </div>
 
+    <div class="container" style="position: relative;">
+        <div class="user-images">
 
-<!-- Page Content -->
+            <div class="post-card" th:each="image : ${postList}">
 
-
-    <div id="page-mask">
-
-        <div id="post-modal"style="width: 100%; overflow-y: scroll;">
-
-            <div id="post-modal-image-container">
-                <img class="modal-click-box" id="post-modal-image"/>
-            </div>
-
-            <div class="modal-click-box" id="post-modal-right">
-
-                <div id="post-modal-details">
-
-                    <div id="post-modal-footer">
-
-                        <div id="post-modal-title-div">
-                            <p id="post-modal-title"></p>
-                        </div>
-
-                        <div id="post-modal-text-div">
-                            <p id="post-modal-text"></p>
-                        </div>
-
-                    </div>
-
-                    <div id="post-modal-ratings-container">
-
-                        <div class="post-modal-ratings-half">
-
-                            <div class="post-modal-ratings-quarter">
-                                <p id="post-modal-ratings"></p>
-                            </div>
-
-                            <div id="post-modals-stars" class="post-modal-ratings-quarter" >
-
-                                <i onclick="setRating(this)" id="star1" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star2" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star3" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star4" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-                                <i onclick="setRating(this)" id="star5" class="bi bi-star" style="cursor: pointer; z-index: 1;"></i>
-
-                            </div>
-                        </div>
-
-                        <div class="post-modal-ratings-half">
-
-                            <div class="post-modal-ratings-quarter">
-                                <p id="post-modal-date"></p>
-                            </div>
-
-                            <div class="post-modal-ratings-quarter">
-                                <p id="post-modal-loc"></p>
-                            </div>
-
-                        </div>
-
-
-
-                    </div>
-
-                </div >
-
-
-
-                <div id="post-modal-comments-container">
-
-                    <ul id="post-modal-comments">
-
-                    </ul>
-
+                <div class="post-card-top">
+                    <img class="post-card-image" onclick="onPostClicked(this)" th:src="${image.image}"  alt="AN ERROR TOOK PLACE LOADING THE PHOTO" th:attr="data-postid=${image.id}"/>
                 </div>
 
-                <div id="post-modal-comment-input">
 
-                    <div style="width: 80%; height: 100%;">
-
-                        <input onkeydown="sendComment(event)" id="post-modal-comment-input-field" placeholder="Write something nice." autocomplete="off"/>
-
+                <div class="post-card-bottom">
+                    <div style="width: 100%; height: 80%;">
+                        <p class="card-text" th:text="${image.title}"></p>
                     </div>
 
-                    <div id="post-modal-send-button-container">
-                        <span onclick="sendComment(event)" id="post-modal-send-button" class="bi bi-arrow-right-circle"></span>
+                    <div style="width: 100%; height: 20%;">
+                        <p style="margin: 0; text-align: right;">
+                            <i class="card-text"  th:text="${image.media}"></i>
+                            <i class="bi bi-star"></i>
+                        </p>
                     </div>
+
 
                 </div>
             </div>
+
 
 
         </div>
     </div>
-<div class="container" style="position: relative;">
-    <div class="user-images">
-
-        <div class="post-card" th:each="image : ${postList}">
-
-            <div class="post-card-top">
-                <img class="post-card-image" onclick="onPostClicked(this)" th:src="${image.image}"  alt="AN ERROR TOOK PLACE LOADING THE PHOTO" th:attr="data-postid=${image.id}"/>
-            </div>
-
-
-            <div class="post-card-bottom">
-                <div style="width: 100%; height: 80%;">
-                    <p class="card-text" th:text="${image.title}"></p>
-                </div>
-
-                <div style="width: 100%; height: 20%;">
-                    <p style="margin: 0; text-align: right;">
-                        <i class="card-text"  th:text="${image.media}"></i>
-                        <i class="bi bi-star"></i>
-                    </p>
-                </div>
-
-
-            </div>
-        </div>
-
-
-
-    </div>
-
-
-
 
     <template>
 
-        <li class="list-group-item" style="; border:none;">
+        <li style="border:none;">
 
-            <div style="width: 100%; display: flex;" >
+            <div style="width: 100%; display: flex; margin-bottom: 5px;" >
 
-                <div style="width: 20%; display: flex; justify-content: center; align-items: center;">
+                <div style="margin-right: 5px; display: flex; justify-content: center;">
                     <img class="comment-pfp" alt="pfp" src="https://new.reactionvrsports.com/wp-content/uploads/2020/11/ACCOUNT.png" />
                 </div>
 
-                <div style="width: 90%">
+                <div style="flex-grow: 1; display: flex; word-wrap: anywhere; padding-top: 0.5rem;">
                     <p></p>
                 </div>
 
@@ -222,7 +203,15 @@
     </template>
 
 
+    <script>
+        window.addEventListener("resize", () => {
 
-</div>
+            let mask = document.getElementById("page-mask");
+
+            if (mask && window.innerWidth < window.innerHeight && mask.style.display === "flex")
+                window.location.href = "/pruebas/posts/" + document.getElementById("post-modal").dataset.postid;
+
+        })
+    </script>
 </body>
 </html>
