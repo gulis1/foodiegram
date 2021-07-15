@@ -26,7 +26,7 @@
         <ul class="navbar-nav">
 
             <li class="nav-item">
-                <h1 class="brand" style="font-size: 2rem;">Foodiegram.</h1>
+                <h1 class="brand">Foodiegram.</h1>
             </li>
 
             <li id="primaryUser" class="userInfo nav-item">
@@ -36,12 +36,8 @@
 
             <li class="nav-item">
 
-                <a id="searchButton" onclick="buscar(this)">
+                <a class="nav-icon" id="searchButton" onclick="buscar(this)">
                     <h4 class="bi bi-search"></h4>
-
-                    <div class="searchResults">
-
-                    </div>
                 </a>
 
                 <a class="nav-icon" th:href="@{/pruebas/upload}">
