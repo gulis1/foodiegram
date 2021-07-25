@@ -29,6 +29,7 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/users")
+@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -54,7 +55,6 @@ public class UserController {
 
     @RequestMapping(value = "/{user}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByName(@PathVariable String user, @RequestParam(required = false) String id) {
-
         UserResource usuario = service.getUserByName(user);
         return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
     }

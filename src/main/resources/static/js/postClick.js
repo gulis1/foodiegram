@@ -113,8 +113,8 @@ function drawRating(score) {
         }
     }
 
-    let postid = document.getElementById("post-modal").dataset.postid;
-    $.get("/posts/" + postid, loadPublication);
+    // let postid = document.getElementById("post-modal").dataset.postid;
+    // $.get("/posts/" + postid, loadPublication);
 }
 
 function loadRatings(data) {

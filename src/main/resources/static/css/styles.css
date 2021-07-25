@@ -413,10 +413,6 @@
         display: none;
     }
 
-    .post-card {
-        width: calc(33.333vw - 10px);
-    }
-
     .user-images {
         width: 100%;
         display: grid;
@@ -450,6 +446,7 @@
 
     .post-card {
         height: 500px;
+        width: calc(33.333vw - 10px);
     }
 
     .post-card-image{
