@@ -19,9 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${jwt.auth.secret}")
     private String authSecret;
 
-    @Value("${jwt.loggedIn.secret}")
-    private String logoutSecret;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
          http.cors().and().csrf().disable();
@@ -40,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mod/**").hasAnyRole("ADMIN", "MOD")
                 .antMatchers("/admin/**").hasRole("ADMIN");
 
-        http.addFilterAfter(new JwtTokenFilter(authSecret, logoutSecret), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(new JwtTokenFilter(authSecret), UsernamePasswordAuthenticationFilter.class);
 
 
     }

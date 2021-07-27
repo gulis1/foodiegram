@@ -10,10 +10,8 @@ import main.application.service.manageAccountService.ManageFriends;
 import main.domain.resource.FollowResource;
 import main.domain.resource.PostResource;
 import main.domain.resource.UserResource;
-import main.persistence.entity.Post;
 import main.rest.forms.*;
 import main.security.AuthTokenGenerator;
-import main.security.LoggedInTokenGenerator;
 import main.security.RefreshTokenGenerator;
 import main.security.TokenRefresher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +27,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequestMapping(value ="/pruebas")
+@CrossOrigin
 public class ControllerPrueba {
 
     @Autowired
@@ -57,9 +55,6 @@ public class ControllerPrueba {
 
     @Autowired
     private RefreshTokenGenerator refreshTokenGenerator;
-
-    @Autowired
-    private LoggedInTokenGenerator loggedInTokenGenerator;
 
     @Autowired
     private TokenRefresher tokenRefresher;
@@ -135,17 +130,8 @@ public class ControllerPrueba {
             cookieR.setMaxAge(18000);
             cookieR.setPath("/pruebas/refresh");
 
-
-
             response.addCookie(cookieR);
 
-            String loginToken = loggedInTokenGenerator.getToken(user.getUsername(), 300);
-
-            Cookie loggedInCookie = new Cookie("loggedIn", loginToken);
-            loggedInCookie.setPath("/");
-            loggedInCookie.setMaxAge(18000);
-
-            response.addCookie(loggedInCookie);
 
             // Se redirige al usuario a su pagina personal
             response.sendRedirect("/pruebas/me/");

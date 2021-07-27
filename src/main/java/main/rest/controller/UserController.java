@@ -9,7 +9,6 @@ import main.domain.resource.UserResource;
 import main.domain.resource.RatingResource;
 import main.rest.forms.UserForm;
 import main.security.AuthTokenGenerator;
-import main.security.LoggedInTokenGenerator;
 import main.security.RefreshTokenGenerator;
 import main.security.TokenRefresher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -46,9 +44,6 @@ public class UserController {
 
     @Autowired
     private RefreshTokenGenerator refreshTokenGenerator;
-
-    @Autowired
-    private LoggedInTokenGenerator loggedInTokenGenerator;
 
     @Autowired
     private TokenRefresher tokenRefresher;
@@ -116,43 +111,19 @@ public class UserController {
     }
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public ResponseEntity<?> login(UserForm user, HttpServletResponse response) {
+    public ResponseEntity<?> login(UserForm user) {
 
         try {
             UsernamePasswordAuthenticationToken userData = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             authenticationManager.authenticate(userData);
+
             // Generamos el token de autentificacion
             String authToken = authTokenGenerator.buildToken(user.getUsername(), 15);
-            Cookie cookieA = new Cookie("authToken",authToken);
-            cookieA.setDomain(domain);
-            cookieA.setHttpOnly(true);
-            cookieA.setMaxAge(900);
-            cookieA.setPath("/");
-
-            response.addCookie(cookieA);
 
             // Generamos el refresh token
             String refreshToken = refreshTokenGenerator.buildToken(user.getUsername(), 300);
-            Cookie cookieR = new Cookie("refreshToken", refreshToken);
-            cookieR.setDomain(domain);
-            cookieR.setHttpOnly(true);
-            cookieR.setMaxAge(18000);
-            cookieR.setPath("/users/refresh");
 
-            response.addCookie(cookieR);
-
-
-            String loginToken = loggedInTokenGenerator.getToken(user.getUsername(), 300);
-
-            Cookie loggedInCookie = new Cookie("loggedIn", loginToken);
-            loggedInCookie.setPath("/");
-            loggedInCookie.setMaxAge(18000);
-
-            response.addCookie(loggedInCookie);
-
-
-
-            return ResponseEntity.ok(" {'Status' : '200'} ");
+            return ResponseEntity.ok(String.format(" {'Status' : '200', 'Auth': '%s', 'Refresh': '%s'} ", authToken, refreshToken));
         }
 
         catch (NullPointerException e) {
@@ -169,18 +140,12 @@ public class UserController {
     }
 
     @RequestMapping(value="/refresh", method=RequestMethod.GET)
-    public ResponseEntity<?> refresh(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<?> refresh(@RequestParam("refreshToken") String refreshToken) {
 
         try {
             String token = tokenRefresher.refresh(refreshToken);
-            Cookie cookieA = new Cookie("authToken",token);
-            cookieA.setDomain(domain);
-            cookieA.setHttpOnly(true);
-            cookieA.setMaxAge(900);
-            cookieA.setPath("/");
-            response.addCookie(cookieA);
 
-            return ResponseEntity.ok(" {'Status' : '200'} ");
+            return ResponseEntity.ok(String.format(" {'Status': 200, 'Auth': '%s'} ", token));
         }
 
         catch (ExpiredJwtException e) {

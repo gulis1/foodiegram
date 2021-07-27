@@ -143,7 +143,6 @@ PublicationServiceImpl implements PublicationService {
             FileOutputStream stream = new FileOutputStream(name);
             stream.write(form.getImage().getBytes());
             stream.close();
-
             // Si se ha conseguido guardar la imagen, se le asocia a la publicacion una direccion en la BD.
 
             String address = String.format("%s/users/%s/%s.%s", apacheAddress, userID, publi.getPostid(), matcher.group(1));

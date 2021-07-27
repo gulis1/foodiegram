@@ -22,11 +22,9 @@ import java.util.List;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final String authSecret;
-    private final String loggedInSecret;
 
-    public JwtTokenFilter(String authSecret, String loggedInSecret) {
+    public JwtTokenFilter(String authSecret) {
         this.authSecret = authSecret;
-        this.loggedInSecret = loggedInSecret;
     }
 
     @Override
@@ -35,62 +33,26 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             // Comprueba si se ha dado un token valido. Se lanza una UnsupportedJwtException si no es valido.
 
-            Cookie loggedInCookie = getCookie(request, "loggedIn");
-            if (loggedInCookie == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                throw new MalformedJwtException("You need to log in to access this resource");
-            }
-
-
-            Claims claims1 = checkLoggedInCookie(loggedInCookie);
-
-
-            Cookie authCookie = getCookie(request, "authToken");
-
-            if (authCookie == null)
-                throw new MalformedJwtException("You need to log in to access this resource");
-
-            Claims claims2 = validateAuthToken(authCookie);
-            setUpSpringAuthentication(claims2);
-
-            if (!claims1.getSubject().equals(claims2.getSubject()))
-                throw new UnsupportedJwtException("Incompatible tokens.");
+            String header = request.getHeader("Authorization");
+            Claims claims = validateAuthToken(header);
+            setUpSpringAuthentication(claims);
 
             chain.doFilter(request, response);
 
 
 
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-
-            UserAgent agent = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
-            BrowserType type = agent.getBrowser().getBrowserType();
-
-            if (type == BrowserType.WEB_BROWSER || type == BrowserType.MOBILE_BROWSER || type == BrowserType.APP) {
-                response.sendRedirect("/pruebas/refresh");
-            }
-
-            else {
-                response.setStatus(401);
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-            }
-
+            response.setStatus(401);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
         }
     }
 
-    private Claims checkLoggedInCookie(Cookie cookie) throws UnsupportedJwtException, MalformedJwtException {
+    private Claims validateAuthToken(String header) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException {
 
-        String jwToken = cookie.getValue();
-        return Jwts.parser().setSigningKey(loggedInSecret.getBytes()).parseClaimsJws(jwToken).getBody();
+        if (header == null || !header.startsWith("Bearer"))
+            throw new MalformedJwtException("You need to log in to access this resource");
 
-    }
-
-    private Claims validateAuthToken(Cookie cookie) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException {
-
-        String jwtToken = cookie.getValue();
-
-        Claims claims =  Jwts.parser().setSigningKey(authSecret.getBytes()).parseClaimsJws(jwtToken).getBody();
-
-        return claims;
+        return Jwts.parser().setSigningKey(authSecret.getBytes()).parseClaimsJws(header.substring(7)).getBody();
     }
 
 
@@ -105,19 +67,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 
     }
-
-
-    private Cookie getCookie(HttpServletRequest request, String name) {
-
-        if (request.getCookies() == null)
-            return null;
-
-        for (Cookie cookie : request.getCookies())
-            if(cookie.getName().equals(name))
-                return cookie;
-
-        return null;
-    }
-
-
 }

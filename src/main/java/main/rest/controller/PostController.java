@@ -119,7 +119,7 @@ public class PostController {
    //devuele si un usuario a valorado una publicacion
    @RequestMapping(value="/{pubID}/ratings/me", method = RequestMethod.GET)
     public ResponseEntity<RatingResource> getRating(@PathVariable Integer pubID){
-
+        System.out.println("hey2");
         String user = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
         RatingResource val=  service.getRating(pubID, user);
 
