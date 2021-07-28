@@ -111,7 +111,7 @@ public class UserController {
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<?> login(UserForm user) {
-        System.out.println(user.getUsername() + " " + user.getPassword());
+
         try {
             UsernamePasswordAuthenticationToken userData = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             authenticationManager.authenticate(userData);
