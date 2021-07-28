@@ -5,8 +5,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import main.application.service.UserService;
 import main.domain.resource.PostPreview;
-import main.domain.resource.UserResource;
 import main.domain.resource.RatingResource;
+import main.domain.resource.UserResource;
 import main.rest.forms.UserForm;
 import main.security.AuthTokenGenerator;
 import main.security.RefreshTokenGenerator;
@@ -27,7 +27,6 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/users")
-@CrossOrigin
 public class UserController {
 
     @Autowired
@@ -112,7 +111,7 @@ public class UserController {
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public ResponseEntity<?> login(UserForm user) {
-
+        System.out.println(user.getUsername() + " " + user.getPassword());
         try {
             UsernamePasswordAuthenticationToken userData = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             authenticationManager.authenticate(userData);

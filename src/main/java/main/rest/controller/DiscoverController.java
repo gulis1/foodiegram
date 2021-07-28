@@ -2,8 +2,8 @@ package main.rest.controller;
 
 
 import main.application.service.DiscoverService;
-import main.domain.resource.RestaurantResource;
 import main.domain.resource.PostPreview;
+import main.domain.resource.RestaurantResource;
 import main.domain.resource.UserPreview;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

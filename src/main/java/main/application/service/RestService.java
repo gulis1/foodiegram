@@ -3,12 +3,8 @@ package main.application.service;
 import com.google.gson.Gson;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-
 
 import java.util.Map;
 import java.util.concurrent.TimeoutException;

@@ -1,9 +1,9 @@
 package main.application.service;
 
 import main.domain.resource.PostPreview;
+import main.domain.resource.RatingResource;
 import main.domain.resource.UserResource;
 import main.domain.resource.Usuario_baneadoResource;
-import main.domain.resource.RatingResource;
 import main.rest.forms.UserForm;
 
 import java.util.List;

@@ -21,7 +21,6 @@ import java.util.List;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/posts")
-@CrossOrigin
 public class PostController {
 
     @Autowired

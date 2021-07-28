@@ -1,7 +1,7 @@
 package main.application.service;
 
-import main.domain.resource.RestaurantResource;
 import main.domain.resource.PostPreview;
+import main.domain.resource.RestaurantResource;
 import main.domain.resource.UserPreview;
 
 import java.util.List;

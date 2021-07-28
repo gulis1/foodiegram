@@ -1,6 +1,5 @@
 package main.domain.converter;
 
-import main.domain.resource.FollowResource;
 import main.domain.resource.RestaurantResource;
 import main.persistence.entity.Restaurant;
 import org.springframework.core.convert.converter.Converter;
