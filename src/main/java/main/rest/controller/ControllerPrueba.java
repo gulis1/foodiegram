@@ -305,18 +305,6 @@ public class ControllerPrueba {
         return new ModelAndView("userPage");
     }
 
-    @GetMapping("/posts/{postId}")
-    ModelAndView postPage(@PathVariable Integer postId, Model model) {
-
-        PostResource post = postService.getPost(postId);
-        UserResource author = userService.getUser(post.getIduser());
-
-        model.addAttribute("user", author);
-        model.addAttribute("post", post);
-
-        return new ModelAndView("postPage");
-
-    }
 
     @RequestMapping(value="/refresh", method=RequestMethod.GET)
     public void refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken, HttpServletResponse response) throws IOException {

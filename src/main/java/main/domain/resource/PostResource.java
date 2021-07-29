@@ -11,7 +11,7 @@ import java.sql.Date;
 public class PostResource {
 
     private Integer id;
-    private Integer iduser;
+    private String user;
     private String title;
     private String text;
     private String image;
