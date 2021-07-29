@@ -11,5 +11,5 @@ public class RatingForm {
 
     Integer pubID;
     Integer userID;
-    Float score;
+    Integer score;
 }

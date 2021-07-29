@@ -182,7 +182,6 @@ PublicationServiceImpl implements PublicationService {
         else {
             Rating valora = new Rating(form.getPubID(), form.getUserID(), form.getScore());
             repoVal.save(valora);
-
             return converterVal.convert(Optional.of(valora));
         }
 

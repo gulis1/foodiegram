@@ -4,6 +4,7 @@ package main.rest.controller;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import main.application.service.UserService;
+import main.domain.resource.LoginResource;
 import main.domain.resource.PostPreview;
 import main.domain.resource.RatingResource;
 import main.domain.resource.UserResource;
@@ -122,19 +123,24 @@ public class UserController {
             // Generamos el refresh token
             String refreshToken = refreshTokenGenerator.buildToken(user.getUsername(), 300);
 
-            return ResponseEntity.ok(String.format(" {'Status' : '200', 'Auth': '%s', 'Refresh': '%s'} ", authToken, refreshToken));
+            LoginResource resource = new LoginResource(authToken, refreshToken, null);
+
+            return ResponseEntity.ok(resource);
         }
 
         catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("{'Status' : 400, 'message': '%s' }",e.getMessage()));
+            LoginResource resource = new LoginResource(null, null, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resource);
         }
 
         catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{'Status' : 401, 'message': 'Wrong Credentials' }");
+            LoginResource resource = new LoginResource(null, null, "Wrong credentials.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resource);
         }
 
         catch (DisabledException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{'Status' : 401, 'message': 'User is Disabled' }");
+            LoginResource resource = new LoginResource(null, null, "User is disabled.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resource);
         }
     }
 
@@ -143,16 +149,18 @@ public class UserController {
 
         try {
             String token = tokenRefresher.refresh(refreshToken);
-
-            return ResponseEntity.ok(String.format(" {'Status': 200, 'Auth': '%s'} ", token));
+            LoginResource resource = new LoginResource(token, null, null);
+            return ResponseEntity.ok(resource);
         }
 
         catch (ExpiredJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{'Status' : 401, 'message': 'Token has expired }");
+            LoginResource resource = new LoginResource(null, null, "Expired token.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resource);
         }
 
         catch (MalformedJwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{'Status' : 401, 'message': 'Malform Token ' }");
+            LoginResource resource = new LoginResource(null, null, "Malformed token.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resource);
         }
 
 

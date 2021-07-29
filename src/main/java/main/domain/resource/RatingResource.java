@@ -10,6 +10,6 @@ public class RatingResource {
 
     private Integer idpubli;
     private Integer iduser;
-    private Float punt;
+    private Integer punt;
     
 }

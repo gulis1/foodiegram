@@ -21,9 +21,6 @@ public class TokenRefresher {
 
         Claims claims =  Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
         return generator.buildToken(Integer.parseInt(claims.getSubject()),  30);
-
-
-
     }
 
 }

@@ -117,13 +117,12 @@ public class PostController {
 
    //devuele si un usuario a valorado una publicacion
    @RequestMapping(value="/{pubID}/ratings/me", method = RequestMethod.GET)
-    public ResponseEntity<RatingResource> getRating(@PathVariable Integer pubID){
-        System.out.println("hey2");
+    public ResponseEntity<RatingResource> getRating(@PathVariable Integer pubID) {
+
         String user = SecurityContextHolder.getContext().getAuthentication().getDetails().toString();
         RatingResource val=  service.getRating(pubID, user);
 
         return val != null ? ResponseEntity.ok(val) : ResponseEntity.notFound().build();
-
     }
 
     //borra una valoracion dentro una publicacion de un usuario

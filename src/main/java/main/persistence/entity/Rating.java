@@ -21,6 +21,6 @@ public class Rating {
   @Id
   private Integer user;
 
-  private Float score;
+    private Integer score;
 
 }
