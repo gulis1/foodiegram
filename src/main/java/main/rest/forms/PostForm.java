@@ -12,19 +12,19 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class PostForm {
 
-    @NotNull
+//    @NotNull
     private MultipartFile image;
     @NotNull
     private String title;
     private String text;
-    private String latitud;
-    private String longitud;
+    private String latitude;
+    private String longitude;
 
 
-    public Double getLatitud() {
-        return latitud != null ? Double.parseDouble(latitud) : null;
+    public Double getLatitude() {
+        return latitude != null ? Double.parseDouble(latitude) : null;
     }
-    public Double getLongitud() {
-        return longitud != null ? Double.parseDouble(longitud) : null;
+    public Double getLongitude() {
+        return longitude != null ? Double.parseDouble(longitude) : null;
     }
 }

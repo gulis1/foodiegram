@@ -117,9 +117,10 @@ PublicationServiceImpl implements PublicationService {
         String country = null;
         String city = null;
 
-        if (form.getLatitud() != null && form.getLongitud() != null) {
-            Map<String, Object> geoData = restService.getGeoData(form.getLatitud(), form.getLongitud());
+        if (form.getLatitude() != null && form.getLongitude() != null) {
+
             try {
+                Map<String, Object> geoData = restService.getGeoData(form.getLatitude(), form.getLongitude());
                 country = geoData.get("country").toString();
                 city = geoData.get("city").toString();
             }
